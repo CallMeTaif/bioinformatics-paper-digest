@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Env / secrets
+.env
+.env.local
+*.local
+
+# Node / Astro
+node_modules/
+web/dist/
+web/.astro/
+.DS_Store
+
+# Data / logs
+*.log
+pipeline/.cache/
+scratch/

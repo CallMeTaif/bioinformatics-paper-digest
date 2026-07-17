@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="About — Paper Digest">
+  <section class="hero" style="padding-bottom:12px;">
+    <h1>About</h1>
+  </section>
+  <div class="basepair-divider" role="presentation"></div>
+
+  <div class="summary" style="max-width:720px;">
+    <section>
+      <h2>What this is</h2>
+      <p>
+        An automated library of open-access bioinformatics research. A pipeline discovers strong
+        papers across genomics, single-cell, proteomics, systems biology, computational methods and
+        clinical informatics, reads each one in full, and writes a structured plain-language summary.
+      </p>
+    </section>
+    <section>
+      <h2>How the summaries are made</h2>
+      <p>
+        Each summary is written by an AI model from the paper's full text, then checked by a second
+        model from a different family for faithfulness — an independent reviewer is more likely to
+        catch mistakes than one sharing the first model's blind spots. High-confidence summaries
+        publish automatically; anything flagged is held for human review.
+      </p>
+    </section>
+    <section>
+      <h2>Honesty about limits</h2>
+      <p>
+        AI checking AI catches most errors, not all. Every summary is labeled AI-generated and links
+        to the original — please verify anything important against the source. Preprints are labeled
+        as not peer-reviewed.
+      </p>
+    </section>
+    <section>
+      <h2>Copyright</h2>
+      <p>
+        Only open-access papers are included, always with attribution and license. PDFs are hosted
+        only when the license permits redistribution; otherwise we link to the original.
+      </p>
+    </section>
+  </div>
+</Base>

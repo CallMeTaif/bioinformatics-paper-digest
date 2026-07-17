@@ -1,0 +1,12 @@
+# Kept intentionally small — fewer wheels to break on new Python releases.
+httpx>=0.27            # all HTTP: OpenAlex, Europe PMC, Supabase REST
+python-dotenv>=1.0     # load .env
+
+# LLM providers (calls are guarded by DRY_RUN; only needed for a real run)
+google-genai>=0.3      # summarizer (Gemini)
+anthropic>=0.40        # verifier (Phase 2)
+
+# Dev
+pytest>=8.0
+
+# NOTE: Europe PMC JATS XML is parsed with the stdlib xml.etree — no lxml.

@@ -1,0 +1,18 @@
+---
+import type { Paper } from '../lib/papers';
+import { accentVar, formatDate } from '../lib/papers';
+interface Props { paper: Paper; }
+const { paper } = Astro.props;
+const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
+---
+<article class="card">
+  <div class="meta">{paper.venue ?? 'Unknown venue'} · {formatDate(paper.publication_date)}</div>
+  <a class="card-title" href={`/paper/${paper.slug}`}>{paper.title}</a>
+  <p class="tldr">{paper.summary.tldr}</p>
+  <div class="chips">
+    <span class="chip tag" style={`--chip-accent:${accentVar(paper.tag_accent)}`}>{tag}</span>
+    <span class="chip diff">{paper.difficulty_level}</span>
+    {paper.is_preprint && <span class="chip preprint">preprint</span>}
+    <span class="chip ai">AI-generated</span>
+  </div>
+</article>

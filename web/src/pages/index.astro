@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import PaperCard from '../components/PaperCard.astro';
+import { allPapers } from '../lib/papers';
+const papers = allPapers();
+---
+<Base>
+  <section class="hero">
+    <h1>Bioinformatics, distilled.</h1>
+    <p>
+      Strong open-access papers across genomics, single-cell, proteomics, systems biology and
+      computational methods — each read in full and summarized by AI, then machine-checked for
+      faithfulness. New papers three times a week.
+    </p>
+    <div class="acgt-strip">A C G T · A T G C · G C A T · T A C G · A C G T</div>
+  </section>
+
+  <div class="basepair-divider" role="presentation"></div>
+
+  {papers.length === 0 ? (
+    <p style="color:var(--muted);padding:20px 0 80px;">No papers published yet — run the pipeline to populate the library.</p>
+  ) : (
+    <div class="grid">
+      {papers.map((p) => <PaperCard paper={p} />)}
+    </div>
+  )}
+</Base>
