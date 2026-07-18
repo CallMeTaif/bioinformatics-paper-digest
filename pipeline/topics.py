@@ -84,6 +84,24 @@ SUBFIELD_TAGS = [
 
 DEFAULT_TAG = ("bioinformatics", "A")
 
+# The closed vocabulary the summarizer must choose from (keeps tags consistent
+# with the site's filters and nucleotide accent colours). Derived from
+# SUBFIELD_TAGS so there is a single source of truth.
+CANONICAL_TAGS: list[str] = [tag for _, tag, _ in SUBFIELD_TAGS] + [DEFAULT_TAG[0]]
+_ACCENT_BY_TAG: dict[str, str] = {tag: accent for _, tag, accent in SUBFIELD_TAGS}
+_ACCENT_BY_TAG[DEFAULT_TAG[0]] = DEFAULT_TAG[1]
+
+DIFFICULTY_LEVELS = ("intro", "intermediate", "advanced")
+
+
+def accent_for_tag(tag: str) -> str:
+    """Nucleotide accent (A/C/G/T) for a canonical tag; default if unknown."""
+    return _ACCENT_BY_TAG.get(tag, DEFAULT_TAG[1])
+
+
+def is_canonical_tag(tag: str) -> bool:
+    return tag in _ACCENT_BY_TAG
+
 # Optional: exact OpenAlex concept IDs to AND/OR into discovery. Leave empty to
 # rely on keyword search. Fill these once verified against the live OpenAlex API
 # (e.g. GET https://api.openalex.org/concepts?search=bioinformatics).

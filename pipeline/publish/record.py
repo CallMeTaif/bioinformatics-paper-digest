@@ -13,7 +13,7 @@ from typing import Any, Optional
 from ..sources.base import Paper
 from ..llm.base import Summary
 from ..llm.verify import Verdict, passes_gate
-from ..topics import tag_for_text
+from ..topics import tag_for_text, accent_for_tag, DIFFICULTY_LEVELS
 
 
 def slugify(title: str, doi: Optional[str]) -> str:
@@ -38,7 +38,13 @@ def build_record(
     paper: Paper, summary: Summary,
     verdict: Optional[Verdict] = None, *, verify_threshold: float = 0.8,
 ) -> dict[str, Any]:
-    tag, accent = tag_for_text(f"{paper.title} {paper.abstract or ''}")
+    # Prefer the summarizer's classification (it read the whole paper); fall back
+    # to the keyword heuristic when the model gave nothing usable.
+    if summary.topic:
+        tag, accent = summary.topic, accent_for_tag(summary.topic)
+    else:
+        tag, accent = tag_for_text(f"{paper.title} {paper.abstract or ''}")
+    difficulty = summary.difficulty if summary.difficulty in DIFFICULTY_LEVELS else _difficulty(paper)
     # Gate: no verdict (Phase 1) auto-publishes; a verdict must pass to publish,
     # otherwise the paper is held in the review queue as 'flagged'.
     if verdict is None:
@@ -63,7 +69,7 @@ def build_record(
         "abstract": paper.abstract,
         "subfield_tags": [tag],
         "tag_accent": accent,              # nucleotide color slot for the UI
-        "difficulty_level": _difficulty(paper),
+        "difficulty_level": difficulty,
         "summary": summary.to_dict(),
         "summary_provider": summary.provider,
         "used_full_text": bool(paper.full_text),

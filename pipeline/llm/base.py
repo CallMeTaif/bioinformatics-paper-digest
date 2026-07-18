@@ -38,6 +38,10 @@ class Summary:
     why: str = ""
     limitations: str = ""
     takeaway: str = ""
+    # classification the model returns alongside the summary (it has already read
+    # the paper, so this is far better than keyword matching and costs nothing extra)
+    topic: str = ""       # one of topics.CANONICAL_TAGS
+    difficulty: str = ""  # one of topics.DIFFICULTY_LEVELS
     # provenance so the site/DB can show which model wrote it
     model: str = ""
     provider: str = ""
@@ -51,8 +55,20 @@ class Summary:
 
     @classmethod
     def from_fields(cls, data: dict[str, Any], *, provider: str, model: str) -> "Summary":
+        from ..topics import is_canonical_tag, DIFFICULTY_LEVELS
+
         kwargs = {f: str(data.get(f, "")).strip() for f in SUMMARY_FIELDS}
-        return cls(provider=provider, model=model, **kwargs)
+        # Only accept classifications from the closed vocabularies; anything else
+        # is dropped so the caller falls back to the heuristic.
+        topic = str(data.get("topic", "")).strip().lower()
+        difficulty = str(data.get("difficulty", "")).strip().lower()
+        return cls(
+            provider=provider,
+            model=model,
+            topic=topic if is_canonical_tag(topic) else "",
+            difficulty=difficulty if difficulty in DIFFICULTY_LEVELS else "",
+            **kwargs,
+        )
 
 
 SYSTEM_PROMPT = (
@@ -80,6 +96,14 @@ def build_user_prompt(*, title: str, venue: Optional[str], text: str,
     ]
     for f in SUMMARY_FIELDS:
         lines.append(f'  "{f}": {_FIELD_LABELS[f]}')
+    from ..topics import CANONICAL_TAGS, DIFFICULTY_LEVELS
+
+    lines.append(f'  "topic": the single best-fitting subfield, chosen ONLY from '
+                 f'this list: {", ".join(CANONICAL_TAGS)}')
+    lines.append(f'  "difficulty": how much background a reader needs, one of: '
+                 f'{", ".join(DIFFICULTY_LEVELS)} '
+                 f'("intro" = accessible review/primer, "advanced" = assumes '
+                 f'specialist knowledge)')
     lines.append("")
     lines.append("Respond with only the JSON object.")
     return "\n".join(lines)

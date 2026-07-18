@@ -60,12 +60,18 @@ class GeminiSummarizer:
 
     def _response_schema(self):
         from google.genai import types  # type: ignore
+        from ..topics import CANONICAL_TAGS, DIFFICULTY_LEVELS
 
+        props = {f: types.Schema(type=types.Type.STRING) for f in SUMMARY_FIELDS}
+        # Constrain the classifications to the closed vocabularies.
+        props["topic"] = types.Schema(type=types.Type.STRING, enum=list(CANONICAL_TAGS))
+        props["difficulty"] = types.Schema(type=types.Type.STRING, enum=list(DIFFICULTY_LEVELS))
+        order = list(SUMMARY_FIELDS) + ["topic", "difficulty"]
         return types.Schema(
             type=types.Type.OBJECT,
-            properties={f: types.Schema(type=types.Type.STRING) for f in SUMMARY_FIELDS},
-            required=list(SUMMARY_FIELDS),
-            property_ordering=list(SUMMARY_FIELDS),
+            properties=props,
+            required=order,
+            property_ordering=order,
         )
 
     def summarize(self, *, title: str, venue: Optional[str], text: str) -> Summary:
