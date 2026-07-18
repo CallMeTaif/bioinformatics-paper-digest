@@ -92,8 +92,24 @@ a:hover { text-decoration: underline; }
   -webkit-background-clip: text; background-clip: text; color: transparent; opacity: 0.85;
 }
 
+/* --- filters (library) --- */
+.filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 8px 0 6px; }
+.filters .search {
+  flex: 1 1 240px; min-width: 200px; background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); border-radius: 8px; padding: 9px 12px; font-family: var(--font-ui); font-size: 0.95rem;
+}
+.filters .filter {
+  background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  border-radius: 8px; padding: 9px 10px; font-family: var(--font-ui); font-size: 0.9rem; cursor: pointer;
+}
+.filters .search:focus, .filters .filter:focus { outline: none; border-color: var(--primary); }
+.filters .chk { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 0.9rem; cursor: pointer; }
+.count { color: var(--muted); font-size: 0.82rem; font-family: var(--font-mono); padding: 4px 0 10px; }
+.empty { color: var(--muted); padding: 30px 0 80px; text-align: center; }
+
 /* --- cards grid --- */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; padding: 8px 0 60px; }
+.card[hidden] { display: none; }
 
 .card {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);

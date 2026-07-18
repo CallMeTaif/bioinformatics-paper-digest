@@ -1,0 +1,89 @@
+---
+import Base from '../layouts/Base.astro';
+import { allPapers, accentVar, formatDate, isVerified } from '../lib/papers';
+
+const papers = allPapers();
+const sources = [...new Set(papers.map((p) => p.source))].sort();
+const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformatics'))].sort();
+---
+<Base title="Library — Paper Digest" description="Browse and filter the AI-summarized bioinformatics library.">
+  <section class="hero" style="padding:40px 0 12px;">
+    <h1>Library</h1>
+    <p>Browse the full collection. Search titles and summaries, or filter by source, type, and difficulty.</p>
+  </section>
+  <div class="basepair-divider" role="presentation"></div>
+
+  <div class="filters">
+    <input id="q" class="search" type="search" placeholder="Search titles and summaries…" autocomplete="off" />
+    <select id="f-source" class="filter"><option value="">All sources</option>{sources.map((s) => <option value={s}>{s}</option>)}</select>
+    <select id="f-type" class="filter"><option value="">All types</option><option value="published">Published</option><option value="preprint">Preprint</option></select>
+    <select id="f-diff" class="filter"><option value="">Any difficulty</option><option value="intro">Intro</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
+    <select id="f-tag" class="filter"><option value="">All topics</option>{tags.map((t) => <option value={t}>{t}</option>)}</select>
+    <label class="chk"><input id="f-verified" type="checkbox" /> Verified only</label>
+  </div>
+  <div id="count" class="count" aria-live="polite"></div>
+
+  <div class="grid" id="lib">
+    {papers.map((p) => {
+      const tag = p.subfield_tags?.[0] ?? 'bioinformatics';
+      const verified = isVerified(p);
+      const hay = `${p.title} ${p.summary.tldr} ${tag} ${(p.authors ?? []).join(' ')}`.toLowerCase();
+      return (
+        <article class="card lib-card"
+          data-hay={hay}
+          data-source={p.source}
+          data-type={p.is_preprint ? 'preprint' : 'published'}
+          data-diff={p.difficulty_level}
+          data-tag={tag}
+          data-verified={verified ? '1' : '0'}>
+          <div class="meta">{p.venue ?? 'Unknown venue'} · {formatDate(p.publication_date)}</div>
+          <a class="card-title" href={`/paper/${p.slug}`}>{p.title}</a>
+          <p class="tldr">{p.summary.tldr}</p>
+          <div class="chips">
+            <span class="chip tag" style={`--chip-accent:${accentVar(p.tag_accent)}`}>{tag}</span>
+            <span class="chip diff">{p.difficulty_level}</span>
+            {p.is_preprint && <span class="chip preprint">preprint</span>}
+            {verified && <span class="chip verified">✓ checked</span>}
+          </div>
+        </article>
+      );
+    })}
+  </div>
+  <p id="empty" class="empty" hidden>No papers match those filters.</p>
+
+  <script is:inline>
+    const q = document.getElementById('q');
+    const fSource = document.getElementById('f-source');
+    const fType = document.getElementById('f-type');
+    const fDiff = document.getElementById('f-diff');
+    const fTag = document.getElementById('f-tag');
+    const fVer = document.getElementById('f-verified');
+    const cards = Array.from(document.querySelectorAll('.lib-card'));
+    const countEl = document.getElementById('count');
+    const emptyEl = document.getElementById('empty');
+
+    function apply() {
+      const term = (q.value || '').trim().toLowerCase();
+      const src = fSource.value, type = fType.value, diff = fDiff.value, tag = fTag.value, ver = fVer.checked;
+      let shown = 0;
+      for (const c of cards) {
+        const ok =
+          (!term || c.dataset.hay.includes(term)) &&
+          (!src || c.dataset.source === src) &&
+          (!type || c.dataset.type === type) &&
+          (!diff || c.dataset.diff === diff) &&
+          (!tag || c.dataset.tag === tag) &&
+          (!ver || c.dataset.verified === '1');
+        c.hidden = !ok;
+        if (ok) shown++;
+      }
+      countEl.textContent = shown + ' of ' + cards.length + ' papers';
+      emptyEl.hidden = shown !== 0;
+    }
+    [q, fSource, fType, fDiff, fTag, fVer].forEach((el) => {
+      el.addEventListener('input', apply);
+      el.addEventListener('change', apply);
+    });
+    apply();
+  </script>
+</Base>
