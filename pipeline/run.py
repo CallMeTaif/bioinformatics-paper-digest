@@ -25,26 +25,63 @@ from .publish import build_record, save_records
 MIN_ABSTRACT_CHARS = 600
 
 
+def _recency(paper) -> float:
+    """0..1, newer within a year scores higher."""
+    if not paper.publication_date:
+        return 0.0
+    try:
+        days = (_dt.date.today() - _dt.date.fromisoformat(paper.publication_date)).days
+    except ValueError:
+        return 0.0
+    return max(0.0, 1.0 - days / 365.0)
+
+
 def _score(paper) -> float:
-    """Simple blended rank: log-ish citation weight + recency bonus."""
-    cites = paper.cited_by_count or 0
-    recency = 0.0
-    if paper.publication_date:
-        try:
-            days = (_dt.date.today() - _dt.date.fromisoformat(paper.publication_date)).days
-            recency = max(0.0, 1.0 - days / 365.0)  # newer within a year scores higher
-        except ValueError:
-            pass
-    return (cites ** 0.5) + 3.0 * recency
+    """Single blended rank (citations + recency). Still used for tie-breaks."""
+    return ((paper.cited_by_count or 0) ** 0.5) + 3.0 * _recency(paper)
+
+
+def blend_lanes(papers, n: int, *, fresh_ratio: float = 0.5):
+    """Two-lane blend (spec §5): interleave an 'established' lane (peer-reviewed,
+    ranked by citations then recency) with a 'fresh' lane (preprints, ranked by
+    recency), so the pool mixes proven work with hot-off-the-press preprints.
+    Without this, one recency-weighted pool lets recent journal papers crowd out
+    every preprint before they're ever screened."""
+    established = sorted(
+        (p for p in papers if not p.is_preprint),
+        key=lambda p: (p.cited_by_count or 0, _recency(p)), reverse=True,
+    )
+    fresh = sorted(
+        (p for p in papers if p.is_preprint), key=_recency, reverse=True,
+    )
+    out, ei, fi = [], 0, 0
+    want_fresh = max(1, round(n * fresh_ratio))
+    while len(out) < n and (ei < len(established) or fi < len(fresh)):
+        # roughly (1 - fresh_ratio) established : fresh_ratio fresh
+        took = 0
+        while took < 2 and ei < len(established) and len(out) < n:
+            out.append(established[ei]); ei += 1; took += 1
+        if fi < len(fresh) and len(out) < n and (len([p for p in out if p.is_preprint]) < want_fresh):
+            out.append(fresh[fi]); fi += 1
+    # top up from whichever lane still has entries
+    for lane in (established[ei:], fresh[fi:]):
+        for p in lane:
+            if len(out) >= n:
+                break
+            out.append(p)
+    return out[:n]
 
 
 def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
     print(f"=== pipeline run {_dt.datetime.now().isoformat(timespec='seconds')} "
           f"(DRY_RUN={config.DRY_RUN}) ===")
 
-    # 1) discover (OpenAlex established lane + bioRxiv/medRxiv fresh lane), then rank
+    # 1) discover (OpenAlex established lane + bioRxiv/medRxiv fresh lane), then
+    #    blend the two lanes so preprints and proven work both get represented.
     papers = discover_all(mailto=mailto, per_term=pool_per_term)
-    ranked = sorted(papers, key=_score, reverse=True)
+    ranked = blend_lanes(papers, max(config.MAX_CANDIDATES, limit * 3))
+    n_pre = sum(p.is_preprint for p in ranked[: config.MAX_CANDIDATES])
+    print(f"[rank] two-lane blend: {n_pre} preprints in top {config.MAX_CANDIDATES}", flush=True)
 
     # 2) abstract pre-screen — a cheap model drops off-topic/weak papers BEFORE we
     #    pay to fetch full text and summarize. Runs on the top MAX_CANDIDATES.
