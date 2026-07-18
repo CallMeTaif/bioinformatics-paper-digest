@@ -93,6 +93,11 @@ class Paper:
         """DOI when present, else a title-based fallback."""
         if self.doi:
             return self.doi
+        return self.title_key()
+
+    def title_key(self) -> str:
+        """Normalized title — collapses versioned duplicates (e.g. Zenodo/preprint
+        versions with different per-version DOIs but the same title)."""
         return "title:" + " ".join((self.title or "").lower().split())
 
     def to_dict(self) -> dict[str, Any]:

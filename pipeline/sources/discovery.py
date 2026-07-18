@@ -15,16 +15,23 @@ from .openalex import discover as discover_openalex, DEFAULT_SEED_TERMS
 from .rxiv import discover as discover_rxiv
 
 
+def _prefer(a: Paper, b: Paper) -> Paper:
+    """Pick the better of two duplicates: peer-reviewed over preprint, then
+    more-cited, then the one that has a DOI."""
+    if a.is_preprint != b.is_preprint:
+        return a if not a.is_preprint else b
+    if (a.cited_by_count or 0) != (b.cited_by_count or 0):
+        return a if (a.cited_by_count or 0) > (b.cited_by_count or 0) else b
+    return a if a.doi else b
+
+
 def _merge(into: dict[str, Paper], papers: list[Paper]) -> None:
+    # Key by normalized TITLE so versioned duplicates (same title, different
+    # per-version DOIs — e.g. Zenodo/bioRxiv versions) collapse into one entry.
     for p in papers:
-        key = p.dedup_key()
+        key = p.title_key()
         existing = into.get(key)
-        if existing is None:
-            into[key] = p
-            continue
-        # Collapse preprint + published: keep the non-preprint (peer-reviewed).
-        if existing.is_preprint and not p.is_preprint:
-            into[key] = p
+        into[key] = p if existing is None else _prefer(existing, p)
 
 
 def discover_all(

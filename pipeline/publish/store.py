@@ -41,9 +41,25 @@ def _save_local(records: list[dict[str, Any]]) -> int:
     merged = sorted(
         by_slug.values(), key=lambda r: r.get("date_posted") or "", reverse=True
     )
+    merged = _collapse_by_title(merged)
     LOCAL_JSON.write_text(json.dumps(merged, indent=2, ensure_ascii=False))
     print(f"[publish] wrote {len(merged)} records ({added} new) -> {LOCAL_JSON.relative_to(_ROOT)}")
     return added
+
+
+def _collapse_by_title(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Drop cross-run versioned duplicates (same normalized title, different
+    slug) — e.g. a preprint published in one run and its journal version later.
+    Keeps the first occurrence (newest, since records are date-sorted)."""
+    seen: set[str] = set()
+    out = []
+    for r in records:
+        key = " ".join((r.get("title") or "").lower().split())
+        if key and key in seen:
+            continue
+        seen.add(key)
+        out.append(r)
+    return out
 
 
 def _save_supabase(records: list[dict[str, Any]]) -> int:
