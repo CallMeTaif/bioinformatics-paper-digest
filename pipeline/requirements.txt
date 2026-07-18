@@ -1,6 +1,7 @@
 # Kept intentionally small — fewer wheels to break on new Python releases.
 httpx>=0.27            # all HTTP: OpenAlex, Europe PMC, Supabase REST
 python-dotenv>=1.0     # load .env
+pypdf>=5.0             # extract text from open-access PDFs (full-text fallback)
 
 # LLM providers (calls are guarded by DRY_RUN; only needed for a real run)
 google-genai>=0.3      # summarizer (Gemini)

@@ -12,6 +12,7 @@ import httpx
 
 from .base import Paper
 from .europepmc import enrich_fulltext, parse_jats, MIN_FULLTEXT_CHARS
+from .pdf import extract_pdf_text
 
 
 def resolve_fulltext(paper: Paper, *, client: Optional[httpx.Client] = None) -> Paper:
@@ -30,9 +31,17 @@ def resolve_fulltext(paper: Paper, *, client: Optional[httpx.Client] = None) -> 
                         paper.abstract = parsed["abstract"]
                     return paper
             except httpx.HTTPError:
-                pass  # fall through to Europe PMC
+                pass  # fall through
         # 2) Europe PMC by DOI (also fills full_text when available).
         enrich_fulltext(paper, client=client)
+        if paper.full_text:
+            return paper
+        # 3) open-access PDF: download + extract text (covers recent papers with
+        #    no JATS but a downloadable PDF, e.g. arXiv/Nature). 403 fails safely.
+        if paper.pdf_original_url:
+            text = extract_pdf_text(paper.pdf_original_url, client=client)
+            if text:
+                paper.full_text = text
     finally:
         if own:
             client.close()
