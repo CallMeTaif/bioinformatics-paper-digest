@@ -15,10 +15,14 @@ import datetime as _dt
 import httpx
 
 from . import config
-from .sources.openalex import discover, DEFAULT_SEED_TERMS
-from .sources.europepmc import enrich_fulltext
-from .llm import get_summarizer, get_verifier
+from .sources.discovery import discover_all
+from .sources.fulltext import resolve_fulltext
+from .llm import get_summarizer, get_verifier, get_prescreener
 from .publish import build_record, save_records
+
+# Preprints often lack fetchable full text while fresh; allow an abstract-only
+# summary when the abstract is substantial enough to be worth summarizing.
+MIN_ABSTRACT_CHARS = 600
 
 
 def _score(paper) -> float:
@@ -38,9 +42,8 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
     print(f"=== pipeline run {_dt.datetime.now().isoformat(timespec='seconds')} "
           f"(DRY_RUN={config.DRY_RUN}) ===")
 
-    # 1) discover, then rank
-    papers = discover(DEFAULT_SEED_TERMS, per_term=pool_per_term, mailto=mailto)
-    print(f"[discover] {len(papers)} unique open-access candidates")
+    # 1) discover (OpenAlex established lane + bioRxiv/medRxiv fresh lane), then rank
+    papers = discover_all(mailto=mailto, per_term=pool_per_term)
     ranked = sorted(papers, key=_score, reverse=True)
 
     # 2) abstract pre-screen — a cheap model drops off-topic/weak papers BEFORE we
@@ -62,20 +65,25 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
             # Preserve rank order among kept; append any un-screened tail as fallback.
             ranked = kept + ranked[config.MAX_CANDIDATES:]
 
-    # 3) enrich with full text; keep only those that have usable full text
+    # 3) resolve full text; keep papers we can summarize (full text, or a
+    #    substantial abstract for fresh preprints without fetchable full text).
     full_text_papers = []
-    with httpx.Client(timeout=45.0) as c:
+    with httpx.Client(timeout=45.0, follow_redirects=True) as c:
         for paper in ranked:
-            enrich_fulltext(paper, client=c)
-            if paper.full_text:
+            resolve_fulltext(paper, client=c)
+            has_ft = bool(paper.full_text)
+            has_abs = bool(paper.abstract) and len(paper.abstract) >= MIN_ABSTRACT_CHARS
+            if has_ft or has_abs:
                 full_text_papers.append(paper)
-                print(f"[fulltext] OK  ({len(paper.full_text):>6}c)  {paper.title[:60]}")
+                src = f"{len(paper.full_text):>6}c full" if has_ft else f"{len(paper.abstract):>6}c abstract"
+                pre = " [preprint]" if paper.is_preprint else ""
+                print(f"[fulltext] OK  ({src})  {paper.title[:52]}{pre}")
             if len(full_text_papers) >= limit:
                 break
-    print(f"[fulltext] {len(full_text_papers)} papers with usable full text (target {limit})")
+    print(f"[fulltext] {len(full_text_papers)} summarizable papers (target {limit})")
 
     if not full_text_papers:
-        print("[run] no full-text papers this run — nothing to publish.")
+        print("[run] nothing summarizable this run — nothing to publish.")
         return 0
 
     # 4) summarize -> verify -> gate (one failure/timeout must not sink the batch)

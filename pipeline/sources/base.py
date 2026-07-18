@@ -70,6 +70,7 @@ class Paper:
     # --- content ---
     abstract: Optional[str] = None
     full_text: Optional[str] = None  # filled by a full-text source (Europe PMC)
+    full_text_url: Optional[str] = None  # direct JATS XML URL (e.g. bioRxiv/medRxiv)
     # --- ranking signals (not persisted directly) ---
     cited_by_count: int = 0
     # --- cross-source identifiers to help enrichment ---
