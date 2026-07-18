@@ -11,6 +11,7 @@ from .. import config
 from .base import Summarizer
 from .mock import MockSummarizer, MockVerifier
 from .verify import Verifier
+from .prescreen import Prescreener, MockPrescreener
 
 
 def get_summarizer(*, force_real: bool = False) -> Summarizer:
@@ -51,3 +52,19 @@ def get_verifier(*, force_real: bool = False) -> Verifier:
 
     print(f"[llm] unknown VERIFIER_PROVIDER={provider!r} — using mock.")
     return MockVerifier()
+
+
+def get_prescreener(*, force_real: bool = False) -> Prescreener:
+    provider = (config.PRESCREEN_PROVIDER or "").lower()
+
+    if config.DRY_RUN and not force_real:
+        return MockPrescreener()
+
+    if provider == "google":
+        if not config.GEMINI_API_KEY:
+            print("[llm] GEMINI_API_KEY missing — using mock pre-screen.")
+            return MockPrescreener()
+        from .prescreen import GeminiPrescreener
+        return GeminiPrescreener(api_key=config.GEMINI_API_KEY, model=config.PRESCREEN_MODEL)
+
+    return MockPrescreener()

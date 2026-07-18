@@ -41,6 +41,10 @@ SUMMARIZER_PROVIDER = os.getenv("SUMMARIZER_PROVIDER", "google")
 SUMMARIZER_MODEL = os.getenv("SUMMARIZER_MODEL", "gemini-3.1-pro")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
+# --- abstract pre-screen (cheap model; reuses GEMINI_API_KEY for google) ---
+PRESCREEN_PROVIDER = os.getenv("PRESCREEN_PROVIDER", "google")
+PRESCREEN_MODEL = os.getenv("PRESCREEN_MODEL", "gemini-2.5-flash")
+
 # --- verifier (Phase 2) ---
 VERIFIER_PROVIDER = os.getenv("VERIFIER_PROVIDER", "anthropic")
 VERIFIER_MODEL = os.getenv("VERIFIER_MODEL", "claude-opus")
@@ -54,6 +58,7 @@ SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 MAX_CANDIDATES = _int("MAX_CANDIDATES", 15)
 PUBLISH_PER_RUN = _int("PUBLISH_PER_RUN", 3)
 DRY_RUN = _bool("DRY_RUN", True)
+PRESCREEN_ENABLED = _bool("PRESCREEN_ENABLED", True)
 
 
 def _float(name: str, default: float) -> float:

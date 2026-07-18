@@ -38,15 +38,34 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
     print(f"=== pipeline run {_dt.datetime.now().isoformat(timespec='seconds')} "
           f"(DRY_RUN={config.DRY_RUN}) ===")
 
-    # 1) discover
+    # 1) discover, then rank
     papers = discover(DEFAULT_SEED_TERMS, per_term=pool_per_term, mailto=mailto)
     print(f"[discover] {len(papers)} unique open-access candidates")
+    ranked = sorted(papers, key=_score, reverse=True)
 
-    # 2) enrich with full text; keep only those that have usable full text
+    # 2) abstract pre-screen — a cheap model drops off-topic/weak papers BEFORE we
+    #    pay to fetch full text and summarize. Runs on the top MAX_CANDIDATES.
+    if config.PRESCREEN_ENABLED:
+        pool = ranked[: config.MAX_CANDIDATES]
+        screener = get_prescreener()
+        print(f"[prescreen] {screener.name}:{screener.model} screening {len(pool)} abstracts",
+              flush=True)
+        try:
+            decisions = screener.screen(pool)
+        except Exception as e:  # noqa: BLE001 — fail open: a screen failure keeps all
+            print(f"[prescreen] failed ({type(e).__name__}: {str(e)[:80]}) — keeping all", flush=True)
+            decisions = None
+        if decisions:
+            kept = [p for p, d in zip(pool, decisions) if d.keep]
+            dropped = len(pool) - len(kept)
+            print(f"[prescreen] kept {len(kept)}, dropped {dropped} off-topic/weak", flush=True)
+            # Preserve rank order among kept; append any un-screened tail as fallback.
+            ranked = kept + ranked[config.MAX_CANDIDATES:]
+
+    # 3) enrich with full text; keep only those that have usable full text
     full_text_papers = []
     with httpx.Client(timeout=45.0) as c:
-        # Rank first so we try the most promising papers and can stop early.
-        for paper in sorted(papers, key=_score, reverse=True):
+        for paper in ranked:
             enrich_fulltext(paper, client=c)
             if paper.full_text:
                 full_text_papers.append(paper)
@@ -59,7 +78,7 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
         print("[run] no full-text papers this run — nothing to publish.")
         return 0
 
-    # 3) summarize -> verify -> gate (one failure/timeout must not sink the batch)
+    # 4) summarize -> verify -> gate (one failure/timeout must not sink the batch)
     summarizer = get_summarizer()
     verifier = get_verifier()
     print(f"[summarize] provider: {summarizer.name}:{summarizer.model}", flush=True)
@@ -91,7 +110,7 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
         print(f"    {rec['status']:9} verdict={verdict.verdict} "
               f"score={verdict.score:.2f} conf={verdict.confidence:.2f}", flush=True)
 
-    # 4) publish (published + flagged both persisted; the site shows only published)
+    # 5) publish (published + flagged both persisted; the site shows only published)
     added = save_records(records)
     print(f"=== done: {added} record(s) written — {n_pub} published, {n_flag} flagged for review ===")
     return added
