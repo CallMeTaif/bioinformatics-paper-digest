@@ -17,6 +17,7 @@ import httpx
 from . import config
 from .sources.discovery import discover_all
 from .sources.fulltext import resolve_fulltext
+from .sources.crossref import enrich_license
 from .llm import get_summarizer, get_verifier, get_prescreener
 from .publish import build_record, save_records
 
@@ -122,6 +123,14 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
     if not full_text_papers:
         print("[run] nothing summarizable this run — nothing to publish.")
         return 0
+
+    # 3b) Crossref: authoritative license for the copyright/host gate (few calls).
+    with httpx.Client(timeout=20.0) as c:
+        for paper in full_text_papers:
+            enrich_license(paper, client=c, mailto=config.CROSSREF_MAILTO)
+    hostable = sum(p.is_hostable for p in full_text_papers)
+    print(f"[license] {hostable}/{len(full_text_papers)} papers host-eligible (rest link-only)",
+          flush=True)
 
     # 4) summarize -> verify -> gate (one failure/timeout must not sink the batch)
     summarizer = get_summarizer()

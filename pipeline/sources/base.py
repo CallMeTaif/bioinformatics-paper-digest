@@ -48,6 +48,8 @@ def normalize_license(raw: Optional[str]) -> str:
         return "cc0"
     if r in {"publisher-specific-oa", "publisher-specific", "other-oa", "unspecified-oa"}:
         return "other-oa"
+    if r.startswith(("http://", "https://")):
+        return "proprietary"  # a non-CC license URL (e.g. publisher user license)
     return r  # keep whatever it is; treated as non-hostable unless in allowlist
 
 
