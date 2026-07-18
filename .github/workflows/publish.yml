@@ -50,7 +50,9 @@ jobs:
         run: |
           python -u -m pipeline.run --limit "${{ github.event.inputs.limit || 3 }}" --pool 10
 
+      # Belt-and-braces: a dry run produces mock summaries, so never publish it.
       - name: Commit new papers
+        if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           if git diff --quiet -- web/src/data/papers.json; then
             echo "No new papers this run — nothing to commit."

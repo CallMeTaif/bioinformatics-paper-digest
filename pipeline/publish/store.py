@@ -86,7 +86,11 @@ def _save_local(records: list[dict[str, Any]]) -> int:
     )
     merged = _collapse_by_title(merged)
     LOCAL_JSON.write_text(json.dumps(merged, indent=2, ensure_ascii=False))
-    print(f"[publish] wrote {len(merged)} records ({added} new) -> {LOCAL_JSON.relative_to(_ROOT)}")
+    try:  # display-only nicety; never let it break the save
+        where = LOCAL_JSON.relative_to(_ROOT)
+    except ValueError:
+        where = LOCAL_JSON
+    print(f"[publish] wrote {len(merged)} records ({added} new) -> {where}")
     return added
 
 
@@ -132,6 +136,13 @@ def save_records(records: list[dict[str, Any]]) -> int:
     """Write records to whichever sink is active. Returns count added/upserted."""
     if not records:
         print("[publish] nothing to save")
+        return 0
+    # A dry run must never mutate the published library — it uses mock models,
+    # so persisting its output would put placeholder summaries on the live site.
+    if config.DRY_RUN:
+        print(f"[publish] DRY_RUN — would save {len(records)} record(s); writing nothing:")
+        for r in records:
+            print(f"           - [{r.get('status')}] {r.get('title', '')[:60]}")
         return 0
     use_supabase = (
         bool(config.SUPABASE_URL) and bool(config.SUPABASE_SERVICE_KEY) and not config.DRY_RUN
