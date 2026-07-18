@@ -19,7 +19,7 @@ from .sources.discovery import discover_all
 from .sources.fulltext import resolve_fulltext
 from .sources.crossref import enrich_license
 from .llm import get_summarizer, get_verifier, get_prescreener
-from .publish import build_record, save_records
+from .publish import build_record, save_records, posted_keys
 
 # Preprints often lack fetchable full text while fresh; allow an abstract-only
 # summary when the abstract is substantial enough to be worth summarizing.
@@ -80,6 +80,16 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
     # 1) discover (OpenAlex established lane + bioRxiv/medRxiv fresh lane), then
     #    blend the two lanes so preprints and proven work both get represented.
     papers = discover_all(mailto=mailto, per_term=pool_per_term)
+
+    # Skip papers already in the library so re-runs don't re-summarize (or repost)
+    # them — makes repeated/scheduled runs cheap and idempotent (spec §5).
+    already = posted_keys()
+    if already:
+        fresh = [p for p in papers if p.doi not in already and p.title_key() not in already]
+        print(f"[dedup] skipped {len(papers) - len(fresh)} already-published; "
+              f"{len(fresh)} new candidates", flush=True)
+        papers = fresh
+
     ranked = blend_lanes(papers, max(config.MAX_CANDIDATES, limit * 3))
     n_pre = sum(p.is_preprint for p in ranked[: config.MAX_CANDIDATES])
     print(f"[rank] two-lane blend: {n_pre} preprints in top {config.MAX_CANDIDATES}", flush=True)

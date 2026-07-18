@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from .. import config
+from ..sources.base import normalize_doi
 
 _ROOT = Path(__file__).resolve().parents[2]
 LOCAL_JSON = _ROOT / "web" / "src" / "data" / "papers.json"
@@ -19,6 +20,48 @@ LOCAL_JSON = _ROOT / "web" / "src" / "data" / "papers.json"
 
 def _now_iso() -> str:
     return _dt.datetime.now(_dt.timezone.utc).isoformat()
+
+
+def _title_key(title: str) -> str:
+    return " ".join((title or "").lower().split())
+
+
+def posted_keys() -> set[str]:
+    """Identifiers (normalized DOIs + title keys) already in the store, so the
+    pipeline can skip re-summarizing papers it has published before.
+
+    Reads Supabase when configured, else the local JSON. Missing/empty -> set().
+    """
+    keys: set[str] = set()
+    records: list[dict[str, Any]] = []
+    if config.SUPABASE_URL and config.SUPABASE_SERVICE_KEY:
+        try:
+            import httpx
+            url = f"{config.SUPABASE_URL.rstrip('/')}/rest/v1/papers"
+            headers = {
+                "apikey": config.SUPABASE_SERVICE_KEY,
+                "Authorization": f"Bearer {config.SUPABASE_SERVICE_KEY}",
+            }
+            with httpx.Client(timeout=20.0) as c:
+                r = c.get(url, headers=headers, params={"select": "doi,title"})
+                r.raise_for_status()
+                records = r.json()
+        except Exception as e:  # noqa: BLE001 — fall back to local on any failure
+            print(f"[dedup] Supabase read failed ({type(e).__name__}); using local")
+            records = []
+    if not records and LOCAL_JSON.exists():
+        try:
+            records = json.loads(LOCAL_JSON.read_text())
+        except json.JSONDecodeError:
+            records = []
+    for r in records:
+        doi = normalize_doi(r.get("doi"))
+        if doi:
+            keys.add(doi)
+        title = r.get("title")
+        if title:
+            keys.add("title:" + _title_key(title))
+    return keys
 
 
 def _save_local(records: list[dict[str, Any]]) -> int:

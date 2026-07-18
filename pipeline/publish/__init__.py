@@ -5,6 +5,6 @@ Sink selection (see store.save_records):
   - otherwise                           -> local JSON the Astro site reads
 """
 from .record import build_record, slugify
-from .store import save_records
+from .store import save_records, posted_keys
 
-__all__ = ["build_record", "slugify", "save_records"]
+__all__ = ["build_record", "slugify", "save_records", "posted_keys"]
