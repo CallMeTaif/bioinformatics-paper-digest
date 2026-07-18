@@ -115,6 +115,21 @@ a:hover { text-decoration: underline; }
 .chip.preprint { border-color: var(--nt-g); color: var(--nt-g); }
 .chip.ai { border-color: var(--primary); color: var(--primary); }
 .chip.diff { text-transform: capitalize; }
+.chip.verified { border-color: var(--nt-a); color: var(--nt-a); background: color-mix(in srgb, var(--nt-a) 12%, transparent); }
+
+/* --- verification panel (detail sidebar) --- */
+.verify-panel {
+  margin-top: 16px; background: var(--surface); border: 1px solid var(--nt-a);
+  border-radius: var(--radius); padding: 16px;
+}
+.verify-head { font-weight: 650; color: var(--nt-a); font-size: 0.95rem; }
+.verify-score { display: flex; align-items: baseline; gap: 8px; margin-top: 10px; }
+.verify-num { font-family: var(--font-mono); font-size: 1.6rem; font-weight: 600; color: var(--text); }
+.verify-label { font-size: 0.78rem; color: var(--muted); }
+.verify-meter { height: 6px; border-radius: 999px; background: var(--border); margin-top: 8px; overflow: hidden; }
+.verify-meter span { display: block; height: 100%; background: var(--nt-a); }
+.verify-by { font-size: 0.8rem; color: var(--muted); margin: 12px 0 0; line-height: 1.5; }
+.verify-notes { font-size: 0.8rem; color: var(--text); margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--border); font-style: italic; }
 
 /* --- detail page --- */
 .detail { display: grid; grid-template-columns: 1fr 280px; gap: 36px; padding: 32px 0 80px; }

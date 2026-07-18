@@ -17,7 +17,7 @@ import httpx
 from . import config
 from .sources.openalex import discover, DEFAULT_SEED_TERMS
 from .sources.europepmc import enrich_fulltext
-from .llm import get_summarizer
+from .llm import get_summarizer, get_verifier
 from .publish import build_record, save_records
 
 
@@ -59,26 +59,41 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
         print("[run] no full-text papers this run — nothing to publish.")
         return 0
 
-    # 3) summarize (one failure/timeout must not sink the whole batch)
+    # 3) summarize -> verify -> gate (one failure/timeout must not sink the batch)
     summarizer = get_summarizer()
-    print(f"[summarize] using provider: {summarizer.name}:{summarizer.model}", flush=True)
+    verifier = get_verifier()
+    print(f"[summarize] provider: {summarizer.name}:{summarizer.model}", flush=True)
+    print(f"[verify]    provider: {verifier.name}:{verifier.model} "
+          f"(threshold {config.VERIFY_THRESHOLD})", flush=True)
     records = []
+    n_pub = n_flag = 0
     for i, paper in enumerate(full_text_papers, 1):
-        print(f"[summarize] {i}/{len(full_text_papers)} {paper.title[:55]} ...", flush=True)
+        text = paper.full_text or paper.abstract or ""
+        print(f"[{i}/{len(full_text_papers)}] {paper.title[:55]} ...", flush=True)
         try:
-            summary = summarizer.summarize(
-                title=paper.title, venue=paper.venue,
-                text=paper.full_text or paper.abstract or "",
-            )
-        except Exception as e:  # noqa: BLE001 — keep going on any per-paper error
-            print(f"[summarize]   SKIPPED ({type(e).__name__}: {str(e)[:120]})", flush=True)
+            summary = summarizer.summarize(title=paper.title, venue=paper.venue, text=text)
+        except Exception as e:  # noqa: BLE001
+            print(f"    SKIPPED summarize ({type(e).__name__}: {str(e)[:100]})", flush=True)
             continue
-        records.append(build_record(paper, summary))
-        print(f"[summarize]   ok", flush=True)
+        try:
+            verdict = verifier.verify(title=paper.title, source_text=text, summary=summary)
+        except Exception as e:  # noqa: BLE001 — a verify failure flags, never auto-publishes
+            print(f"    verify failed ({type(e).__name__}: {str(e)[:80]}) — flagging", flush=True)
+            from .llm import Verdict
+            verdict = Verdict(verdict="flag", notes=f"verify error: {type(e).__name__}",
+                              provider=verifier.name, model=verifier.model)
+        rec = build_record(paper, summary, verdict, verify_threshold=config.VERIFY_THRESHOLD)
+        records.append(rec)
+        if rec["status"] == "published":
+            n_pub += 1
+        else:
+            n_flag += 1
+        print(f"    {rec['status']:9} verdict={verdict.verdict} "
+              f"score={verdict.score:.2f} conf={verdict.confidence:.2f}", flush=True)
 
-    # 4) publish
+    # 4) publish (published + flagged both persisted; the site shows only published)
     added = save_records(records)
-    print(f"=== done: {added} new record(s) ===")
+    print(f"=== done: {added} record(s) written — {n_pub} published, {n_flag} flagged for review ===")
     return added
 
 

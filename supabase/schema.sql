@@ -33,6 +33,9 @@ create table if not exists papers (
     -- verifier (Phase 2; nullable until then)
     verifier_score    numeric,                     -- 0..1 faithfulness/quality
     verifier_verdict  text check (verifier_verdict in ('pass','flag')),
+    verifier_provider text,                        -- which model checked it (e.g. 'anthropic', 'mock')
+    verifier_notes    text,                        -- one-line reason for the verdict
+    verifier_unsupported_claims text[],            -- claims the verifier couldn't support
 
     status            text not null default 'draft'
         check (status in ('draft','queued','flagged','published')),

@@ -12,6 +12,7 @@ from typing import Any, Optional
 
 from ..sources.base import Paper
 from ..llm.base import Summary
+from ..llm.verify import Verdict, passes_gate
 from ..topics import tag_for_text
 
 
@@ -33,8 +34,17 @@ def _difficulty(paper: Paper) -> str:
     return "intermediate"
 
 
-def build_record(paper: Paper, summary: Summary) -> dict[str, Any]:
+def build_record(
+    paper: Paper, summary: Summary,
+    verdict: Optional[Verdict] = None, *, verify_threshold: float = 0.8,
+) -> dict[str, Any]:
     tag, accent = tag_for_text(f"{paper.title} {paper.abstract or ''}")
+    # Gate: no verdict (Phase 1) auto-publishes; a verdict must pass to publish,
+    # otherwise the paper is held in the review queue as 'flagged'.
+    if verdict is None:
+        status = "published"
+    else:
+        status = "published" if passes_gate(verdict, threshold=verify_threshold) else "flagged"
     return {
         "slug": slugify(paper.title, paper.doi),
         "doi": paper.doi,
@@ -57,7 +67,10 @@ def build_record(paper: Paper, summary: Summary) -> dict[str, Any]:
         "summary": summary.to_dict(),
         "summary_provider": summary.provider,
         "used_full_text": bool(paper.full_text),
-        "verifier_score": None,            # Phase 2
-        "verifier_verdict": None,          # Phase 2
-        "status": "published",
+        "verifier_score": verdict.score if verdict else None,
+        "verifier_verdict": verdict.verdict if verdict else None,
+        "verifier_provider": verdict.provider if verdict else None,
+        "verifier_notes": verdict.notes if verdict else None,
+        "verifier_unsupported_claims": verdict.unsupported_claims if verdict else None,
+        "status": status,
     }

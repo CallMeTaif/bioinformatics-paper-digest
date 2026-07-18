@@ -34,8 +34,22 @@ export interface Paper {
   summary: Summary;
   summary_provider: string;
   used_full_text: boolean;
+  verifier_verdict?: 'pass' | 'flag' | null;
+  verifier_score?: number | null;
+  verifier_provider?: string | null;
+  verifier_notes?: string | null;
+  verifier_unsupported_claims?: string[] | null;
   status: string;
   date_posted?: string;
+}
+
+// True only when a real (non-mock) verifier checked this summary.
+export function isVerified(p: Paper): boolean {
+  return (
+    !!p.verifier_provider &&
+    p.verifier_provider !== 'mock' &&
+    p.verifier_verdict === 'pass'
+  );
 }
 
 const papers = data as unknown as Paper[];

@@ -9,7 +9,8 @@ from __future__ import annotations
 
 from .. import config
 from .base import Summarizer
-from .mock import MockSummarizer
+from .mock import MockSummarizer, MockVerifier
+from .verify import Verifier
 
 
 def get_summarizer(*, force_real: bool = False) -> Summarizer:
@@ -30,3 +31,23 @@ def get_summarizer(*, force_real: bool = False) -> Summarizer:
 
     print(f"[llm] unknown SUMMARIZER_PROVIDER={provider!r} — using mock.")
     return MockSummarizer()
+
+
+def get_verifier(*, force_real: bool = False) -> Verifier:
+    provider = (config.VERIFIER_PROVIDER or "").lower()
+
+    if config.DRY_RUN and not force_real:
+        return MockVerifier()
+
+    if provider == "anthropic":
+        if not config.ANTHROPIC_API_KEY:
+            print("[llm] ANTHROPIC_API_KEY missing — using mock verifier.")
+            return MockVerifier()
+        from .claude import ClaudeVerifier
+        return ClaudeVerifier(api_key=config.ANTHROPIC_API_KEY, model=config.VERIFIER_MODEL)
+
+    if provider in ("mock", "", "none"):
+        return MockVerifier()
+
+    print(f"[llm] unknown VERIFIER_PROVIDER={provider!r} — using mock.")
+    return MockVerifier()

@@ -56,6 +56,16 @@ PUBLISH_PER_RUN = _int("PUBLISH_PER_RUN", 3)
 DRY_RUN = _bool("DRY_RUN", True)
 
 
+def _float(name: str, default: float) -> float:
+    try:
+        return float(os.getenv(name, "").strip())
+    except (ValueError, AttributeError):
+        return default
+
+
+VERIFY_THRESHOLD = _float("VERIFY_THRESHOLD", 0.8)
+
+
 def summary_of_settings() -> str:
     """Human-readable, secret-safe dump for `python -m pipeline.config`."""
     def has(v: str) -> str:

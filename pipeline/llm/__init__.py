@@ -1,9 +1,13 @@
-"""Swappable LLM layer: summarize() now, verify() in Phase 2.
+"""Swappable LLM layer: summarize() (Phase 1) and verify() (Phase 2).
 
-Callers use get_summarizer() and never import a concrete provider, so the
-model/provider can change via env without touching the pipeline.
+Callers use get_summarizer()/get_verifier() and never import a concrete provider,
+so the model/provider can change via env without touching the pipeline.
 """
 from .base import Summary, SUMMARY_FIELDS
-from .provider import get_summarizer
+from .verify import Verdict, passes_gate
+from .provider import get_summarizer, get_verifier
 
-__all__ = ["Summary", "SUMMARY_FIELDS", "get_summarizer"]
+__all__ = [
+    "Summary", "SUMMARY_FIELDS", "get_summarizer",
+    "Verdict", "passes_gate", "get_verifier",
+]
