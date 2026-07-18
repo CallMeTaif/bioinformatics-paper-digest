@@ -1,0 +1,64 @@
+name: Publish papers
+
+# Mon/Wed/Fri at 08:00 UTC, plus a manual "Run workflow" button for testing.
+on:
+  schedule:
+    - cron: "0 8 * * 1,3,5"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "How many papers to publish this run"
+        required: false
+        default: "3"
+      dry_run:
+        description: "true = mock models, no API cost"
+        required: false
+        default: "false"
+
+# Needed so the job can push the new papers back to the repo.
+permissions:
+  contents: write
+
+# Never let two runs publish at the same time.
+concurrency:
+  group: publish-papers
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r pipeline/requirements.txt
+
+      - name: Run pipeline
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENALEX_MAILTO: ${{ vars.CONTACT_EMAIL }}
+          CROSSREF_MAILTO: ${{ vars.CONTACT_EMAIL }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          python -u -m pipeline.run --limit "${{ github.event.inputs.limit || 3 }}" --pool 10
+
+      - name: Commit new papers
+        run: |
+          if git diff --quiet -- web/src/data/papers.json; then
+            echo "No new papers this run — nothing to commit."
+            exit 0
+          fi
+          git config user.name  "paper-digest-bot"
+          git config user.email "actions@github.com"
+          git add web/src/data/papers.json
+          git commit -m "Publish new papers ($(date -u +%Y-%m-%d))"
+          git push
+          echo "Pushed — Vercel will redeploy the site automatically."
