@@ -44,6 +44,12 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Storage for licence-permitting PDFs. USE_SUPABASE_DB stays false:
+          # records live in the repo's JSON, Supabase is used only for files.
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          SUPABASE_PDF_BUCKET: pdfs
+          USE_SUPABASE_DB: "false"
           OPENALEX_MAILTO: ${{ vars.CONTACT_EMAIL }}
           CROSSREF_MAILTO: ${{ vars.CONTACT_EMAIL }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}

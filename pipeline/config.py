@@ -54,6 +54,10 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 SUPABASE_PDF_BUCKET = os.getenv("SUPABASE_PDF_BUCKET", "pdfs")
+# Storage and database are independent: having storage credentials (for PDF
+# hosting) must NOT make the pipeline write records to a Supabase table that
+# may not exist. Opt in explicitly.
+USE_SUPABASE_DB = _bool("USE_SUPABASE_DB", False)
 
 # --- tuning ---
 MAX_CANDIDATES = _int("MAX_CANDIDATES", 15)

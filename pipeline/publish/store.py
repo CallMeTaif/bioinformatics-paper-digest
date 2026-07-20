@@ -34,7 +34,7 @@ def posted_keys() -> set[str]:
     """
     keys: set[str] = set()
     records: list[dict[str, Any]] = []
-    if config.SUPABASE_URL and config.SUPABASE_SERVICE_KEY:
+    if config.USE_SUPABASE_DB and config.SUPABASE_URL and config.SUPABASE_SERVICE_KEY:
         try:
             import httpx
             url = f"{config.SUPABASE_URL.rstrip('/')}/rest/v1/papers"
@@ -145,7 +145,9 @@ def save_records(records: list[dict[str, Any]]) -> int:
             print(f"           - [{r.get('status')}] {r.get('title', '')[:60]}")
         return 0
     use_supabase = (
-        bool(config.SUPABASE_URL) and bool(config.SUPABASE_SERVICE_KEY) and not config.DRY_RUN
+        config.USE_SUPABASE_DB
+        and bool(config.SUPABASE_URL) and bool(config.SUPABASE_SERVICE_KEY)
+        and not config.DRY_RUN
     )
     if use_supabase:
         return _save_supabase(records)
