@@ -177,6 +177,23 @@ a:hover { text-decoration: underline; }
 }
 .btn:hover { text-decoration: none; filter: brightness(1.08); }
 
+/* --- hosted PDF (licence-permitting papers only) --- */
+.pdf-section { margin: 36px 0 10px; }
+.pdf-head {
+  font-family: var(--font-ui); font-size: 0.8rem; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--primary); margin: 0 0 6px; font-weight: 600;
+}
+.pdf-note { color: var(--muted); font-size: 0.85rem; margin: 0 0 12px; line-height: 1.5; }
+.pdf-frame {
+  width: 100%; height: 78vh; min-height: 420px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--surface);
+}
+.btn-secondary {
+  background: transparent; color: var(--primary); border: 1px solid var(--primary);
+  margin-top: 8px;
+}
+.btn-secondary:hover { background: color-mix(in srgb, var(--primary) 12%, transparent); }
+
 /* reading progress bar */
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--primary); z-index: 40; }
 

@@ -53,6 +53,7 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 # --- storage ---
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
+SUPABASE_PDF_BUCKET = os.getenv("SUPABASE_PDF_BUCKET", "pdfs")
 
 # --- tuning ---
 MAX_CANDIDATES = _int("MAX_CANDIDATES", 15)

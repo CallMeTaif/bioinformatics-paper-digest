@@ -23,15 +23,28 @@ def _looks_like_pdf(content: bytes, content_type: str) -> bool:
     return content[:5] == b"%PDF-" or "application/pdf" in (content_type or "").lower()
 
 
-def extract_pdf_text(url: str, *, client: httpx.Client) -> Optional[str]:
-    """Return cleaned full text from a PDF URL, or None if unavailable/too short."""
+def download_pdf(url: str, *, client: httpx.Client) -> Optional[bytes]:
+    """Fetch a PDF and return its bytes, or None if unavailable/not a PDF/too big.
+
+    Shared by full-text extraction and PDF hosting so we fetch the same way.
+    """
     try:
         resp = client.get(url, headers={"User-Agent": _UA})
         resp.raise_for_status()
     except httpx.HTTPError:
         return None
     content = resp.content
-    if len(content) > _MAX_PDF_BYTES or not _looks_like_pdf(content, resp.headers.get("content-type", "")):
+    if len(content) > _MAX_PDF_BYTES:
+        return None
+    if not _looks_like_pdf(content, resp.headers.get("content-type", "")):
+        return None
+    return content
+
+
+def extract_pdf_text(url: str, *, client: httpx.Client) -> Optional[str]:
+    """Return cleaned full text from a PDF URL, or None if unavailable/too short."""
+    content = download_pdf(url, client=client)
+    if content is None:
         return None
     try:
         import pypdf  # type: ignore

@@ -6,5 +6,6 @@ Sink selection (see store.save_records):
 """
 from .record import build_record, slugify
 from .store import save_records, posted_keys
+from .pdf_host import host_pdf
 
-__all__ = ["build_record", "slugify", "save_records", "posted_keys"]
+__all__ = ["build_record", "slugify", "save_records", "posted_keys", "host_pdf"]

@@ -69,6 +69,7 @@ class Paper:
     license: str = "unknown"
     original_url: Optional[str] = None
     pdf_original_url: Optional[str] = None
+    hosted_pdf_path: Optional[str] = None  # set only when the licence allows hosting
     # --- content ---
     abstract: Optional[str] = None
     full_text: Optional[str] = None  # filled by a full-text source (Europe PMC)

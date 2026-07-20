@@ -64,7 +64,7 @@ def build_record(
         "license": paper.license,
         "original_url": paper.original_url,
         "pdf_original_url": paper.pdf_original_url,
-        "hosted_pdf_path": None,           # Phase 1 links only; never host yet
+        "hosted_pdf_path": paper.hosted_pdf_path,  # set only via the licence gate
         "can_host": paper.is_hostable,     # license verdict for Phase 2
         "abstract": paper.abstract,
         "subfield_tags": [tag],

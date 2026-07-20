@@ -14,7 +14,9 @@ const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
 const isMock = paper.summary_provider === 'mock';
 const verified = isVerified(paper);
 const scorePct = paper.verifier_score != null ? Math.round(paper.verifier_score * 100) : null;
-const pdfLink = paper.hosted_pdf_path ?? paper.pdf_original_url ?? paper.original_url;
+// We only host a copy when the licence permits redistribution; otherwise we link out.
+const hostedPdf = paper.hosted_pdf_path;
+const originalLink = paper.original_url ?? paper.pdf_original_url;
 ---
 <Base title={`${paper.title} — Paper Digest`} description={paper.summary.tldr}>
   <div id="progress"></div>
@@ -49,6 +51,20 @@ const pdfLink = paper.hosted_pdf_path ?? paper.pdf_original_url ?? paper.origina
           </section>
         ))}
       </div>
+
+      {hostedPdf && (
+        <section class="pdf-section">
+          <h2 class="pdf-head">Full paper</h2>
+          <p class="pdf-note">
+            Hosted here because this paper is published under <strong>{paper.license}</strong>,
+            which permits redistribution. Attribution: {(paper.authors ?? []).slice(0, 3).join(', ')}
+            {(paper.authors ?? []).length > 3 ? ' et al.' : ''} — {paper.venue}.
+          </p>
+          <object class="pdf-frame" data={hostedPdf} type="application/pdf">
+            <p>Your browser can’t display PDFs inline. <a href={hostedPdf}>Download the PDF</a> instead.</p>
+          </object>
+        </section>
+      )}
     </article>
 
     <aside class="sidebar">
@@ -62,7 +78,8 @@ const pdfLink = paper.hosted_pdf_path ?? paper.pdf_original_url ?? paper.origina
           <dt>Source</dt><dd>{paper.source}</dd>
           <dt>Summarized from</dt><dd>{paper.used_full_text ? 'full text' : 'abstract'}</dd>
         </dl>
-        {pdfLink && <a class="btn" href={pdfLink} target="_blank" rel="noopener">Read the original ↗</a>}
+        {originalLink && <a class="btn" href={originalLink} target="_blank" rel="noopener">Read the original ↗</a>}
+        {hostedPdf && <a class="btn btn-secondary" href={hostedPdf} download>Download PDF ↓</a>}
       </div>
 
       {verified && (

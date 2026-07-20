@@ -19,7 +19,8 @@ from .sources.discovery import discover_all
 from .sources.fulltext import resolve_fulltext
 from .sources.crossref import enrich_license
 from .llm import get_summarizer, get_verifier, get_prescreener
-from .publish import build_record, save_records, posted_keys
+from .publish import build_record, save_records, posted_keys, host_pdf
+from .publish.record import slugify
 
 # Preprints often lack fetchable full text while fresh; allow an abstract-only
 # summary when the abstract is substantial enough to be worth summarizing.
@@ -141,6 +142,18 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
     hostable = sum(p.is_hostable for p in full_text_papers)
     print(f"[license] {hostable}/{len(full_text_papers)} papers host-eligible (rest link-only)",
           flush=True)
+
+    # 3c) Host our own PDF copy — ONLY for redistribution-permitting licences.
+    #     A dry run never uploads; failures fall back to link-only.
+    if hostable and not config.DRY_RUN:
+        with httpx.Client(timeout=60.0, follow_redirects=True) as c:
+            for paper in full_text_papers:
+                if not paper.is_hostable:
+                    continue
+                hosted = host_pdf(paper, slugify(paper.title, paper.doi), client=c)
+                if hosted:
+                    paper.hosted_pdf_path = hosted
+                    print(f"[pdf-host] hosted {paper.title[:48]}", flush=True)
 
     # 4) summarize -> verify -> gate (one failure/timeout must not sink the batch)
     summarizer = get_summarizer()
