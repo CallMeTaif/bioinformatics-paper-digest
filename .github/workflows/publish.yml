@@ -9,7 +9,7 @@ on:
       limit:
         description: "How many papers to publish this run"
         required: false
-        default: "3"
+        default: "1"
       dry_run:
         description: "true = mock models, no API cost"
         required: false
@@ -48,7 +48,8 @@ jobs:
           CROSSREF_MAILTO: ${{ vars.CONTACT_EMAIL }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
-          python -u -m pipeline.run --limit "${{ github.event.inputs.limit || 3 }}" --pool 10
+          # 1 paper per run x Mon/Wed/Fri = 3 papers per week.
+          python -u -m pipeline.run --limit "${{ github.event.inputs.limit || 1 }}" --pool 10
 
       # Belt-and-braces: a dry run produces mock summaries, so never publish it.
       - name: Commit new papers
