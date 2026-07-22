@@ -1,5 +1,56 @@
 [
   {
+    "slug": "artificial-intelligence-and-big-data-for-precision-medicine--8280a6",
+    "doi": "10.32996/fcsai.2026.5.6.7",
+    "title": "Artificial Intelligence and Big Data for Precision Medicine: A Review of Bioinformatics-Driven Healthcare Applications",
+    "authors": [
+      "Mohammad Abdus Sami",
+      "Md Lutfor Rahman",
+      "Zerin Akter Tanni",
+      "Zakia Sultana Munmun",
+      "Sabiha Nusrat",
+      "Bidhan Biswas"
+    ],
+    "venue": "Frontiers in Computer Science and Artificial Intelligence",
+    "publication_date": "2026-05-09",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "hybrid",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.32996/fcsai.2026.5.6.7",
+    "pdf_original_url": "https://al-kindipublisher.com/index.php/fcsai/article/download/12680/11358",
+    "hosted_pdf_path": "https://cnwojlwrnlsjpllkhybj.supabase.co/storage/v1/object/public/pdfs/artificial-intelligence-and-big-data-for-precision-medicine--8280a6.pdf",
+    "can_host": true,
+    "abstract": "Healthcare is in the middle of a quiet but profound shift. Genomic sequencers, hospital information systems, wearables and imaging archives now generate data faster than clinicians can read it, and that flood is reshaping what “evidence-based care” means. We review more than forty recent studies that bring artificial intelligence (AI), machine learning and big-data analytics into bioinformatics and precision medicine, spanning oncology, drug discovery, cardiology, neurology, public-health surveillance and healthcare operations. Reported accuracies and AUCs range from roughly 80% in early drug-discovery pipelines to above 94% in deep-learning-based pancreatic and breast imaging. Yet our reading also suggests a more cautious story: many models still suffer from limited external validation, opaque decision logic and uneven access to high-quality multi-omics data. We propose a layered conceptual framework that connects heterogeneous data sources, federated and privacy-preserving pre-processing, predictive and explainable AI engines, and downstream clinical applications. The paper closes with a discussion of remaining barriers, interpretability, fairness, regulatory uncertainty and workflow integration and outlines research directions for the next several years.",
+    "subfield_tags": [
+      "clinical-informatics"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intro",
+    "summary": {
+      "tldr": "This review examines over forty recent studies on artificial intelligence in precision medicine, finding that while AI shows high accuracy in tasks like medical imaging, real-world clinical adoption requires better transparency, fairness, and workflow integration.",
+      "problem": "Modern healthcare generates massive amounts of patient data, such as genomic sequences and wearable sensor readings, making it impossible for human clinicians to synthesize all this information during a standard visit to determine the best personalized treatment.",
+      "methods": "The authors reviewed more than forty peer-reviewed papers published between 2018 and 2026 that applied artificial intelligence, machine learning, and big data analytics to healthcare and bioinformatics. They analyzed the algorithms used, performance metrics, clinical goals, and reported challenges, and then developed a conceptual framework for integrating these technologies.",
+      "findings": "Artificial intelligence models achieved the highest performance in medical imaging tasks, such as detecting pancreatic and breast cancer with over 90 percent accuracy, while tasks using complex tabular data like drug discovery and mental health triage scored between 80 and 86 percent. The authors also identified a common system structure across successful studies that combines diverse data sources, privacy-protecting data processing, and explainable AI engines.",
+      "why": "Integrating artificial intelligence into medicine can help doctors make faster, highly personalized treatment decisions based on a patient's complete biological and medical profile, ultimately improving patient care and healthcare operations.",
+      "limitations": "Many current artificial intelligence models struggle to perform well when tested on data from different hospitals, lack transparent decision-making processes, and risk amplifying biases if trained on data that under-represents certain demographic groups.",
+      "takeaway": "While artificial intelligence has proven it can accurately analyze complex medical data, its future in everyday healthcare depends on building transparent, fair, and privacy-focused systems that fit smoothly into a doctor's daily routine.",
+      "topic": "clinical-informatics",
+      "difficulty": "intro",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.97,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's scope, methods, findings, and limitations without introducing contradicted or invented facts.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-07-22T10:26:12.768337+00:00"
+  },
+  {
     "slug": "representation-learning-for-multi-modal-spatially-resolved-t-453ace",
     "doi": "10.1093/bioinformatics/btag316",
     "title": "Representation learning for multi-modal spatially resolved transcriptomics data",
