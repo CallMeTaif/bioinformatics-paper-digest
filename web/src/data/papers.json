@@ -1,5 +1,51 @@
 [
   {
+    "slug": "postbiotics-and-phage-synergy-in-precision-oral-microbiome-e-b83a30",
+    "doi": "10.3389/fmolb.2026.1766853",
+    "title": "Postbiotics and phage synergy in precision oral microbiome engineering: systems biology strategies targeting Streptococcus mutans in dental caries",
+    "authors": [
+      "Guhanraj Radhamanalan"
+    ],
+    "venue": "Frontiers in Molecular Biosciences",
+    "publication_date": "2026-04-08",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "gold",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.3389/fmolb.2026.1766853",
+    "pdf_original_url": "https://public-pages-files-2025.frontiersin.org/journals/molecular-biosciences/articles/10.3389/fmolb.2026.1766853/pdf",
+    "hosted_pdf_path": "https://cnwojlwrnlsjpllkhybj.supabase.co/storage/v1/object/public/pdfs/postbiotics-and-phage-synergy-in-precision-oral-microbiome-e-b83a30.pdf",
+    "can_host": true,
+    "abstract": "Dental caries continues to represent a major global public health concern and arises from complex ecological shifts within oral biofilms. The dominance of Streptococcus mutans , in combination with broader microbial imbalance and interactions involving the oral virome, plays a central role in disease progression. Although established preventive measures such as fluoride therapy and mechanical plaque control reduce enamel demineralization and microbial load, they do not comprehensively address dysbiosis, virulence regulation, or host–microbial signaling dynamics. Postbiotics are non-viable microbial products or metabolic derivatives with biological activity, are gaining attention as targeted modulators of the oral ecosystem. These agents include organic acids, exopolysaccharides, bacteriocins, and structural components derived from inactivated probiotic cells. Through diverse mechanisms, postbiotics can reduce acidogenic potential, weaken extracellular matrix integrity within biofilms, disrupt bacterial communication systems, and modulate mucosal immune pathways. Such effects may limit colonization efficiency and pathogenic behavior of S. mutans while preserving commensal balance. Emerging strategies propose combining postbiotics with bacteriophage-based approaches, immunomodulatory platforms, and innovative delivery systems such as nanoformulations and bioadhesive matrices to improve site-specific efficacy. Advances in multi-omics technologies, systems biology modeling, and artificial intelligence–driven diagnostics further support the development of personalized interventions tailored to individual microbial signatures. In addition, postbiotic-mediated modulation of viral–bacterial interactions and horizontal gene exchange may contribute to restoring ecological stability and reducing antimicrobial resistance dissemination. This review integrates current knowledge on postbiotic-driven regulation of the oral microbiome and virome and examines their potential role in precision-oriented caries management. Addressing translational challenges, including formulation stability, safety evaluation, regulatory pathways, and comprehensive virome profiling, will be critical for future clinical application.",
+    "subfield_tags": [
+      "systems-biology"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intro",
+    "summary": {
+      "tldr": "Combining non-living microbial products with bacteria-infecting viruses offers a highly targeted way to treat the microbial imbalances that cause dental cavities.",
+      "problem": "Traditional cavity prevention methods like fluoride and brushing do not fix the underlying imbalance of the oral microbiome, specifically the overgrowth of the acid-producing bacterium Streptococcus mutans.",
+      "methods": "The authors reviewed existing scientific literature to explore how postbiotics and bacteriophages interact within the oral microbiome and how they can be applied using a systems biology approach.",
+      "findings": "Postbiotics, which include beneficial bacterial byproducts like fatty acids and antimicrobial peptides, can prevent Streptococcus mutans from producing acid, break down its protective biofilms, and disrupt its communication. When paired with bacteriophages, these therapies can penetrate stubborn biofilms to selectively destroy cavity-causing bacteria while preserving healthy microbes.",
+      "why": "This strategy provides a foundation for precision dental treatments that can restore a healthy oral ecosystem without contributing to antimicrobial resistance or harming beneficial bacteria.",
+      "limitations": "The paper highlights several challenges before clinical use, including ensuring the stability of postbiotic formulations, navigating regulatory approvals, and overcoming a lack of comprehensive databases for identifying oral viruses.",
+      "takeaway": "Using a combination of postbiotics and bacteriophages presents a promising, highly specific strategy to prevent dental cavities by neutralizing harmful bacteria and restoring a healthy microbial balance in the mouth.",
+      "topic": "systems-biology",
+      "difficulty": "intro",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.98,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the review's content on postbiotics, bacteriophages, mechanisms, and translational challenges without introducing fabricated facts.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-07-24T10:16:45.456563+00:00"
+  },
+  {
     "slug": "artificial-intelligence-and-big-data-for-precision-medicine--8280a6",
     "doi": "10.32996/fcsai.2026.5.6.7",
     "title": "Artificial Intelligence and Big Data for Precision Medicine: A Review of Bioinformatics-Driven Healthcare Applications",
