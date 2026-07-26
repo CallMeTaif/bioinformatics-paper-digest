@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { allPapers, getPaper, SUMMARY_SECTIONS, accentVar, formatDate, isVerified } from '../../lib/papers';
+import { allPapers, getPaper, SUMMARY_SECTIONS, accentVar, formatDate } from '../../lib/papers';
 
 export function getStaticPaths() {
   return allPapers().map((p) => ({ params: { slug: p.slug } }));
@@ -11,7 +11,6 @@ const paper = getPaper(slug!);
 if (!paper) return Astro.redirect('/404');
 
 const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
-const verified = isVerified(paper);
 // We only host a copy when the licence permits redistribution; otherwise we link out.
 const hostedPdf = paper.hosted_pdf_path;
 const originalLink = paper.original_url ?? paper.pdf_original_url;
@@ -25,8 +24,6 @@ const originalLink = paper.original_url ?? paper.pdf_original_url;
         <span class="chip tag" style={`--chip-accent:${accentVar(paper.tag_accent)}`}>{tag}</span>
         <span class="chip diff">{paper.difficulty_level}</span>
         {paper.is_preprint && <span class="chip preprint">preprint · not peer-reviewed</span>}
-        <span class="chip ai">AI-generated</span>
-        {verified && <span class="chip verified">✓ machine-checked</span>}
       </div>
 
       <h1>{paper.title}</h1>
