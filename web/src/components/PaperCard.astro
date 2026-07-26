@@ -12,6 +12,5 @@ const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
   <div class="chips">
     <span class="chip tag" style={`--chip-accent:${accentVar(paper.tag_accent)}`}>{tag}</span>
     <span class="chip diff">{paper.difficulty_level}</span>
-    {paper.is_preprint && <span class="chip preprint">preprint</span>}
   </div>
 </article>
