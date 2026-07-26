@@ -1,98 +1,86 @@
-# Bioinformatics Paper Digest
+# BioRead
+
+**Live at [bioread.bio](https://www.bioread.bio)**
 
 An automated pipeline that discovers strong open-access bioinformatics papers,
 summarizes them with AI, **independently verifies each summary with a second AI
-from a different model family**, and publishes them to a static website.
+from a different model family**, and publishes them to a static website — three
+new papers a week, hands-off.
 
 Scope: **broad bioinformatics** — genomics, single-cell, proteomics, phylogenetics,
-systems biology, methods/algorithms, plus computational clinical informatics.
+systems biology, methods and algorithms, plus computational clinical informatics.
 
 ## How it works
 
 ```
-discover (4 sources, two-lane blend)     OpenAlex + bioRxiv + medRxiv
+discover (multi-source, two-lane blend)   OpenAlex + bioRxiv + medRxiv
    ↓
-skip already-published                   never re-summarize or repost a paper
+skip already-published                    never re-summarize or repost a paper
    ↓
-abstract pre-screen (cheap model)        drop off-topic/weak papers before paying
+abstract pre-screen (cheap model)         drop off-topic / weak papers early
    ↓
-resolve full text                        JATS XML → Europe PMC → open PDF
+resolve full text                         JATS XML → Europe PMC → open PDF
    ↓
-Crossref license                         authoritative host-vs-link decision
+license check (Crossref)                  decides host-vs-link for the PDF
    ↓
-SUMMARIZE  (Gemini)                      fixed 7-section template
+SUMMARIZE  (Gemini)                        fixed 7-section template
    ↓
-VERIFY     (Claude Opus)                 different model family, checks every claim
+VERIFY     (Claude Opus)                   different model family, checks every claim
    ↓
-gate → publish | flag for review         high-confidence pass auto-publishes
+gate → publish | hold for review          high-confidence passes auto-publish
 ```
 
-**Why two model families?** A model checking its own family's output shares its
-blind spots. Using a different family for verification catches more.
+**Why two model families?** A model checking its own family's output tends to
+share its blind spots. Using a different family for verification catches more.
 
-Honest limits: automated checking catches most errors, not all. Every summary is
-labeled AI-generated and links to the original. Preprints are labeled as not
-peer-reviewed. PDFs are only ever hosted when the license permits redistribution.
+## Transparency
 
-## Layout
+Summaries are AI-written and link to the original. Automated checking catches
+most errors, not all — readers are asked to verify anything important against the
+source. Preprints are noted as not peer-reviewed, and a paper's PDF is only ever
+hosted when its license permits redistribution; otherwise the site links out.
+
+## Tech stack
+
+- **Site:** Astro static site (fast, SEO-friendly), deployed on Vercel
+- **Pipeline:** Python, run on a schedule via GitHub Actions
+- **Models:** Google Gemini (summarize) + Anthropic Claude (verify), behind a
+  swappable interface
+- **Storage:** Supabase Storage for license-cleared PDFs
+
+## Repository layout
 
 ```
-web/            Astro static site — home, library (search/filters), paper detail, about
+web/                         Astro site — home, library (search/filters), paper detail, about
 pipeline/
-  sources/      openalex, rxiv (bioRxiv/medRxiv), europepmc, crossref, pdf,
-                discovery (merge+dedup), fulltext (resolver)
-  llm/          swappable summarize() / verify() / prescreen() interfaces
-                (mock, gemini, claude) — provider chosen by env
-  publish/      record building, copyright gate, store (local JSON or Supabase)
-  topics.py     the on-topic definition        config.py  env settings
-  run.py        entrypoint the scheduler calls  tests/    60 unit tests
-supabase/       schema.sql
+  sources/                   openalex, rxiv (bioRxiv/medRxiv), europepmc, crossref, pdf,
+                             discovery (merge + dedup), fulltext (resolver)
+  llm/                       swappable summarize() / verify() / prescreen() interfaces
+  publish/                   record building, license gate, store, PDF hosting
+  topics.py                  the on-topic definition
+  config.py                  settings loaded from the environment
+  run.py                     pipeline entrypoint
+  tests/                     unit tests
+supabase/                    storage/schema notes
+.github/workflows/           scheduled Mon/Wed/Fri publishing
 ```
 
-## Quick start
+## Running locally
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r pipeline/requirements.txt
-cp .env.example .env          # then fill in keys
-python -m pipeline.config     # secret-safe settings check
+cp .env.example .env          # then add your API keys
 python -m pytest pipeline/tests -q
+python -u -m pipeline.run --limit 1    # DRY_RUN=true by default — mock models, no external calls
 
-python -u -m pipeline.run --limit 5    # DRY_RUN=true by default (no paid calls)
+cd web && npm install && npm run dev    # site at localhost:4321
 ```
 
-Runs default to **`DRY_RUN=true`** — mock models, no cost. Set `DRY_RUN=false`
-in `.env` (with API keys) for a real run. Repeat runs are safe: already-published
-papers are skipped automatically.
+Set `DRY_RUN=false` in `.env` (with real keys) for a live run. Repeat runs are
+safe — already-published papers are skipped automatically.
 
-```bash
-cd web && npm install && npm run dev     # site at localhost:4321
-```
+## License
 
-## Deploying the site
-
-The site is a static Astro build in `web/`, so any static host works.
-
-**Vercel (recommended):**
-1. Sign in to [vercel.com](https://vercel.com) with GitHub → **Add New Project**.
-2. Pick this repository.
-3. Set **Root Directory** to `web` (the site lives in a subfolder). Astro is
-   auto-detected — no other settings needed.
-4. **Deploy.** Every future `git push` redeploys automatically.
-
-Afterwards, set `site` in `web/astro.config.mjs` to the real URL (for SEO/sitemap).
-
-## Cost
-
-~$0.18–0.20 per published paper (summarize + verify), so roughly **$5/month** at
-3 posts/week. Hosting and the scheduler are free; no always-on server or GPU.
-
-## Status
-
-- [x] **Phase 0** — scaffold, schema, env, topic scope
-- [x] **Phase 1** — discovery → full text → summarize → static site
-- [x] **Phase 2** — cross-family verifier + publish gate, abstract pre-screen,
-      bioRxiv/medRxiv fresh lane, two-lane blend, Crossref licenses, PDF text
-      extraction, posted-paper dedup
-- [x] **Phase 3 (partial)** — searchable/filterable library
-- [ ] Scheduled M/W/F runs, review queue, RSS, PDF hosting
+Code is available for reference. Paper summaries link to their original sources,
+which retain their own licenses.
