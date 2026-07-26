@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { allPapers, getPaper, SUMMARY_SECTIONS, accentVar, formatDate } from '../../lib/papers';
+import { allPapers, getPaper, SUMMARY_SECTIONS, accentVar, formatDate, readingMinutes } from '../../lib/papers';
 
 export function getStaticPaths() {
   return allPapers().map((p) => ({ params: { slug: p.slug } }));
@@ -27,7 +27,7 @@ const originalLink = paper.original_url ?? paper.pdf_original_url;
 
       <h1>{paper.title}</h1>
       <div class="byline">{(paper.authors ?? []).join(', ')}</div>
-      <div class="byline">{paper.venue} · {formatDate(paper.publication_date)}</div>
+      <div class="byline">{paper.venue} · {formatDate(paper.publication_date)} · {readingMinutes(paper)} min read</div>
 
       <div class="summary">
         {SUMMARY_SECTIONS.map((s) => (

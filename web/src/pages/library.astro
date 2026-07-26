@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { allPapers, accentVar, formatDate } from '../lib/papers';
+import { allPapers, accentVar, formatDate, readingMinutes } from '../lib/papers';
 
 const papers = allPapers();
 const sources = [...new Set(papers.map((p) => p.source))].sort();
@@ -32,7 +32,7 @@ const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformati
           data-type={p.is_preprint ? 'preprint' : 'published'}
           data-diff={p.difficulty_level}
           data-tag={tag}>
-          <div class="meta">{p.venue ?? 'Unknown venue'} · {formatDate(p.publication_date)}</div>
+          <div class="meta">{p.venue ?? 'Unknown venue'} · {formatDate(p.publication_date)} · {readingMinutes(p)} min read</div>
           <a class="card-title" href={`/paper/${p.slug}`}>{p.title}</a>
           <p class="tldr">{p.summary.tldr}</p>
           <div class="chips">

@@ -81,6 +81,13 @@ export function accentVar(accent: string | null): string {
   return `var(${map[accent ?? 'A'] ?? '--nt-a'})`;
 }
 
+// Estimated minutes to read the summary itself (~200 wpm), min 1.
+export function readingMinutes(p: Paper): number {
+  const text = SUMMARY_SECTIONS.map((s) => (p.summary[s.key] as string) || '').join(' ');
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}
+
 export function formatDate(iso: string | null): string {
   if (!iso) return '';
   const d = new Date(iso);
