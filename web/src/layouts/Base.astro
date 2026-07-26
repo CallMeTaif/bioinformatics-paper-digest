@@ -22,6 +22,7 @@ const { title = 'BioRead', description = 'AI-summarized, open-access bioinformat
     </script>
   </head>
   <body>
+    <canvas id="net" class="site-net" aria-hidden="true"></canvas>
     <header class="site-header">
       <div class="inner">
         <a class="brand" href="/">
@@ -53,6 +54,65 @@ const { title = 'BioRead', description = 'AI-summarized, open-access bioinformat
         document.documentElement.setAttribute('data-theme', cur);
         localStorage.setItem('theme', cur);
       });
+    </script>
+
+    <script is:inline>
+      // Site-wide molecular-network background: drifting nodes + connecting lines,
+      // fixed to the viewport (behind all content). Pauses for reduced-motion.
+      (() => {
+        const canvas = document.getElementById('net');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const ACCENTS = ['#14B8A6', '#22C55E', '#3B82F6', '#F59E0B', '#F43F5E'];
+        let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2), nodes = [];
+
+        function resize() {
+          w = window.innerWidth; h = window.innerHeight;
+          canvas.width = w * dpr; canvas.height = h * dpr;
+          canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const count = Math.min(130, Math.round(w * h / 12000));
+          nodes = Array.from({ length: count }, () => ({
+            x: Math.random() * w, y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.7, vy: (Math.random() - 0.5) * 0.7,
+            r: 1.2 + Math.random() * 1.6,
+            c: ACCENTS[(Math.random() * ACCENTS.length) | 0],
+          }));
+        }
+        function draw() {
+          ctx.clearRect(0, 0, w, h);
+          for (let i = 0; i < nodes.length; i++) {
+            const a = nodes[i];
+            for (let j = i + 1; j < nodes.length; j++) {
+              const b = nodes[j];
+              const dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+              if (d2 < 120 * 120) {
+                ctx.globalAlpha = (1 - Math.sqrt(d2) / 120) * 0.16;
+                ctx.strokeStyle = '#14B8A6'; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+              }
+            }
+          }
+          for (const n of nodes) {
+            ctx.globalAlpha = 0.5; ctx.fillStyle = n.c;
+            ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+        }
+        function step() {
+          for (const n of nodes) {
+            n.x += n.vx; n.y += n.vy;
+            if (n.x < 0 || n.x > w) n.vx *= -1;
+            if (n.y < 0 || n.y > h) n.vy *= -1;
+          }
+          draw();
+          requestAnimationFrame(step);
+        }
+        resize();
+        window.addEventListener('resize', () => { dpr = Math.min(window.devicePixelRatio || 1, 2); resize(); draw(); });
+        if (reduce) draw(); else requestAnimationFrame(step);
+      })();
     </script>
   </body>
 </html>
