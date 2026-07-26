@@ -42,11 +42,6 @@ const originalLink = paper.original_url ?? paper.pdf_original_url;
       {hostedPdf && (
         <section class="pdf-section">
           <h2 class="pdf-head">Full paper</h2>
-          <p class="pdf-note">
-            Hosted here because this paper is published under <strong>{paper.license}</strong>,
-            which permits redistribution. Attribution: {(paper.authors ?? []).slice(0, 3).join(', ')}
-            {(paper.authors ?? []).length > 3 ? ' et al.' : ''} — {paper.venue}.
-          </p>
           <object class="pdf-frame" data={hostedPdf} type="application/pdf">
             <p>Your browser can’t display PDFs inline. <a href={hostedPdf}>Download the PDF</a> instead.</p>
           </object>
