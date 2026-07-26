@@ -21,7 +21,7 @@ const u = encodeURIComponent(shareUrl);
 const tx = encodeURIComponent(paper.title);
 const shareX = `https://twitter.com/intent/tweet?text=${tx}&url=${u}`;
 const shareLinkedIn = `https://www.linkedin.com/sharing/share-offsite/?url=${u}`;
-const shareWhatsApp = `https://wa.me/?text=${encodeURIComponent(paper.title + ' ' + shareUrl)}`;
+const shareWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(paper.title + ' ' + shareUrl)}`;
 ---
 <Base title={`${paper.title} — BioRead`} description={paper.summary.tldr}>
   <div id="progress"></div>
