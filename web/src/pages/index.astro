@@ -6,14 +6,82 @@ const papers = allPapers();
 ---
 <Base>
   <section class="hero">
-    <h1>Bioinformatics, distilled.</h1>
-    <p>
-      Keep up with the field without drowning in PDFs. The strongest new open-access research —
-      genomics, single-cell, proteomics, systems biology and beyond — each turned into a clear,
-      few-minute read you can trust. Three new papers a week.
-    </p>
-    <div class="acgt-strip">A C G T · A T G C · G C A T · T A C G · A C G T</div>
+    <canvas id="net" class="hero-net" aria-hidden="true"></canvas>
+    <div class="hero-content">
+      <h1>Bioinformatics, distilled.</h1>
+      <p>
+        Keep up with the field without drowning in PDFs. The strongest new open-access research —
+        genomics, single-cell, proteomics, systems biology and beyond — each turned into a clear,
+        few-minute read you can trust. Three new papers a week.
+      </p>
+      <div class="acgt-strip">A C G T · A T G C · G C A T · T A C G · A C G T</div>
+    </div>
   </section>
+
+  <script is:inline>
+    // Subtle molecular-network motif — faint drifting nodes + connecting lines.
+    // Confined to the hero; pauses entirely for prefers-reduced-motion.
+    (() => {
+      const canvas = document.getElementById('net');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const hero = canvas.parentElement;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const ACCENTS = ['#14B8A6', '#22C55E', '#3B82F6', '#F59E0B', '#F43F5E'];
+      let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+      let nodes = [];
+
+      function resize() {
+        w = hero.clientWidth; h = hero.clientHeight;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const count = Math.min(46, Math.round(w * h / 22000));
+        nodes = Array.from({ length: count }, () => ({
+          x: Math.random() * w, y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25,
+          r: 1.3 + Math.random() * 1.6,
+          c: ACCENTS[(Math.random() * ACCENTS.length) | 0],
+        }));
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < nodes.length; i++) {
+          const a = nodes[i];
+          for (let j = i + 1; j < nodes.length; j++) {
+            const b = nodes[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < 130 * 130) {
+              ctx.globalAlpha = (1 - Math.sqrt(d2) / 130) * 0.18;
+              ctx.strokeStyle = '#14B8A6'; ctx.lineWidth = 1;
+              ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+            }
+          }
+        }
+        for (const n of nodes) {
+          ctx.globalAlpha = 0.55; ctx.fillStyle = n.c;
+          ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      function step() {
+        for (const n of nodes) {
+          n.x += n.vx; n.y += n.vy;
+          if (n.x < 0 || n.x > w) n.vx *= -1;
+          if (n.y < 0 || n.y > h) n.vy *= -1;
+        }
+        draw();
+        requestAnimationFrame(step);
+      }
+
+      resize();
+      window.addEventListener('resize', () => { dpr = Math.min(window.devicePixelRatio || 1, 2); resize(); draw(); });
+      if (reduce) draw(); else requestAnimationFrame(step);
+    })();
+  </script>
 
   <div class="basepair-divider" role="presentation"></div>
 
