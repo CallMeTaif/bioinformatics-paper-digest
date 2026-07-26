@@ -12,7 +12,6 @@ if (!paper) return Astro.redirect('/404');
 
 const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
 const verified = isVerified(paper);
-const scorePct = paper.verifier_score != null ? Math.round(paper.verifier_score * 100) : null;
 // We only host a copy when the licence permits redistribution; otherwise we link out.
 const hostedPdf = paper.hosted_pdf_path;
 const originalLink = paper.original_url ?? paper.pdf_original_url;
@@ -72,19 +71,6 @@ const originalLink = paper.original_url ?? paper.pdf_original_url;
         {originalLink && <a class="btn" href={originalLink} target="_blank" rel="noopener">Read the original ↗</a>}
         {hostedPdf && <a class="btn btn-secondary" href={hostedPdf} download>Download PDF ↓</a>}
       </div>
-
-      {verified && (
-        <div class="verify-panel">
-          <div class="verify-head">✓ Faithfulness check</div>
-          <div class="verify-score">
-            <span class="verify-num">{scorePct}%</span>
-            <span class="verify-label">faithful · verdict: pass</span>
-          </div>
-          <div class="verify-meter"><span style={`width:${scorePct}%`}></span></div>
-          <p class="verify-by">Checked by Claude (Opus) — a different model family than the summarizer, so it doesn’t share the same blind spots.</p>
-          {paper.verifier_notes && <p class="verify-notes">{paper.verifier_notes}</p>}
-        </div>
-      )}
     </aside>
   </div>
 
