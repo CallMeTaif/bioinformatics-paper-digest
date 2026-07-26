@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { allPapers, accentVar, formatDate, isVerified } from '../lib/papers';
+import { allPapers, accentVar, formatDate } from '../lib/papers';
 
 const papers = allPapers();
 const sources = [...new Set(papers.map((p) => p.source))].sort();
@@ -19,14 +19,12 @@ const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformati
     <select id="f-type" class="filter"><option value="">All types</option><option value="published">Published</option><option value="preprint">Preprint</option></select>
     <select id="f-diff" class="filter"><option value="">Any difficulty</option><option value="intro">Intro</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
     <select id="f-tag" class="filter"><option value="">All topics</option>{tags.map((t) => <option value={t}>{t}</option>)}</select>
-    <label class="chk"><input id="f-verified" type="checkbox" /> Verified only</label>
   </div>
   <div id="count" class="count" aria-live="polite"></div>
 
   <div class="grid" id="lib">
     {papers.map((p) => {
       const tag = p.subfield_tags?.[0] ?? 'bioinformatics';
-      const verified = isVerified(p);
       const hay = `${p.title} ${p.summary.tldr} ${tag} ${(p.authors ?? []).join(' ')}`.toLowerCase();
       return (
         <article class="card lib-card"
@@ -34,8 +32,7 @@ const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformati
           data-source={p.source}
           data-type={p.is_preprint ? 'preprint' : 'published'}
           data-diff={p.difficulty_level}
-          data-tag={tag}
-          data-verified={verified ? '1' : '0'}>
+          data-tag={tag}>
           <div class="meta">{p.venue ?? 'Unknown venue'} · {formatDate(p.publication_date)}</div>
           <a class="card-title" href={`/paper/${p.slug}`}>{p.title}</a>
           <p class="tldr">{p.summary.tldr}</p>
@@ -55,14 +52,13 @@ const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformati
     const fType = document.getElementById('f-type');
     const fDiff = document.getElementById('f-diff');
     const fTag = document.getElementById('f-tag');
-    const fVer = document.getElementById('f-verified');
     const cards = Array.from(document.querySelectorAll('.lib-card'));
     const countEl = document.getElementById('count');
     const emptyEl = document.getElementById('empty');
 
     function apply() {
       const term = (q.value || '').trim().toLowerCase();
-      const src = fSource.value, type = fType.value, diff = fDiff.value, tag = fTag.value, ver = fVer.checked;
+      const src = fSource.value, type = fType.value, diff = fDiff.value, tag = fTag.value;
       let shown = 0;
       for (const c of cards) {
         const ok =
@@ -70,15 +66,14 @@ const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformati
           (!src || c.dataset.source === src) &&
           (!type || c.dataset.type === type) &&
           (!diff || c.dataset.diff === diff) &&
-          (!tag || c.dataset.tag === tag) &&
-          (!ver || c.dataset.verified === '1');
+          (!tag || c.dataset.tag === tag);
         c.hidden = !ok;
         if (ok) shown++;
       }
       countEl.textContent = shown + ' of ' + cards.length + ' papers';
       emptyEl.hidden = shown !== 0;
     }
-    [q, fSource, fType, fDiff, fTag, fVer].forEach((el) => {
+    [q, fSource, fType, fDiff, fTag].forEach((el) => {
       el.addEventListener('input', apply);
       el.addEventListener('change', apply);
     });
