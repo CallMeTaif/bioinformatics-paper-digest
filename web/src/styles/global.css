@@ -211,6 +211,23 @@ a:hover { text-decoration: underline; }
 }
 .btn-secondary:hover { background: color-mix(in srgb, var(--primary) 12%, transparent); }
 
+/* --- share (paper sidebar) --- */
+.share { margin-top: 16px; }
+.share-label {
+  display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted); margin-bottom: 8px;
+}
+.share-row { display: flex; gap: 8px; }
+.share-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 9px;
+  background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+  cursor: pointer; transition: color .15s, border-color .15s, background-color .15s;
+}
+.share-btn:hover { color: var(--primary); border-color: var(--primary); text-decoration: none; }
+.share-btn svg { width: 17px; height: 17px; }
+.share-btn.copied { color: var(--nt-a); border-color: var(--nt-a); }
+
 /* reading progress bar */
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--primary); z-index: 40; }
 
