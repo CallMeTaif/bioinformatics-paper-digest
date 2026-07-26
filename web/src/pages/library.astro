@@ -43,7 +43,6 @@ const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformati
             <span class="chip tag" style={`--chip-accent:${accentVar(p.tag_accent)}`}>{tag}</span>
             <span class="chip diff">{p.difficulty_level}</span>
             {p.is_preprint && <span class="chip preprint">preprint</span>}
-            {verified && <span class="chip verified">✓ checked</span>}
           </div>
         </article>
       );

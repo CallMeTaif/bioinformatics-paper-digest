@@ -1,10 +1,9 @@
 ---
 import type { Paper } from '../lib/papers';
-import { accentVar, formatDate, isVerified } from '../lib/papers';
+import { accentVar, formatDate } from '../lib/papers';
 interface Props { paper: Paper; }
 const { paper } = Astro.props;
 const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
-const verified = isVerified(paper);
 ---
 <article class="card">
   <div class="meta">{paper.venue ?? 'Unknown venue'} · {formatDate(paper.publication_date)}</div>
@@ -14,7 +13,5 @@ const verified = isVerified(paper);
     <span class="chip tag" style={`--chip-accent:${accentVar(paper.tag_accent)}`}>{tag}</span>
     <span class="chip diff">{paper.difficulty_level}</span>
     {paper.is_preprint && <span class="chip preprint">preprint</span>}
-    <span class="chip ai">AI-generated</span>
-    {verified && <span class="chip verified">✓ checked</span>}
   </div>
 </article>
