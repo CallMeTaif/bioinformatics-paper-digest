@@ -43,7 +43,7 @@ const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformati
       );
     })}
   </div>
-  <p id="empty" class="empty" hidden>No papers match those filters.</p>
+  <p id="empty" class="empty" hidden>No papers found.</p>
 
   <script is:inline>
     const q = document.getElementById('q');

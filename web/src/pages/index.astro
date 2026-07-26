@@ -18,7 +18,7 @@ const papers = allPapers();
   <div class="basepair-divider" role="presentation"></div>
 
   {papers.length === 0 ? (
-    <p style="color:var(--muted);padding:20px 0 80px;">No papers published yet — run the pipeline to populate the library.</p>
+    <p style="color:var(--muted);padding:20px 0 80px;">The first summaries land soon — new papers publish Monday, Wednesday, and Friday. Check back shortly.</p>
   ) : (
     <div class="grid">
       {papers.map((p) => <PaperCard paper={p} />)}
