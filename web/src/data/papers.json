@@ -1,1 +1,54 @@
-[]
+[
+  {
+    "slug": "advancing-bioinformatics-with-language-models-components-app-2ce9d9",
+    "doi": "10.1093/bib/bbag367",
+    "title": "Advancing bioinformatics with language models: components, applications, and perspectives",
+    "authors": [
+      "Jiajia Liu",
+      "Mengyuan Yang",
+      "Yankai Yu",
+      "Haixia Xu",
+      "Tiangang Wang",
+      "Kang Li",
+      "Xiaobo Zhou"
+    ],
+    "venue": "Briefings in Bioinformatics",
+    "publication_date": "2026-07-01",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "gold",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1093/bib/bbag367",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": true,
+    "abstract": "Large language models (LLMs) are a class of artificial intelligence models based on deep learning, which have great performance in various tasks, especially in natural language processing (NLP). Large language models typically consist of artificial neural networks with numerous parameters, trained on large amounts of unlabeled input using self-supervised or semi-supervised learning. However, their potential for solving bioinformatics problems may even exceed their proficiency in modeling human language. In this review, we will provide a comprehensive overview of the essential components of large language models (LLMs) in bioinformatics, spanning genomics, transcriptomics, proteomics, drug discovery, and single-cell analysis. Key aspects covered include tokenization methods for diverse data types, the architecture of transformer models, the core attention mechanism, and the pre-training processes underlying these models. Additionally, we will introduce currently available foundation models and highlight their downstream applications across various bioinformatics domains. Finally, drawing from our experience, we will offer practical guidance for both LLM users and developers, emphasizing strategies to optimize their use and foster further innovation in the field.",
+    "subfield_tags": [
+      "ml-in-bio"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intro",
+    "summary": {
+      "tldr": "This review provides a comprehensive overview of how large language models are built and applied across various fields of bioinformatics.",
+      "problem": "Researchers need a structured understanding of how large language models, originally designed for human text, can be adapted to solve complex biological problems.",
+      "methods": "The authors reviewed the essential components of large language models in bioinformatics, including tokenization, transformer architectures, attention mechanisms, pre-training processes, and existing foundation models.",
+      "findings": "The review details how large language models are being successfully applied across genomics, transcriptomics, proteomics, drug discovery, and single-cell analysis, suggesting their potential in biology may exceed their success in human language.",
+      "why": "Understanding the underlying mechanics and current applications of these models helps researchers optimize their use and fosters further innovation in biological data analysis.",
+      "limitations": "The provided text does not mention any specific limitations of the review or the models discussed.",
+      "takeaway": "Large language models are powerful tools for bioinformatics, and understanding their core components is essential for developing new applications in the field.",
+      "topic": "ml-in-bio",
+      "difficulty": "intro",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 0.98,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the abstract's content across all sections without introducing fabricated facts.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-07-27T08:17:51.120281+00:00"
+  }
+]
