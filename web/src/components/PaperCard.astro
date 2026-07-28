@@ -1,6 +1,6 @@
 ---
 import type { Paper } from '../lib/papers';
-import { accentVar, formatDate, readingMinutes } from '../lib/papers';
+import { accentVar, formatDate, readingMinutes, tagLabel } from '../lib/papers';
 interface Props { paper: Paper; }
 const { paper } = Astro.props;
 const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
@@ -10,7 +10,7 @@ const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
   <a class="card-title" href={`/paper/${paper.slug}`}>{paper.title}</a>
   <p class="tldr">{paper.summary.tldr}</p>
   <div class="chips">
-    <span class="chip tag" style={`--chip-accent:${accentVar(paper.tag_accent)}`}>{tag}</span>
+    <span class="chip tag" style={`--chip-accent:${accentVar(paper.tag_accent)}`}>{tagLabel(tag)}</span>
     <span class="chip diff">{paper.difficulty_level}</span>
   </div>
 </article>

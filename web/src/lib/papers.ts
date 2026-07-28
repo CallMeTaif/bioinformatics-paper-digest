@@ -75,6 +75,19 @@ export const SUMMARY_SECTIONS: { key: keyof Summary; label: string }[] = [
   { key: 'takeaway', label: 'Takeaway' },
 ];
 
+// Human-readable label for a subfield-tag slug. Falls back to a de-hyphenated
+// version of the slug so a new tag still reads cleanly without a code change.
+const TAG_LABELS: Record<string, string> = {
+  'single-cell': 'single cell',
+  'ml-in-bio': 'machine learning in biology',
+  'systems-biology': 'systems biology',
+  'clinical-informatics': 'clinical informatics',
+  'drug-discovery': 'drug discovery',
+};
+export function tagLabel(tag: string): string {
+  return TAG_LABELS[tag] ?? tag.replace(/-/g, ' ');
+}
+
 // Nucleotide accent -> CSS var (see global.css)
 export function accentVar(accent: string | null): string {
   const map: Record<string, string> = { A: '--nt-a', C: '--nt-c', G: '--nt-g', T: '--nt-t' };

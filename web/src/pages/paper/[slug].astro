@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { allPapers, getPaper, SUMMARY_SECTIONS, accentVar, formatDate, readingMinutes } from '../../lib/papers';
+import { allPapers, getPaper, SUMMARY_SECTIONS, accentVar, formatDate, readingMinutes, tagLabel } from '../../lib/papers';
 
 export function getStaticPaths() {
   return allPapers().map((p) => ({ params: { slug: p.slug } }));
@@ -29,7 +29,7 @@ const shareWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(p
   <div class="detail">
     <article>
       <div class="chips" style="margin-bottom:12px;">
-        <span class="chip tag" style={`--chip-accent:${accentVar(paper.tag_accent)}`}>{tag}</span>
+        <span class="chip tag" style={`--chip-accent:${accentVar(paper.tag_accent)}`}>{tagLabel(tag)}</span>
         <span class="chip diff">{paper.difficulty_level}</span>
       </div>
 

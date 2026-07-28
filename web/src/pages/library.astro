@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { allPapers, accentVar, formatDate, readingMinutes } from '../lib/papers';
+import { allPapers, accentVar, formatDate, readingMinutes, tagLabel } from '../lib/papers';
 
 const papers = allPapers();
 const sources = [...new Set(papers.map((p) => p.source))].sort();
@@ -17,7 +17,7 @@ const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformati
     <select id="f-source" class="filter"><option value="">All sources</option>{sources.map((s) => <option value={s}>{s}</option>)}</select>
     <select id="f-type" class="filter"><option value="">All types</option><option value="published">Published</option><option value="preprint">Preprint</option></select>
     <select id="f-diff" class="filter"><option value="">Any difficulty</option><option value="intro">Intro</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
-    <select id="f-tag" class="filter"><option value="">All topics</option>{tags.map((t) => <option value={t}>{t}</option>)}</select>
+    <select id="f-tag" class="filter"><option value="">All topics</option>{tags.map((t) => <option value={t}>{tagLabel(t)}</option>)}</select>
   </div>
   <div id="count" class="count" aria-live="polite"></div>
 
@@ -36,7 +36,7 @@ const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformati
           <a class="card-title" href={`/paper/${p.slug}`}>{p.title}</a>
           <p class="tldr">{p.summary.tldr}</p>
           <div class="chips">
-            <span class="chip tag" style={`--chip-accent:${accentVar(p.tag_accent)}`}>{tag}</span>
+            <span class="chip tag" style={`--chip-accent:${accentVar(p.tag_accent)}`}>{tagLabel(tag)}</span>
             <span class="chip diff">{p.difficulty_level}</span>
           </div>
         </article>
