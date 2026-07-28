@@ -57,61 +57,103 @@ const { title = 'BioRead', description = 'AI-summarized, open-access bioinformat
     </script>
 
     <script is:inline>
-      // Site-wide molecular-network background: drifting nodes + connecting lines,
-      // fixed to the viewport (behind all content). Pauses for reduced-motion.
+      // Site-wide DNA double-helix background: a field of diagonally tilted,
+      // slowly rotating helices — teal backbones with nucleotide-colored base
+      // pairs. Fixed behind all content; theme-aware ink (deeper + boosted on
+      // light grounds); a single static frame for reduced-motion.
       (() => {
         const canvas = document.getElementById('net');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const ACCENTS = ['#14B8A6', '#22C55E', '#3B82F6', '#F59E0B', '#F43F5E'];
-        let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2), nodes = [];
+
+        const PALETTE = {
+          dark:  { strand: ['#14B8A6', '#5EEAD4'], bead: '#2DD4BF', k: 1,
+                   rungs: ['#22C55E', '#3B82F6', '#F59E0B', '#F43F5E'] },
+          light: { strand: ['#0D9488', '#0F766E'], bead: '#0F766E', k: 1.7,
+                   rungs: ['#15803D', '#1D4ED8', '#B45309', '#BE123C'] },
+        };
+        const OPACITY = 0.4, SPEED = 0.8, DENSITY = 0.9, ANGLE = 20 * Math.PI / 180;
+
+        let W, H, DPR = Math.min(window.devicePixelRatio || 1, 2), helices = [];
+
+        function build() {
+          helices = [];
+          const cols = Math.max(2, Math.round(window.innerWidth / 300 * DENSITY));
+          for (let i = 0; i < cols; i++) {
+            helices.push({
+              x: (i + 0.5) / cols,
+              amp: 22 + Math.random() * 16,
+              pitch: 30 + Math.random() * 12,
+              speed: 0.3 + Math.random() * 0.4,
+              phase: Math.random() * Math.PI * 2,
+              dir: Math.random() < 0.5 ? 1 : -1,
+              nt: (Math.random() * 4) | 0,
+            });
+          }
+        }
 
         function resize() {
-          w = window.innerWidth; h = window.innerHeight;
-          canvas.width = w * dpr; canvas.height = h * dpr;
-          canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          const count = Math.min(130, Math.round(w * h / 12000));
-          nodes = Array.from({ length: count }, () => ({
-            x: Math.random() * w, y: Math.random() * h,
-            vx: (Math.random() - 0.5) * 0.7, vy: (Math.random() - 0.5) * 0.7,
-            r: 1.2 + Math.random() * 1.6,
-            c: ACCENTS[(Math.random() * ACCENTS.length) | 0],
-          }));
+          DPR = Math.min(window.devicePixelRatio || 1, 2);
+          W = canvas.width = Math.floor(window.innerWidth * DPR);
+          H = canvas.height = Math.floor(window.innerHeight * DPR);
+          canvas.style.width = window.innerWidth + 'px';
+          canvas.style.height = window.innerHeight + 'px';
+          build();
         }
-        function draw() {
-          ctx.clearRect(0, 0, w, h);
-          for (let i = 0; i < nodes.length; i++) {
-            const a = nodes[i];
-            for (let j = i + 1; j < nodes.length; j++) {
-              const b = nodes[j];
-              const dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
-              if (d2 < 120 * 120) {
-                ctx.globalAlpha = (1 - Math.sqrt(d2) / 120) * 0.16;
-                ctx.strokeStyle = '#14B8A6'; ctx.lineWidth = 1;
-                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-              }
+
+        const isLight = () => document.documentElement.getAttribute('data-theme') === 'light';
+
+        function drawHelix(h, t) {
+          const ux = Math.sin(ANGLE), uy = Math.cos(ANGLE);   // axis direction (tilted)
+          const px = Math.cos(ANGLE), py = -Math.sin(ANGLE);  // perpendicular
+          const cx = h.x * W, cy = H / 2;
+          const amp = h.amp * DPR, pitch = h.pitch * DPR, step = 6 * DPR;
+          const len = Math.hypot(W, H) + 4 * step;            // crosses viewport at any tilt
+          const spin = t * h.speed * h.dir;
+          const A = [], B = [];
+          for (let s = -len / 2; s <= len / 2; s += step) {
+            const a = s / pitch + h.phase + spin;
+            const bx = cx + ux * s, by = cy + uy * s;
+            const dA = (Math.cos(a) + 1) / 2;                 // 0 back .. 1 front
+            const oA = Math.sin(a) * amp, oB = Math.sin(a + Math.PI) * amp;
+            A.push({ x: bx + px * oA, y: by + py * oA, d: dA });
+            B.push({ x: bx + px * oB, y: by + py * oB, d: 1 - dA });
+          }
+          const P = PALETTE[isLight() ? 'light' : 'dark'];
+
+          for (let i = 0; i < A.length; i += 3) {             // base-pair rungs
+            const depth = Math.max(A[i].d, B[i].d);
+            ctx.strokeStyle = P.rungs[(h.nt + ((i / 3) | 0)) % 4];
+            ctx.globalAlpha = (0.10 + 0.32 * depth) * OPACITY * P.k;
+            ctx.lineWidth = (0.6 + depth * 1.1) * DPR;
+            ctx.beginPath(); ctx.moveTo(A[i].x, A[i].y); ctx.lineTo(B[i].x, B[i].y); ctx.stroke();
+          }
+          for (const [pts, col] of [[A, P.strand[0]], [B, P.strand[1]]]) { // backbones
+            ctx.strokeStyle = col; ctx.globalAlpha = 0.30 * OPACITY * P.k; ctx.lineWidth = 1.4 * DPR;
+            ctx.beginPath();
+            pts.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+            ctx.stroke();
+          }
+          for (let i = 0; i < A.length; i += 3) {             // backbone beads
+            for (const p of [A[i], B[i]]) {
+              ctx.globalAlpha = (0.18 + 0.6 * p.d) * OPACITY * P.k;
+              ctx.fillStyle = P.bead;
+              ctx.beginPath(); ctx.arc(p.x, p.y, (0.8 + p.d * 1.8) * DPR, 0, Math.PI * 2); ctx.fill();
             }
           }
-          for (const n of nodes) {
-            ctx.globalAlpha = 0.5; ctx.fillStyle = n.c;
-            ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
-          }
+        }
+
+        function frame(t) {
+          ctx.clearRect(0, 0, W, H);
+          for (const h of helices) drawHelix(h, t);
           ctx.globalAlpha = 1;
         }
-        function step() {
-          for (const n of nodes) {
-            n.x += n.vx; n.y += n.vy;
-            if (n.x < 0 || n.x > w) n.vx *= -1;
-            if (n.y < 0 || n.y > h) n.vy *= -1;
-          }
-          draw();
-          requestAnimationFrame(step);
-        }
+        function loop(now) { frame(now * 0.001 * SPEED); requestAnimationFrame(loop); }
+
         resize();
-        window.addEventListener('resize', () => { dpr = Math.min(window.devicePixelRatio || 1, 2); resize(); draw(); });
-        if (reduce) draw(); else requestAnimationFrame(step);
+        window.addEventListener('resize', () => { resize(); if (reduce) frame(0); });
+        if (reduce) frame(0); else requestAnimationFrame(loop);
       })();
     </script>
   </body>

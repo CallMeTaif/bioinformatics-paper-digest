@@ -82,13 +82,13 @@ a:hover { text-decoration: underline; }
   opacity: 0.6;
 }
 
-/* --- site-wide molecular-network background (fixed, behind all content) --- */
+/* --- site-wide DNA double-helix background (fixed, behind all content) --- */
+/* Visual weight (opacity/contrast) is handled in the canvas script itself,
+   including a theme-aware boost for light grounds — so no CSS opacity here. */
 .site-net {
   position: fixed; inset: 0; width: 100vw; height: 100vh;
-  z-index: 0; pointer-events: none; opacity: 0.5;
+  z-index: 0; pointer-events: none;
 }
-/* Softer on light backgrounds — bright dots on near-white read as noisy. */
-:root[data-theme='light'] .site-net { opacity: 0.32; }
 
 /* --- hero --- */
 .hero { padding: 56px 0 28px; }
