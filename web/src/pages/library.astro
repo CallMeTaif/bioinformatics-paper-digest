@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import { allPapers, accentVar, formatDate, readingMinutes, tagLabel } from '../lib/papers';
+import { allPapers, accentVar, formatDate, readingMinutes, tagLabel, ALL_TOPICS } from '../lib/papers';
 
 const papers = allPapers();
 const sources = [...new Set(papers.map((p) => p.source))].sort();
-const tags = [...new Set(papers.map((p) => p.subfield_tags?.[0] ?? 'bioinformatics'))].sort();
+// Show every topic the site covers, not just the ones with a paper yet.
+const tags = [...ALL_TOPICS].sort((a, b) => tagLabel(a).localeCompare(tagLabel(b)));
 ---
 <Base title="Library — BioRead" description="Browse and filter the AI-summarized bioinformatics library.">
   <section class="hero" style="padding:40px 0 12px;">

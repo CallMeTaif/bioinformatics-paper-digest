@@ -75,6 +75,15 @@ export const SUMMARY_SECTIONS: { key: keyof Summary; label: string }[] = [
   { key: 'takeaway', label: 'Takeaway' },
 ];
 
+// The full topic vocabulary (mirrors pipeline/topics.py CANONICAL_TAGS), so the
+// Library filter can show every category the site covers — not only the ones that
+// happen to have a paper yet.
+export const ALL_TOPICS: string[] = [
+  'single-cell', 'transcriptomics', 'proteomics', 'genomics', 'phylogenetics',
+  'metagenomics', 'epigenomics', 'ml-in-bio', 'systems-biology',
+  'clinical-informatics', 'drug-discovery', 'bioinformatics',
+];
+
 // Human-readable label for a subfield-tag slug. Falls back to a de-hyphenated
 // version of the slug so a new tag still reads cleanly without a code change.
 const TAG_LABELS: Record<string, string> = {
