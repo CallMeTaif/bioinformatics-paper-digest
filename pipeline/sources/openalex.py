@@ -23,8 +23,12 @@ _SELECT = ",".join(
     ]
 )
 
-# Good broad seeds for discovery. Kept short on purpose: each is one API call.
+# Seed terms for discovery — each is one API call, deduped by DOI downstream.
+# The first block is broad coverage; the second targets categories the site can
+# tag but that the broad seeds rarely surface, so the library grows into every
+# topic the filter advertises. Safe to add/remove entries: this is data, not logic.
 DEFAULT_SEED_TERMS = [
+    # broad
     "bioinformatics",
     "computational biology",
     "genomics sequencing",
@@ -33,6 +37,13 @@ DEFAULT_SEED_TERMS = [
     "deep learning genomics",
     "metagenomics microbiome",
     "systems biology network",
+    # targeted — one per otherwise-underserved category
+    "phylogenetics",
+    "epigenomics DNA methylation",
+    "drug discovery machine learning",
+    "clinical informatics electronic health records",
+    "proteomics mass spectrometry",
+    "RNA-seq differential expression",
 ]
 
 _PREPRINT_VENUES = {"biorxiv", "medrxiv", "arxiv", "research square", "preprints.org"}
