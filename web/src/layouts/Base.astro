@@ -57,10 +57,11 @@ const { title = 'BioRead', description = 'AI-summarized, open-access bioinformat
     </script>
 
     <script is:inline>
-      // Site-wide DNA double-helix background: a field of diagonally tilted,
-      // slowly rotating helices — teal backbones with nucleotide-colored base
-      // pairs. Fixed behind all content; theme-aware ink (deeper + boosted on
-      // light grounds); a single static frame for reduced-motion.
+      // Site-wide DNA background: small double-helix fragments that drift and
+      // gently twist across the viewport (they wrap around the edges), fixed
+      // behind all content. Theme-aware ink (deeper + boosted on light grounds),
+      // soft-faded ends so each reads as a fragment; a single static frame for
+      // reduced-motion.
       (() => {
         const canvas = document.getElementById('net');
         if (!canvas) return;
@@ -73,24 +74,34 @@ const { title = 'BioRead', description = 'AI-summarized, open-access bioinformat
           light: { strand: ['#0D9488', '#0F766E'], bead: '#0F766E', k: 1.7,
                    rungs: ['#15803D', '#1D4ED8', '#B45309', '#BE123C'] },
         };
-        const OPACITY = 0.4, SPEED = 0.8, DENSITY = 0.9, ANGLE = 20 * Math.PI / 180;
+        const OPACITY = 0.35, SPEED = 0.6, COUNT = 1;
 
-        let W, H, DPR = Math.min(window.devicePixelRatio || 1, 2), helices = [];
+        let W, H, DPR, chunks = [], last = 0, clock = 0;
+
+        function makeChunk() {
+          const pitch = 15 + Math.random() * 8;
+          const turns = 1.4 + Math.random() * 2.0;
+          const dir = Math.random() < 0.5 ? 1 : -1;
+          const a = Math.random() * Math.PI * 2;
+          return {
+            x: Math.random(), y: Math.random(),
+            vx: Math.cos(a) * (0.4 + Math.random() * 0.8),
+            vy: Math.sin(a) * (0.4 + Math.random() * 0.8),
+            angle: Math.random() * Math.PI * 2,
+            angVel: (Math.random() - 0.5) * 0.1,   // barely any whole-piece tumble
+            amp: 7 + Math.random() * 6,
+            pitch, turns,
+            phase: Math.random() * Math.PI * 2,
+            twist: (0.5 + Math.random() * 0.7) * dir,
+            nt: (Math.random() * 4) | 0,
+            scale: 0.55 + Math.random() * 0.5,
+          };
+        }
 
         function build() {
-          helices = [];
-          const cols = Math.max(2, Math.round(window.innerWidth / 300 * DENSITY));
-          for (let i = 0; i < cols; i++) {
-            helices.push({
-              x: (i + 0.5) / cols,
-              amp: 22 + Math.random() * 16,
-              pitch: 30 + Math.random() * 12,
-              speed: 0.3 + Math.random() * 0.4,
-              phase: Math.random() * Math.PI * 2,
-              dir: Math.random() < 0.5 ? 1 : -1,
-              nt: (Math.random() * 4) | 0,
-            });
-          }
+          const base = (window.innerWidth * window.innerHeight) / 90000;
+          const n = Math.max(4, Math.round(base * COUNT));
+          chunks = Array.from({ length: n }, makeChunk);
         }
 
         function resize() {
@@ -104,56 +115,82 @@ const { title = 'BioRead', description = 'AI-summarized, open-access bioinformat
 
         const isLight = () => document.documentElement.getAttribute('data-theme') === 'light';
 
-        function drawHelix(h, t) {
-          const ux = Math.sin(ANGLE), uy = Math.cos(ANGLE);   // axis direction (tilted)
-          const px = Math.cos(ANGLE), py = -Math.sin(ANGLE);  // perpendicular
-          const cx = h.x * W, cy = H / 2;
-          const amp = h.amp * DPR, pitch = h.pitch * DPR, step = 6 * DPR;
-          const len = Math.hypot(W, H) + 4 * step;            // crosses viewport at any tilt
-          const spin = t * h.speed * h.dir;
+        function drawChunk(c, P) {
+          const ux = Math.sin(c.angle), uy = Math.cos(c.angle);
+          const px = Math.cos(c.angle), py = -Math.sin(c.angle);
+          const cx = c.x * W, cy = c.y * H;
+          const amp = c.amp * DPR * c.scale;
+          const pitch = c.pitch * DPR * c.scale;
+          const step = 4 * DPR;
+          const L = c.turns * pitch * 2 * Math.PI;
+          const half = L / 2;
+          const spin = clock * c.twist;
           const A = [], B = [];
-          for (let s = -len / 2; s <= len / 2; s += step) {
-            const a = s / pitch + h.phase + spin;
+          for (let s = -half; s <= half; s += step) {
+            const a = s / pitch + c.phase + spin;
             const bx = cx + ux * s, by = cy + uy * s;
-            const dA = (Math.cos(a) + 1) / 2;                 // 0 back .. 1 front
+            const dA = (Math.cos(a) + 1) / 2;
             const oA = Math.sin(a) * amp, oB = Math.sin(a + Math.PI) * amp;
-            A.push({ x: bx + px * oA, y: by + py * oA, d: dA });
-            B.push({ x: bx + px * oB, y: by + py * oB, d: 1 - dA });
+            const e = 1 - Math.pow(Math.abs(s) / half, 3);  // soft fade toward the ends
+            A.push({ x: bx + px * oA, y: by + py * oA, d: dA, e });
+            B.push({ x: bx + px * oB, y: by + py * oB, d: 1 - dA, e });
           }
-          const P = PALETTE[isLight() ? 'light' : 'dark'];
 
-          for (let i = 0; i < A.length; i += 3) {             // base-pair rungs
+          for (let i = 0; i < A.length; i += 3) {           // base-pair rungs
             const depth = Math.max(A[i].d, B[i].d);
-            ctx.strokeStyle = P.rungs[(h.nt + ((i / 3) | 0)) % 4];
-            ctx.globalAlpha = (0.10 + 0.32 * depth) * OPACITY * P.k;
+            ctx.strokeStyle = P.rungs[(c.nt + ((i / 3) | 0)) % 4];
+            ctx.globalAlpha = (0.10 + 0.32 * depth) * A[i].e * OPACITY * P.k;
             ctx.lineWidth = (0.6 + depth * 1.1) * DPR;
             ctx.beginPath(); ctx.moveTo(A[i].x, A[i].y); ctx.lineTo(B[i].x, B[i].y); ctx.stroke();
           }
-          for (const [pts, col] of [[A, P.strand[0]], [B, P.strand[1]]]) { // backbones
-            ctx.strokeStyle = col; ctx.globalAlpha = 0.30 * OPACITY * P.k; ctx.lineWidth = 1.4 * DPR;
-            ctx.beginPath();
-            pts.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
-            ctx.stroke();
+          for (const pts of [A, B]) {                         // backbones (per-segment, so end-fade shows)
+            ctx.strokeStyle = pts === A ? P.strand[0] : P.strand[1];
+            ctx.lineWidth = 1.4 * DPR;
+            for (let i = 1; i < pts.length; i++) {
+              ctx.globalAlpha = 0.30 * ((pts[i].e + pts[i - 1].e) / 2) * OPACITY * P.k;
+              ctx.beginPath(); ctx.moveTo(pts[i - 1].x, pts[i - 1].y); ctx.lineTo(pts[i].x, pts[i].y); ctx.stroke();
+            }
           }
-          for (let i = 0; i < A.length; i += 3) {             // backbone beads
+          for (let i = 0; i < A.length; i += 3) {           // backbone beads
             for (const p of [A[i], B[i]]) {
-              ctx.globalAlpha = (0.18 + 0.6 * p.d) * OPACITY * P.k;
+              ctx.globalAlpha = (0.18 + 0.6 * p.d) * p.e * OPACITY * P.k;
               ctx.fillStyle = P.bead;
               ctx.beginPath(); ctx.arc(p.x, p.y, (0.8 + p.d * 1.8) * DPR, 0, Math.PI * 2); ctx.fill();
             }
           }
         }
 
-        function frame(t) {
+        function frame() {
           ctx.clearRect(0, 0, W, H);
-          for (const h of helices) drawHelix(h, t);
+          const P = PALETTE[isLight() ? 'light' : 'dark'];
+          for (const c of chunks) drawChunk(c, P);
           ctx.globalAlpha = 1;
         }
-        function loop(now) { frame(now * 0.001 * SPEED); requestAnimationFrame(loop); }
+
+        function update(dt) {
+          const flow = 26 * SPEED;   // px/sec baseline
+          const m = 0.18;
+          for (const c of chunks) {
+            c.x += (c.vx * flow * dt) / window.innerWidth;
+            c.y += (c.vy * flow * dt) / window.innerHeight;
+            c.angle += c.angVel * dt * SPEED;
+            if (c.x < -m) c.x += 1 + 2 * m; else if (c.x > 1 + m) c.x -= 1 + 2 * m;
+            if (c.y < -m) c.y += 1 + 2 * m; else if (c.y > 1 + m) c.y -= 1 + 2 * m;
+          }
+        }
+
+        function loop(now) {
+          const dt = Math.min(0.05, (now - last) / 1000 || 0);
+          last = now;
+          clock += dt * SPEED;
+          update(dt);
+          frame();
+          requestAnimationFrame(loop);
+        }
 
         resize();
-        window.addEventListener('resize', () => { resize(); if (reduce) frame(0); });
-        if (reduce) frame(0); else requestAnimationFrame(loop);
+        window.addEventListener('resize', () => { resize(); if (reduce) frame(); });
+        if (reduce) { frame(); } else { last = performance.now(); requestAnimationFrame(loop); }
       })();
     </script>
   </body>
