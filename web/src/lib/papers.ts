@@ -84,6 +84,20 @@ export const ALL_TOPICS: string[] = [
   'clinical-informatics', 'drug-discovery', 'bioinformatics',
 ];
 
+// Every source the pipeline pulls papers from (see pipeline/sources), so the
+// Library filter lists them all — not only the ones with a paper yet.
+export const ALL_SOURCES: string[] = ['openalex', 'biorxiv', 'medrxiv'];
+
+// Nice display name for a source slug; falls back to the slug itself.
+const SOURCE_LABELS: Record<string, string> = {
+  openalex: 'OpenAlex',
+  biorxiv: 'bioRxiv',
+  medrxiv: 'medRxiv',
+};
+export function sourceLabel(src: string): string {
+  return SOURCE_LABELS[src] ?? src;
+}
+
 // Human-readable label for a subfield-tag slug. Falls back to a de-hyphenated
 // version of the slug so a new tag still reads cleanly without a code change.
 const TAG_LABELS: Record<string, string> = {

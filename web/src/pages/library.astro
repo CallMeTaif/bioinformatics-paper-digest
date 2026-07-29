@@ -1,10 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
-import { allPapers, accentVar, formatDate, readingMinutes, tagLabel, ALL_TOPICS } from '../lib/papers';
+import { allPapers, accentVar, formatDate, readingMinutes, tagLabel, sourceLabel, ALL_TOPICS, ALL_SOURCES } from '../lib/papers';
 
 const papers = allPapers();
-const sources = [...new Set(papers.map((p) => p.source))].sort();
-// Show every topic the site covers, not just the ones with a paper yet.
+// Show every source and topic the site covers, not just the ones with a paper yet.
+const sources = [...ALL_SOURCES].sort((a, b) => sourceLabel(a).localeCompare(sourceLabel(b)));
 const tags = [...ALL_TOPICS].sort((a, b) => tagLabel(a).localeCompare(tagLabel(b)));
 ---
 <Base title="Library — BioRead" description="Browse and filter the AI-summarized bioinformatics library.">
@@ -15,7 +15,7 @@ const tags = [...ALL_TOPICS].sort((a, b) => tagLabel(a).localeCompare(tagLabel(b
 
   <div class="filters">
     <input id="q" class="search" type="search" placeholder="Search titles and summaries…" autocomplete="off" />
-    <select id="f-source" class="filter"><option value="">All sources</option>{sources.map((s) => <option value={s}>{s}</option>)}</select>
+    <select id="f-source" class="filter"><option value="">All sources</option>{sources.map((s) => <option value={s}>{sourceLabel(s)}</option>)}</select>
     <select id="f-type" class="filter"><option value="">All types</option><option value="published">Published</option><option value="preprint">Preprint</option></select>
     <select id="f-diff" class="filter"><option value="">Any difficulty</option><option value="intro">Intro</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
     <select id="f-tag" class="filter"><option value="">All topics</option>{tags.map((t) => <option value={t}>{tagLabel(t)}</option>)}</select>
