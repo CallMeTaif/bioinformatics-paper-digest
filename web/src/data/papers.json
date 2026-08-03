@@ -1,5 +1,52 @@
 [
   {
+    "slug": "inferring-variant-specific-effective-reproduction-numbers-fr-5706d0",
+    "doi": "10.7554/elife.104802.2",
+    "title": "Inferring variant-specific effective reproduction numbers from combined case and sequencing data",
+    "authors": [
+      "Marlin D Figgins",
+      "Trevor Bedford"
+    ],
+    "venue": "eLife",
+    "publication_date": "2026-07-09",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "gold",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.7554/elife.104802.2",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": true,
+    "abstract": "Accurately estimating relative transmission rates of SARS-CoV-2 variants remains a scientific and public health priority. Recent studies have used the sample proportions of different variants from genetic sequence data to describe variant frequency dynamics and relative transmission rates, but frequencies alone cannot capture the rich epidemiological behavior of SARS-CoV-2. Here, we extend methods for inferring the effective reproduction number of an epidemic using confirmed case data to jointly estimate variant-specific effective reproduction numbers and frequencies of co-circulating variants using cases and sequences across states in the United States from January 2021 to March 2022. Our method can be used to infer structured relationships between effective reproduction numbers across time series, allowing us to estimate fixed variant-specific growth advantages. We use this model to estimate the effective reproduction number of SARS-CoV-2 variants of concern and variants of interest in the United States, and to estimate consistent growth advantages of particular variants across different locations.",
+    "subfield_tags": [
+      "bioinformatics"
+    ],
+    "tag_accent": "A",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "Researchers developed a new method that combines case counts and genetic sequencing data to accurately estimate the transmission rates and growth advantages of different SARS-CoV-2 variants.",
+      "problem": "Previous methods relied only on the frequency of different variants in genetic sequences to estimate transmission rates, which fails to capture the full epidemiological complexity of how the virus spreads.",
+      "methods": "The authors expanded existing epidemic modeling techniques by combining confirmed case data with genetic sequencing data from the United States between January 2021 and March 2022 to jointly calculate variant frequencies and their specific reproduction numbers.",
+      "findings": "The new model successfully estimated the effective reproduction numbers for various SARS-CoV-2 variants of concern and interest, revealing consistent growth advantages for specific variants across different geographic locations.",
+      "why": "Accurately measuring how fast different viral variants spread is crucial for public health planning and understanding the dynamics of an ongoing pandemic.",
+      "limitations": "The provided text does not mention any specific limitations of the study.",
+      "takeaway": "Combining overall case counts with genetic sequencing data provides a more accurate and detailed picture of how specific viral variants spread and outcompete others.",
+      "topic": "bioinformatics",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 0.98,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's method, data, and findings without introducing hallucinated details.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-08-03T11:22:39.124214+00:00"
+  },
+  {
     "slug": "accelerating-scientific-discovery-with-co-scientist-7fd5e0",
     "doi": "10.1038/s41586-026-10644-y",
     "title": "Accelerating scientific discovery with Co-Scientist",
