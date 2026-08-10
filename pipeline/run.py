@@ -26,6 +26,11 @@ from .publish.record import slugify
 # summary when the abstract is substantial enough to be worth summarizing.
 MIN_ABSTRACT_CHARS = 600
 
+# Prepare a few candidates beyond the publish target so that if a paper hard-fails
+# (e.g. a sustained provider outage the retries can't ride out, or a gate flag),
+# the run can fall through to a backup instead of publishing nothing.
+SUMMARIZE_BUFFER = 2
+
 
 def _recency(paper) -> float:
     """0..1, newer within a year scores higher."""
@@ -127,9 +132,10 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
                 src = f"{len(paper.full_text):>6}c full" if has_ft else f"{len(paper.abstract):>6}c abstract"
                 pre = " [preprint]" if paper.is_preprint else ""
                 print(f"[fulltext] OK  ({src})  {paper.title[:52]}{pre}")
-            if len(full_text_papers) >= limit:
+            if len(full_text_papers) >= limit + SUMMARIZE_BUFFER:
                 break
-    print(f"[fulltext] {len(full_text_papers)} summarizable papers (target {limit})")
+    print(f"[fulltext] {len(full_text_papers)} summarizable papers "
+          f"(target {limit}, +{SUMMARIZE_BUFFER} buffer)")
 
     if not full_text_papers:
         print("[run] nothing summarizable this run — nothing to publish.")
@@ -186,6 +192,10 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
             n_flag += 1
         print(f"    {rec['status']:9} verdict={verdict.verdict} "
               f"score={verdict.score:.2f} conf={verdict.confidence:.2f}", flush=True)
+        # Stop as soon as we've published the target; the buffer only gets used
+        # when earlier candidates fail to summarize/verify or get flagged.
+        if n_pub >= limit:
+            break
 
     # 5) publish (published + flagged both persisted; the site shows only published)
     added = save_records(records)

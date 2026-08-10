@@ -10,6 +10,7 @@ from typing import Optional
 from .base import Summary
 from .verify import Verdict, SYSTEM_PROMPT_VERIFY, build_verify_prompt
 from .gemini import _parse_json_object, timeout_for_text  # reuse tolerant parse + adaptive timeout
+from ._retry import with_retries
 
 
 class ClaudeVerifier:
@@ -27,11 +28,15 @@ class ClaudeVerifier:
         prompt = build_verify_prompt(title=title, source_text=source_text, summary=summary)
         timeout_s = timeout_for_text(source_text)
         # Opus 4.8 rejects temperature; leave sampling params off. Small output.
-        resp = self._client.with_options(timeout=timeout_s).messages.create(
-            model=self.model,
-            max_tokens=2000,
-            system=SYSTEM_PROMPT_VERIFY,
-            messages=[{"role": "user", "content": prompt}],
+        # Retry transient overloads/rate-limits so a blip doesn't flag a good paper.
+        resp = with_retries(
+            lambda: self._client.with_options(timeout=timeout_s).messages.create(
+                model=self.model,
+                max_tokens=2000,
+                system=SYSTEM_PROMPT_VERIFY,
+                messages=[{"role": "user", "content": prompt}],
+            ),
+            what="claude",
         )
         text = "".join(
             b.text for b in resp.content if getattr(b, "type", None) == "text"

@@ -8,6 +8,7 @@ import json
 from typing import Optional
 
 from .base import Summary, SUMMARY_FIELDS, SYSTEM_PROMPT, build_user_prompt
+from ._retry import with_retries
 
 
 def _parse_json_object(raw: str) -> dict:
@@ -79,16 +80,21 @@ class GeminiSummarizer:
 
         prompt = build_user_prompt(title=title, venue=venue, text=text)
         timeout_ms = int(timeout_for_text(text) * 1000)
-        resp = self._client.models.generate_content(
-            model=self.model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=SYSTEM_PROMPT,
-                response_mime_type="application/json",
-                response_schema=self._response_schema(),
-                temperature=0.2,
-                http_options=types.HttpOptions(timeout=timeout_ms),
+        # Retry transient overloads (503 "high demand") / rate-limits with backoff;
+        # a single blip must not sink the run's only paper.
+        resp = with_retries(
+            lambda: self._client.models.generate_content(
+                model=self.model,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_PROMPT,
+                    response_mime_type="application/json",
+                    response_schema=self._response_schema(),
+                    temperature=0.2,
+                    http_options=types.HttpOptions(timeout=timeout_ms),
+                ),
             ),
+            what="gemini",
         )
         # Prefer the SDK's parsed object; fall back to tolerant text parsing.
         data = getattr(resp, "parsed", None)
