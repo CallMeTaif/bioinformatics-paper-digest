@@ -5,14 +5,6 @@ import Base from '../layouts/Base.astro';
   <section class="hero" style="padding:40px 0 12px;">
     <h1>My Library</h1>
   </section>
-  <div class="basepair-divider" role="presentation"></div>
-
-  <p id="signedout" class="empty" hidden>
-    <a href="/login?next=/my-library">Sign in</a> to save papers and track your reading.
-  </p>
-  <p id="loading" class="empty">Loading your library…</p>
-  <p id="empty" class="empty" hidden>Nothing saved yet.</p>
-
   <div class="filters" id="lib-filter" hidden>
     <select id="f-status" class="filter">
       <option value="reading" selected>Reading</option>
@@ -21,6 +13,14 @@ import Base from '../layouts/Base.astro';
       <option value="done">Done</option>
     </select>
   </div>
+
+  <div class="basepair-divider" role="presentation"></div>
+
+  <p id="signedout" class="empty" hidden>
+    <a href="/login?next=/my-library">Sign in</a> to save papers and track your reading.
+  </p>
+  <p id="loading" class="empty">Loading your library…</p>
+  <p id="empty" class="empty" hidden>Nothing saved yet.</p>
 
   <div id="board" hidden></div>
 
