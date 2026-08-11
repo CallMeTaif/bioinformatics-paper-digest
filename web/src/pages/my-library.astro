@@ -13,6 +13,15 @@ import Base from '../layouts/Base.astro';
   <p id="loading" class="empty">Loading your library…</p>
   <p id="empty" class="empty" hidden>Nothing saved yet.</p>
 
+  <div class="filters" id="lib-filter" hidden>
+    <select id="f-status" class="filter">
+      <option value="">All statuses</option>
+      <option value="reading">Reading</option>
+      <option value="want">Read later</option>
+      <option value="done">Done</option>
+    </select>
+  </div>
+
   <div id="board" hidden></div>
 
   <script>
@@ -26,6 +35,15 @@ import Base from '../layouts/Base.astro';
     const signedout = document.getElementById('signedout')!;
     const empty = document.getElementById('empty')!;
     const board = document.getElementById('board')!;
+    const filter = document.getElementById('lib-filter')!;
+    const fStatus = document.getElementById('f-status') as HTMLSelectElement;
+
+    fStatus.addEventListener('change', () => {
+      const v = fStatus.value;
+      board.querySelectorAll<HTMLElement>('.lib-col').forEach((col) => {
+        col.hidden = !!v && col.dataset.status !== v;
+      });
+    });
 
     async function run() {
       if (!supabase) { loading.hidden = true; signedout.hidden = false; return; }
@@ -46,11 +64,13 @@ import Base from '../layouts/Base.astro';
       rows.forEach((r: any) => groups[r.status]?.push(r));
 
       board.hidden = false;
+      filter.hidden = false;
       for (const status of ORDER) {
         const items = groups[status];
         if (!items.length) continue;
         const col = document.createElement('section');
         col.className = 'lib-col';
+        col.dataset.status = status;
         col.innerHTML = `<h2>${STATUS_LABELS[status]} <span class="badge">${items.length}</span></h2>`;
         for (const r of items) {
           const p = bySlug.get(r.paper_slug)!;
