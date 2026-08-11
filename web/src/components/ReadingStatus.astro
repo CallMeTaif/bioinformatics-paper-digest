@@ -1,0 +1,16 @@
+---
+// Reading-status control. Static markup; wired up client-side by lib/account.ts.
+// When signed out, a click sends the user to /login (with a return path).
+// Renders nothing until Supabase is configured, so the feature stays hidden
+// on the live site until accounts are switched on.
+interface Props { slug: string; compact?: boolean; }
+const { slug, compact = false } = Astro.props;
+const authEnabled = Boolean(import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY);
+---
+{authEnabled && (
+  <div class={`js-reading reading-status${compact ? ' compact' : ''}`} data-slug={slug} data-current="">
+    <button type="button" data-status="want" title="Save for later">Read later</button>
+    <button type="button" data-status="reading" title="Mark as reading">Reading</button>
+    <button type="button" data-status="done" title="Mark as done">Done</button>
+  </div>
+)}

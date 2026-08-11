@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="My Library — BioRead" description="Your saved papers: read later, reading, and done.">
+  <section class="hero" style="padding:40px 0 12px;">
+    <h1>My Library</h1>
+  </section>
+  <div class="basepair-divider" role="presentation"></div>
+
+  <p id="signedout" class="empty" hidden>
+    <a href="/login?next=/my-library">Sign in</a> to save papers and track your reading.
+  </p>
+  <p id="loading" class="empty">Loading your library…</p>
+  <p id="empty" class="empty" hidden>Nothing saved yet — open a paper and choose “Read later”, “Reading”, or “Done”.</p>
+
+  <div id="board" hidden></div>
+
+  <script>
+    import { supabase, STATUS_LABELS, type ReadingStatus } from '../lib/supabase';
+    import { allPapers, formatDate } from '../lib/papers';
+
+    const ORDER: ReadingStatus[] = ['reading', 'want', 'done'];
+    const bySlug = new Map(allPapers().map((p) => [p.slug, p]));
+
+    const loading = document.getElementById('loading')!;
+    const signedout = document.getElementById('signedout')!;
+    const empty = document.getElementById('empty')!;
+    const board = document.getElementById('board')!;
+
+    async function run() {
+      if (!supabase) { loading.hidden = true; signedout.hidden = false; return; }
+      const { data: sess } = await supabase.auth.getSession();
+      if (!sess.session) { loading.hidden = true; signedout.hidden = false; return; }
+
+      const { data, error } = await supabase
+        .from('reading_list')
+        .select('paper_slug,status,updated_at')
+        .order('updated_at', { ascending: false });
+      loading.hidden = true;
+      if (error) { empty.textContent = 'Could not load your library.'; empty.hidden = false; return; }
+
+      const rows = (data ?? []).filter((r: any) => bySlug.has(r.paper_slug));
+      if (!rows.length) { empty.hidden = false; return; }
+
+      const groups: Record<string, any[]> = { want: [], reading: [], done: [] };
+      rows.forEach((r: any) => groups[r.status]?.push(r));
+
+      board.hidden = false;
+      for (const status of ORDER) {
+        const items = groups[status];
+        if (!items.length) continue;
+        const col = document.createElement('section');
+        col.className = 'lib-col';
+        col.innerHTML = `<h2>${STATUS_LABELS[status]} <span class="badge">${items.length}</span></h2>`;
+        for (const r of items) {
+          const p = bySlug.get(r.paper_slug)!;
+          const a = document.createElement('a');
+          a.className = 'lib-row';
+          a.href = `/paper/${p.slug}`;
+          a.innerHTML = `<span class="lib-title">${p.title}</span>` +
+            `<span class="lib-meta">${p.venue ?? ''}${p.venue ? ' · ' : ''}${formatDate(p.publication_date)}</span>`;
+          col.appendChild(a);
+        }
+        board.appendChild(col);
+      }
+    }
+    run();
+  </script>
+</Base>

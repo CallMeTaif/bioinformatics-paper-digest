@@ -1,6 +1,7 @@
 ---
 import type { Paper } from '../lib/papers';
 import { accentVar, formatDate, readingMinutes, tagLabel } from '../lib/papers';
+import ReadingStatus from './ReadingStatus.astro';
 interface Props { paper: Paper; }
 const { paper } = Astro.props;
 const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
@@ -13,4 +14,5 @@ const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
     <span class="chip tag" style={`--chip-accent:${accentVar(paper.tag_accent)}`}>{tagLabel(tag)}</span>
     <span class="chip diff">{paper.difficulty_level}</span>
   </div>
+  <ReadingStatus slug={paper.slug} compact={true} />
 </article>

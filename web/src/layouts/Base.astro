@@ -2,6 +2,9 @@
 import '../styles/global.css';
 interface Props { title?: string; description?: string; }
 const { title = 'BioRead', description = 'AI-summarized, open-access bioinformatics research — verified and updated three times a week.' } = Astro.props;
+// Only surface accounts UI once Supabase is configured (env vars present at build).
+// Until then the site looks exactly as before — nothing half-wired goes live.
+const authEnabled = Boolean(import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY);
 ---
 <!doctype html>
 <html lang="en" data-theme="dark">
@@ -32,6 +35,13 @@ const { title = 'BioRead', description = 'AI-summarized, open-access bioinformat
           <a href="/">Latest</a>
           <a href="/library">Library</a>
           <a href="/about">About</a>
+          {authEnabled && (
+            <span class="auth" id="auth-slot">
+              <a href="/login" data-auth="out">Sign in</a>
+              <a href="/my-library" data-auth="in" hidden>My Library</a>
+              <button id="logout" class="linkish" data-auth="in" hidden>Log out</button>
+            </span>
+          )}
           <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">◐</button>
         </nav>
       </div>
@@ -46,6 +56,11 @@ const { title = 'BioRead', description = 'AI-summarized, open-access bioinformat
         Short summaries to always keep up with the world of bioinformatics.
       </div>
     </footer>
+
+    <!-- account: header auth state + reading-status controls (bundled module) -->
+    <script>
+      import '../lib/account';
+    </script>
 
     <script is:inline>
       const btn = document.getElementById('theme-toggle');

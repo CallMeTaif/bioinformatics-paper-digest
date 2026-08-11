@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import ReadingStatus from '../../components/ReadingStatus.astro';
 import { allPapers, getPaper, SUMMARY_SECTIONS, accentVar, formatDate, readingMinutes, tagLabel } from '../../lib/papers';
 
 export function getStaticPaths() {
@@ -11,6 +12,7 @@ const paper = getPaper(slug!);
 if (!paper) return Astro.redirect('/404');
 
 const tag = paper.subfield_tags?.[0] ?? 'bioinformatics';
+const authEnabled = Boolean(import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY);
 // We only host a copy when the licence permits redistribution; otherwise we link out.
 const hostedPdf = paper.hosted_pdf_path;
 const originalLink = paper.original_url ?? paper.pdf_original_url;
@@ -57,6 +59,13 @@ const shareWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(p
     </article>
 
     <aside class="sidebar">
+      {authEnabled && (
+        <div class="reading-box">
+          <span class="reading-label">My reading</span>
+          <ReadingStatus slug={paper.slug} />
+        </div>
+      )}
+
       <div class="info-panel">
         <dl>
           <dt>Venue</dt><dd>{paper.venue ?? '—'}</dd>
