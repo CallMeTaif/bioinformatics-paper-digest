@@ -15,8 +15,8 @@ import Base from '../layouts/Base.astro';
 
   <div class="filters" id="lib-filter" hidden>
     <select id="f-status" class="filter">
+      <option value="reading" selected>Reading</option>
       <option value="">All statuses</option>
-      <option value="reading">Reading</option>
       <option value="want">Read later</option>
       <option value="done">Done</option>
     </select>
@@ -38,12 +38,13 @@ import Base from '../layouts/Base.astro';
     const filter = document.getElementById('lib-filter')!;
     const fStatus = document.getElementById('f-status') as HTMLSelectElement;
 
-    fStatus.addEventListener('change', () => {
+    function applyFilter() {
       const v = fStatus.value;
       board.querySelectorAll<HTMLElement>('.lib-col').forEach((col) => {
         col.hidden = !!v && col.dataset.status !== v;
       });
-    });
+    }
+    fStatus.addEventListener('change', applyFilter);
 
     async function run() {
       if (!supabase) { loading.hidden = true; signedout.hidden = false; return; }
@@ -83,6 +84,7 @@ import Base from '../layouts/Base.astro';
         }
         board.appendChild(col);
       }
+      applyFilter(); // open on the default status (Reading)
     }
     run();
   </script>
