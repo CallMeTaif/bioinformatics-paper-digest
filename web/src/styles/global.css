@@ -32,6 +32,9 @@
 
 * { box-sizing: border-box; }
 
+/* The `hidden` attribute must always win, even over display:grid/flex rules. */
+[hidden] { display: none !important; }
+
 html { scroll-behavior: smooth; }
 
 body {
