@@ -18,6 +18,8 @@ function initHeader() {
   const emailEl = slot.querySelector<HTMLElement>('[data-auth-email]');
 
   const render = (user: User | null) => {
+    // Drives header links AND reveals reading-status controls (CSS: :root.has-user).
+    document.documentElement.classList.toggle('has-user', !!user);
     outEls.forEach((e) => (e.hidden = !!user));
     inEls.forEach((e) => (e.hidden = !user));
     if (emailEl && user) emailEl.textContent = user.email ?? 'Account';

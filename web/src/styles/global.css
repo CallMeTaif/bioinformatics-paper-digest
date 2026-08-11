@@ -227,7 +227,9 @@ footer.site-footer { border-top: 1px solid var(--border); color: var(--muted); f
 .linkish:hover { color: var(--text); }
 
 /* --- reading-status control --- */
-.reading-status { display: flex; gap: 6px; flex-wrap: wrap; }
+/* Hidden until the visitor is signed in; account.ts adds `has-user` to <html>. */
+.reading-status { display: none; gap: 6px; flex-wrap: wrap; }
+:root.has-user .reading-status { display: flex; }
 .reading-status button {
   flex: 1 1 auto; background: var(--surface); border: 1px solid var(--border); color: var(--muted);
   border-radius: 8px; padding: 8px 10px; cursor: pointer; font-family: var(--font-ui);
@@ -240,9 +242,11 @@ footer.site-footer { border-top: 1px solid var(--border); color: var(--muted); f
 .reading-status.compact button { padding: 5px 8px; font-size: 0.75rem; }
 
 .reading-box {
+  display: none; /* revealed only when signed in (see :root.has-user) */
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 14px; margin-bottom: 16px;
 }
+:root.has-user .reading-box { display: block; }
 .reading-label {
   display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
   color: var(--muted); margin-bottom: 8px;
