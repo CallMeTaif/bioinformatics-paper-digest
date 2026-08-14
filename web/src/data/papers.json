@@ -1,5 +1,53 @@
 [
   {
+    "slug": "toll-like-receptors-in-innate-immunity-and-inflammation-from-374415",
+    "doi": "10.1007/s44466-026-00040-6",
+    "title": "Toll-like receptors in innate immunity and inflammation: from fundamental biology to clinic insights",
+    "authors": [
+      "Cheng Qian",
+      "Xuetao Cao",
+      "Jules A. Hoffmann"
+    ],
+    "venue": "Immunity & Inflammation",
+    "publication_date": "2026-04-27",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "hybrid",
+    "license": "cc-by-nc-nd",
+    "original_url": "https://doi.org/10.1007/s44466-026-00040-6",
+    "pdf_original_url": "https://link.springer.com/content/pdf/10.1007/s44466-026-00040-6.pdf",
+    "hosted_pdf_path": null,
+    "can_host": false,
+    "abstract": "The discovery and investigation of Toll-like receptors (TLRs) has fundamentally reshaped our understanding of innate immunity and inflammation over the past four decades. These pivotal pattern-recognition receptors play a canonical role as sentinels that detect pathogen-associated molecular patterns (PAMPs) and damage-associated molecular patterns (DAMPs). In addition, TLR signaling is subject to exquisite multilayered regulation to prevent excessive inflammation and maintain immune homeostasis. Such regulation includes posttranslational modifications, epigenetic reprogramming, metabolic rewiring, and dynamic assembly of signaling condensates. This review comprehensively summarizes the intrinsic regulatory networks and tissue-microenvironment crosstalk that fine-tune TLR responses. We highlight the central roles of TLR signaling in infection, autoimmunity, cancer, inflammaging, cardiovascular diseases, and neurodegenerative disorders, underscoring how dysregulation drives pathology. Finally, we examine recent analyses and future prospects for pharmacological modulation of TLR pathways with agonists or antagonists as a promising therapeutic strategy for a broad spectrum of inflammatory and immune-mediated diseases. By bridging foundational mechanisms with clinical insights, this article illustrates how TLR research continues to illuminate immune regulation and offers novel avenues for targeted immunotherapy.",
+    "subfield_tags": [
+      "systems-biology"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "This review summarizes how Toll-like receptors regulate innate immunity through complex molecular networks and how their dysregulation drives inflammatory and autoimmune diseases.",
+      "problem": "How does the immune system use Toll-like receptors to accurately detect threats without triggering excessive, tissue-damaging inflammation, and what happens when this regulation fails?",
+      "methods": "The authors reviewed existing scientific literature on Toll-like receptors, synthesizing decades of research on their signaling pathways, regulatory mechanisms, and clinical implications.",
+      "findings": "Toll-like receptor signaling is controlled by a multilayered system involving protein modifications, epigenetic changes, metabolic shifts, and dynamic protein complexes. These receptors interact extensively with other immune pathways and tissue signals. Furthermore, pathogens can hijack these networks to evade detection, and genetic mutations in these pathways are linked to autoimmune disorders and varying susceptibilities to infections.",
+      "why": "Mapping the precise control mechanisms of these immune sensors reveals how our bodies maintain health and identifies new targets for drugs to treat infections, autoimmune disorders, and cancer.",
+      "limitations": "As a review article, the paper does not provide new experimental data. The authors also note that the exact mechanisms of certain genetic mutations and the roles of specific receptors in parasitic infections remain unclear.",
+      "takeaway": "Toll-like receptors act as sophisticated decision-making hubs for the immune system, and understanding their complex regulation opens new avenues for targeted immunotherapies.",
+      "topic": "systems-biology",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.97,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's content, methods (literature review), regulatory mechanisms, cross-regulation, pathogen evasion, and disease associations, with limitations correctly noted.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-08-14T09:07:36.404087+00:00"
+  },
+  {
     "slug": "the-single-cell-pediatric-cancer-atlas-data-portal-and-open--c128b2",
     "doi": "10.1016/j.xgen.2026.101283",
     "title": "The Single-Cell Pediatric Cancer Atlas: Data portal and open-source tools for single-cell transcriptomics of pediatric tumors",
