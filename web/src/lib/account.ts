@@ -17,11 +17,16 @@ function initHeader() {
   const inEls = slot.querySelectorAll<HTMLElement>('[data-auth="in"]');
   const emailEl = slot.querySelector<HTMLElement>('[data-auth-email]');
 
+  // The private Control Room link shows only for this account.
+  const ADMIN_EMAIL = 'ai.taif.alharbi@gmail.com';
+  const controlLink = document.getElementById('control-link');
+
   const render = (user: User | null) => {
     // Drives header links AND reveals reading-status controls (CSS: :root.has-user).
     document.documentElement.classList.toggle('has-user', !!user);
     outEls.forEach((e) => (e.hidden = !!user));
     inEls.forEach((e) => (e.hidden = !user));
+    if (controlLink) controlLink.hidden = !(user && user.email?.toLowerCase() === ADMIN_EMAIL);
     if (emailEl && user) emailEl.textContent = user.email ?? 'Account';
   };
   render(null);

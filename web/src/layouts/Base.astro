@@ -39,6 +39,7 @@ const authEnabled = Boolean(import.meta.env.PUBLIC_SUPABASE_URL && import.meta.e
             <span class="auth" id="auth-slot">
               <a href="/login" data-auth="out">Sign in</a>
               <a href="/my-library" data-auth="in" hidden>My Library</a>
+              <a href="/control" id="control-link" hidden>Control</a>
               <button id="logout" class="linkish" data-auth="in" hidden>Log out</button>
             </span>
           )}
