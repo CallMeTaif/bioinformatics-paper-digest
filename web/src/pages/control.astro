@@ -32,7 +32,7 @@ const funnel = [
 ];
 ---
 <Base title="Control Room — BioRead" description="Private pipeline dashboard.">
-  <p id="gate" class="empty">Checking access…</p>
+  <div id="gate" class="cr-gate"><span class="cr-spinner" aria-hidden="true"></span></div>
 
   <div id="dash" hidden>
     <section class="hero" style="padding:36px 0 8px;">
@@ -115,6 +115,10 @@ const funnel = [
   </div>
 
   <style>
+    .cr-gate { display: flex; justify-content: center; align-items: center; min-height: 55vh; }
+    .cr-spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: cr-spin .8s linear infinite; }
+    @keyframes cr-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .cr-spinner { animation: none; } }
     .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; padding: 10px 0 8px; }
     .tile { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 4px; }
     .t-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }

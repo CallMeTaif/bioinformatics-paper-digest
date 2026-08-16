@@ -13,7 +13,16 @@ export const supabaseConfigured = Boolean(url && anon);
 // Null when env isn't set yet, so pages degrade gracefully instead of crashing.
 export const supabase: SupabaseClient | null = supabaseConfigured
   ? createClient(url!, anon!, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        // Implicit flow returns the token directly in the redirect URL hash, so
+        // sign-in doesn't rely on a code_verifier stashed in storage — which
+        // Safari's tracking protection can wipe during the OAuth round-trip
+        // (the cause of "returns to sign-in" after Google).
+        flowType: 'implicit',
+      },
     })
   : null;
 
