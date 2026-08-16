@@ -25,7 +25,7 @@ import Base from '../layouts/Base.astro';
   <div id="board" hidden></div>
 
   <script>
-    import { supabase, STATUS_LABELS, type ReadingStatus } from '../lib/supabase';
+    import { supabase, onceSession, STATUS_LABELS, type ReadingStatus } from '../lib/supabase';
     import { allPapers, formatDate } from '../lib/papers';
 
     const ORDER: ReadingStatus[] = ['reading', 'want', 'done'];
@@ -46,12 +46,10 @@ import Base from '../layouts/Base.astro';
     }
     fStatus.addEventListener('change', applyFilter);
 
-    async function run() {
-      if (!supabase) { loading.hidden = true; signedout.hidden = false; return; }
-      const { data: sess } = await supabase.auth.getSession();
-      if (!sess.session) { loading.hidden = true; signedout.hidden = false; return; }
+    async function run(user: any) {
+      if (!user) { loading.hidden = true; signedout.hidden = false; return; }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('reading_list')
         .select('paper_slug,status,updated_at')
         .order('updated_at', { ascending: false });
@@ -86,6 +84,6 @@ import Base from '../layouts/Base.astro';
       }
       applyFilter(); // open on the default status (Reading)
     }
-    run();
+    onceSession(run);
   </script>
 </Base>

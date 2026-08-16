@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient, type User } from '@supabase/supabase-js';
 
 // Public, browser-safe credentials (the anon key is designed to be exposed;
 // row-level security is what actually protects each user's data). Set these as
@@ -16,6 +16,25 @@ export const supabase: SupabaseClient | null = supabaseConfigured
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
     })
   : null;
+
+// Resolve the session reliably — even immediately after an OAuth/magic-link
+// redirect, when the URL still holds a code Supabase hasn't exchanged yet.
+// Reading getSession() too early there returns null and looks "signed out";
+// instead we wait for the auth event. Calls `cb` once with the user (or null
+// when definitively signed out / the exchange fails).
+export function onceSession(cb: (user: User | null) => void): void {
+  if (!supabase) { cb(null); return; }
+  const pendingRedirect =
+    /[?&]code=/.test(location.search) || location.hash.includes('access_token');
+  let done = false;
+  const finish = (u: User | null) => { if (!done) { done = true; cb(u); } };
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (session) finish(session.user);
+    else if (event === 'INITIAL_SESSION' && !pendingRedirect) finish(null);
+  });
+  // If we came back from a redirect but the exchange never completes, stop waiting.
+  if (pendingRedirect) setTimeout(() => finish(null), 6000);
+}
 
 export type ReadingStatus = 'want' | 'reading' | 'done';
 

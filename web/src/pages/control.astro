@@ -147,21 +147,19 @@ const funnel = [
   </style>
 
   <script>
-    import { supabase } from '../lib/supabase';
+    import { onceSession } from '../lib/supabase';
     // Only this account may view the dashboard. Soft gate (client-side) — the data
     // shown is non-sensitive (counts/scores/model names), never keys or balances.
     const ADMIN = 'ai.taif.alharbi@gmail.com';
 
-    (async () => {
-      if (!supabase) { location.href = '/'; return; }
-      const { data } = await supabase.auth.getSession();
-      const email = data.session?.user?.email?.toLowerCase();
+    onceSession((user) => {
+      const email = user?.email?.toLowerCase();
       if (!email) { location.href = '/login?next=/control'; return; }
       if (email !== ADMIN) { location.href = '/'; return; }
       document.getElementById('gate')!.hidden = true;
       document.getElementById('dash')!.hidden = false;
       renderNextRun();
-    })();
+    });
 
     function renderNextRun() {
       const now = new Date();
