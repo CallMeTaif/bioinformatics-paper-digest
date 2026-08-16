@@ -19,7 +19,7 @@ import Base from '../../layouts/Base.astro';
   </style>
 
   <script>
-    import { onceSession, supabase } from '../../lib/supabase';
+    import { supabase } from '../../lib/supabase';
     const q = new URLSearchParams(location.search);
     const h = new URLSearchParams(location.hash.replace(/^#/, ''));
     const next = q.get('next') || '/my-library';
@@ -33,19 +33,34 @@ import Base from '../../layouts/Base.astro';
       const e = document.getElementById('err')!; e.textContent = msg; e.hidden = false;
       document.getElementById('back')!.hidden = false;
       const d = document.getElementById('diag')!;
-      const gotToken = location.hash.includes('access_token');
-      const gotCode = /[?&]code=/.test(location.search);
       d.textContent =
-        `returned with token: ${gotToken}\nreturned with code: ${gotCode}\n` +
+        `returned with token: ${location.hash.includes('access_token')}\n` +
         `url: ${location.href.replace(/(access_token=)[^&]+/, '$1<hidden>')}`;
       d.hidden = false;
     }
 
-    if (errorMsg) fail(errorMsg);
-    else if (!supabase) fail('Sign-in isn’t configured.');
-    else onceSession((user) => {
-      if (user) location.replace(next);
-      else fail('We couldn’t finish the sign-in. The details below tell us why:');
-    });
+    (async () => {
+      if (errorMsg) { fail(errorMsg); return; }
+      if (!supabase) { fail('Sign-in isn’t configured.'); return; }
+      try {
+        // Maybe the auto-detector already established it…
+        let { data: { session } } = await supabase.auth.getSession();
+        // …otherwise set the session explicitly from the tokens in the URL hash.
+        // This sidesteps Safari's timing quirk where the auto-detect event is missed.
+        if (!session) {
+          const access_token = h.get('access_token');
+          const refresh_token = h.get('refresh_token');
+          if (access_token && refresh_token) {
+            const { data, error } = await supabase.auth.setSession({ access_token, refresh_token });
+            if (error) throw error;
+            session = data.session;
+          }
+        }
+        if (session) { location.replace(next); return; }
+        fail('No sign-in token was returned. Please try again.');
+      } catch (e: any) {
+        fail(e?.message || String(e));
+      }
+    })();
   </script>
 </Base>
