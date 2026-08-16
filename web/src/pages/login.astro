@@ -30,7 +30,9 @@ import Base from '../layouts/Base.astro';
 
     const params = new URLSearchParams(location.search);
     const next = params.get('next') || '/my-library';
-    const redirectTo = new URL(next, location.origin).href;
+    // Return through a dedicated callback that patiently completes the sign-in
+    // (and surfaces any error) instead of racing on the destination page.
+    const redirectTo = new URL('/auth/callback?next=' + encodeURIComponent(next), location.origin).href;
 
     const msg = document.getElementById('msg')!;
     const show = (t: string, warn = false) => { msg.textContent = t; msg.hidden = false; msg.classList.toggle('warn', warn); };

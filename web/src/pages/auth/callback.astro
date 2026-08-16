@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Signing in… — BioRead" description="Completing sign-in.">
+  <section class="auth-page">
+    <h1 id="t">Signing you in…</h1>
+    <p class="sub" id="m">One moment.</p>
+    <p id="err" class="msg warn" hidden></p>
+    <pre id="diag" hidden></pre>
+    <p id="back" hidden><a href="/login">← Back to sign in</a></p>
+  </section>
+
+  <style>
+    #diag {
+      text-align: left; overflow: auto; font-size: 0.72rem; color: var(--muted);
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px; margin-top: 14px; white-space: pre-wrap; word-break: break-all;
+    }
+  </style>
+
+  <script>
+    import { onceSession, supabase } from '../../lib/supabase';
+    const q = new URLSearchParams(location.search);
+    const h = new URLSearchParams(location.hash.replace(/^#/, ''));
+    const next = q.get('next') || '/my-library';
+    const errorMsg =
+      q.get('error_description') || q.get('error') ||
+      h.get('error_description') || h.get('error');
+
+    function fail(msg: string) {
+      document.getElementById('t')!.textContent = 'Sign-in didn’t complete';
+      document.getElementById('m')!.hidden = true;
+      const e = document.getElementById('err')!; e.textContent = msg; e.hidden = false;
+      document.getElementById('back')!.hidden = false;
+      const d = document.getElementById('diag')!;
+      const gotToken = location.hash.includes('access_token');
+      const gotCode = /[?&]code=/.test(location.search);
+      d.textContent =
+        `returned with token: ${gotToken}\nreturned with code: ${gotCode}\n` +
+        `url: ${location.href.replace(/(access_token=)[^&]+/, '$1<hidden>')}`;
+      d.hidden = false;
+    }
+
+    if (errorMsg) fail(errorMsg);
+    else if (!supabase) fail('Sign-in isn’t configured.');
+    else onceSession((user) => {
+      if (user) location.replace(next);
+      else fail('We couldn’t finish the sign-in. The details below tell us why:');
+    });
+  </script>
+</Base>
