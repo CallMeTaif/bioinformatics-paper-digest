@@ -19,9 +19,11 @@ export const supabase: SupabaseClient | null = supabaseConfigured
         detectSessionInUrl: true,
         // Implicit flow returns the token directly in the redirect URL hash, so
         // sign-in doesn't rely on a code_verifier stashed in storage — which
-        // Safari's tracking protection can wipe during the OAuth round-trip
-        // (the cause of "returns to sign-in" after Google).
+        // Safari's tracking protection can wipe during the OAuth round-trip.
         flowType: 'implicit',
+        // Safari (Private mode / older versions) throws on the Web Locks API that
+        // supabase-js uses by default — a no-op lock sidesteps it.
+        lock: async (_name, _acquireTimeout, fn) => fn(),
       },
     })
   : null;

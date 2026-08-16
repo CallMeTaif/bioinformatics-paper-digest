@@ -59,7 +59,9 @@ import Base from '../../layouts/Base.astro';
         if (session) { location.replace(next); return; }
         fail('No sign-in token was returned. Please try again.');
       } catch (e: any) {
-        fail(e?.message || String(e));
+        fail(`${e?.name || 'Error'}: ${e?.message || String(e)}`);
+        const d = document.getElementById('diag')!;
+        d.textContent += '\nstack: ' + String(e?.stack || '').split('\n').slice(0, 2).join(' | ');
       }
     })();
   </script>
