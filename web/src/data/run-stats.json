@@ -1,0 +1,17 @@
+{
+  "ran_at": null,
+  "target": 1,
+  "discovered": 0,
+  "already_skipped": 0,
+  "new_candidates": 0,
+  "prescreen_kept": null,
+  "prescreen_dropped": null,
+  "summarizable": 0,
+  "published": 0,
+  "flagged": 0,
+  "summarizer": "google:gemini-3.1-pro-preview",
+  "verifier": "anthropic:claude-opus-4-8",
+  "papers": [],
+  "skipped": [],
+  "duration_s": 0
+}

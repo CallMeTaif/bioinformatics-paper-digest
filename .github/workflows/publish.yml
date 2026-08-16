@@ -58,16 +58,18 @@ jobs:
           python -u -m pipeline.run --limit "${{ github.event.inputs.limit || 1 }}" --pool 10
 
       # Belt-and-braces: a dry run produces mock summaries, so never publish it.
-      - name: Commit new papers
+      - name: Commit new papers + run stats
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
-          if git diff --quiet -- web/src/data/papers.json; then
-            echo "No new papers this run — nothing to commit."
+          # Commit if EITHER the papers or the run-stats changed (so the /control
+          # dashboard stays current even on a run that published nothing).
+          if git diff --quiet -- web/src/data/papers.json web/src/data/run-stats.json; then
+            echo "No changes this run — nothing to commit."
             exit 0
           fi
           git config user.name  "paper-digest-bot"
           git config user.email "actions@github.com"
-          git add web/src/data/papers.json
-          git commit -m "Publish new papers ($(date -u +%Y-%m-%d))"
+          git add web/src/data/papers.json web/src/data/run-stats.json
+          git commit -m "Publish papers + run stats ($(date -u +%Y-%m-%d))"
           git push
           echo "Pushed — Vercel will redeploy the site automatically."

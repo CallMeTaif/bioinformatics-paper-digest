@@ -11,6 +11,9 @@ from __future__ import annotations
 
 import argparse
 import datetime as _dt
+import json
+import time
+from pathlib import Path
 
 import httpx
 
@@ -30,6 +33,21 @@ MIN_ABSTRACT_CHARS = 600
 # (e.g. a sustained provider outage the retries can't ride out, or a gate flag),
 # the run can fall through to a backup instead of publishing nothing.
 SUMMARIZE_BUFFER = 2
+
+# Per-run summary for the private /control dashboard. Written next to papers.json
+# so the site can read it; skipped on DRY_RUN like the papers sink.
+_STATS_PATH = Path(__file__).resolve().parents[1] / "web" / "src" / "data" / "run-stats.json"
+
+
+def _write_stats(stats: dict) -> None:
+    if config.DRY_RUN:
+        return
+    try:
+        _STATS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        _STATS_PATH.write_text(json.dumps(stats, indent=2, ensure_ascii=False))
+        print(f"[stats] wrote {_STATS_PATH.name}", flush=True)
+    except Exception as e:  # noqa: BLE001 — stats are best-effort, never fail a run
+        print(f"[stats] could not write ({type(e).__name__}: {e})", flush=True)
 
 
 def _recency(paper) -> float:
@@ -80,12 +98,30 @@ def blend_lanes(papers, n: int, *, fresh_ratio: float = 0.5):
 
 
 def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
+    t0 = time.time()
     print(f"=== pipeline run {_dt.datetime.now().isoformat(timespec='seconds')} "
           f"(DRY_RUN={config.DRY_RUN}) ===")
+
+    stats: dict = {
+        "ran_at": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"),
+        "target": limit,
+        "discovered": 0, "already_skipped": 0, "new_candidates": 0,
+        "prescreen_kept": None, "prescreen_dropped": None,
+        "summarizable": 0, "published": 0, "flagged": 0,
+        "summarizer": f"{config.SUMMARIZER_PROVIDER}:{config.SUMMARIZER_MODEL}",
+        "verifier": f"{config.VERIFIER_PROVIDER}:{config.VERIFIER_MODEL}",
+        "papers": [], "skipped": [],
+    }
+
+    def _finish(ret: int) -> int:
+        stats["duration_s"] = round(time.time() - t0, 1)
+        _write_stats(stats)
+        return ret
 
     # 1) discover (OpenAlex established lane + bioRxiv/medRxiv fresh lane), then
     #    blend the two lanes so preprints and proven work both get represented.
     papers = discover_all(mailto=mailto, per_term=pool_per_term)
+    stats["discovered"] = len(papers)
 
     # Skip papers already in the library so re-runs don't re-summarize (or repost)
     # them — makes repeated/scheduled runs cheap and idempotent (spec §5).
@@ -94,7 +130,9 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
         fresh = [p for p in papers if p.doi not in already and p.title_key() not in already]
         print(f"[dedup] skipped {len(papers) - len(fresh)} already-published; "
               f"{len(fresh)} new candidates", flush=True)
+        stats["already_skipped"] = len(papers) - len(fresh)
         papers = fresh
+    stats["new_candidates"] = len(papers)
 
     ranked = blend_lanes(papers, max(config.MAX_CANDIDATES, limit * 3))
     n_pre = sum(p.is_preprint for p in ranked[: config.MAX_CANDIDATES])
@@ -115,6 +153,8 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
         if decisions:
             kept = [p for p, d in zip(pool, decisions) if d.keep]
             dropped = len(pool) - len(kept)
+            stats["prescreen_kept"] = len(kept)
+            stats["prescreen_dropped"] = dropped
             print(f"[prescreen] kept {len(kept)}, dropped {dropped} off-topic/weak", flush=True)
             # Preserve rank order among kept; append any un-screened tail as fallback.
             ranked = kept + ranked[config.MAX_CANDIDATES:]
@@ -136,10 +176,11 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
                 break
     print(f"[fulltext] {len(full_text_papers)} summarizable papers "
           f"(target {limit}, +{SUMMARIZE_BUFFER} buffer)")
+    stats["summarizable"] = len(full_text_papers)
 
     if not full_text_papers:
         print("[run] nothing summarizable this run — nothing to publish.")
-        return 0
+        return _finish(0)
 
     # 3b) Crossref: authoritative license for the copyright/host gate (few calls).
     with httpx.Client(timeout=20.0) as c:
@@ -176,6 +217,7 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
             summary = summarizer.summarize(title=paper.title, venue=paper.venue, text=text)
         except Exception as e:  # noqa: BLE001
             print(f"    SKIPPED summarize ({type(e).__name__}: {str(e)[:100]})", flush=True)
+            stats["skipped"].append({"title": paper.title, "reason": f"summarize: {type(e).__name__}"})
             continue
         try:
             verdict = verifier.verify(title=paper.title, source_text=text, summary=summary)
@@ -190,6 +232,13 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
             n_pub += 1
         else:
             n_flag += 1
+        stats["papers"].append({
+            "title": paper.title,
+            "status": rec["status"],
+            "verdict": verdict.verdict,
+            "score": round(verdict.score, 2),
+            "topic": (rec.get("subfield_tags") or [None])[0],
+        })
         print(f"    {rec['status']:9} verdict={verdict.verdict} "
               f"score={verdict.score:.2f} conf={verdict.confidence:.2f}", flush=True)
         # Stop as soon as we've published the target; the buffer only gets used
@@ -199,8 +248,10 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
 
     # 5) publish (published + flagged both persisted; the site shows only published)
     added = save_records(records)
+    stats["published"] = n_pub
+    stats["flagged"] = n_flag
     print(f"=== done: {added} record(s) written — {n_pub} published, {n_flag} flagged for review ===")
-    return added
+    return _finish(added)
 
 
 def main() -> None:
