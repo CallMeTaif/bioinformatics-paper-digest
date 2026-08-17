@@ -1,9 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import { allPapers, tagLabel, sourceLabel } from '../lib/papers';
-import stats from '../data/run-stats.json';
 
-// Library snapshot (built at deploy time from the published set).
+// Library snapshot is built from the *published* set (already public on the site),
+// so it's fine server-side. The private run-stats are fetched live from Supabase
+// (RLS: only the admin can read them) — they never ship in this HTML.
 const papers = allPapers();
 const total = papers.length;
 const countBy = (fn: (p: any) => string) => {
@@ -13,23 +14,7 @@ const countBy = (fn: (p: any) => string) => {
 };
 const byTopic = countBy((p) => tagLabel(p.subfield_tags?.[0] ?? 'bioinformatics'));
 const bySource = countBy((p) => sourceLabel(p.source));
-
-// Rough spend estimate — we don't read real provider balances (that needs secret
-// keys), so this is an approximation from a per-paper average, clearly labelled.
-const EST_PER_PAPER = 0.19;
-const estTotal = (total * EST_PER_PAPER).toFixed(2);
-const estRun = ((stats.published ?? 0) * EST_PER_PAPER).toFixed(2);
-
-const s: any = stats;
-const funnelMax = Math.max(1, s.discovered || 1);
-const funnel = [
-  { label: 'Discovered', value: s.discovered },
-  { label: 'New (after dedup)', value: s.new_candidates },
-  { label: 'Pre-screen kept', value: s.prescreen_kept ?? '—' },
-  { label: 'Summarizable', value: s.summarizable },
-  { label: 'Published', value: s.published },
-  { label: 'Flagged', value: s.flagged },
-];
+const estTotal = (total * 0.19).toFixed(2);
 ---
 <Base title="Control Room — BioRead" description="Private pipeline dashboard.">
   <div id="gate" class="cr-gate"><span class="cr-spinner" aria-hidden="true"></span></div>
@@ -41,61 +26,31 @@ const funnel = [
     </section>
     <div class="basepair-divider" role="presentation"></div>
 
-    <!-- top tiles -->
     <div class="tiles">
       <div class="tile"><span class="t-label">Papers live</span><span class="t-val">{total}</span></div>
       <div class="tile"><span class="t-label">Next run</span><span class="t-val" id="next-run">—</span><span class="t-sub" id="next-run-rel"></span></div>
-      <div class="tile"><span class="t-label">Last run published</span><span class="t-val">{s.published ?? 0}<span class="t-unit">/ target {s.target ?? 1}</span></span><span class="t-sub">{s.flagged ?? 0} flagged</span></div>
-      <div class="tile"><span class="t-label">Est. spend (rough)</span><span class="t-val">${estRun}</span><span class="t-sub">~${estTotal} all-time</span></div>
+      <div class="tile"><span class="t-label">Last run published</span><span class="t-val" id="lastrun-pub">—</span><span class="t-sub" id="lastrun-flag"></span></div>
+      <div class="tile"><span class="t-label">Est. spend (rough)</span><span class="t-val" id="est-run">—</span><span class="t-sub">~${estTotal} all-time</span></div>
     </div>
 
-    <!-- last run -->
     <h2 class="sec">Last run</h2>
-    <p class="run-meta" id="run-meta">
-      {s.ran_at ? `${s.ran_at.replace('T', ' ').replace('+00:00', ' UTC')} · ${s.duration_s ?? '?'}s` : 'No run recorded yet — the next scheduled run will populate this.'}
-    </p>
-    <div class="funnel">
-      {funnel.map((f) => (
-        <div class="frow">
-          <span class="fl">{f.label}</span>
-          <span class="fbar"><span class="fbar-fill" style={`width:${typeof f.value === 'number' ? Math.round((f.value / funnelMax) * 100) : 0}%`}></span></span>
-          <span class="fv">{f.value}</span>
-        </div>
-      ))}
+    <p class="run-meta" id="run-meta">Loading…</p>
+    <div class="funnel" id="funnel"></div>
+    <div class="models" id="models"></div>
+
+    <div id="papers-wrap" hidden>
+      <h2 class="sec">Papers this run</h2>
+      <table class="tbl">
+        <thead><tr><th>Title</th><th>Topic</th><th>Status</th><th>Score</th></tr></thead>
+        <tbody id="papers-body"></tbody>
+      </table>
     </div>
 
-    <div class="models">
-      <span><span class="m-label">Summarizer</span> {s.summarizer}</span>
-      <span><span class="m-label">Verifier</span> {s.verifier}</span>
+    <div id="skips-wrap" hidden>
+      <h2 class="sec">Skipped (failed to summarize)</h2>
+      <ul class="skips" id="skips-list"></ul>
     </div>
 
-    {s.papers && s.papers.length > 0 && (
-      <>
-        <h2 class="sec">Papers this run</h2>
-        <table class="tbl">
-          <thead><tr><th>Title</th><th>Topic</th><th>Status</th><th>Score</th></tr></thead>
-          <tbody>
-            {s.papers.map((p: any) => (
-              <tr>
-                <td class="td-title">{p.title}</td>
-                <td>{p.topic ? tagLabel(p.topic) : '—'}</td>
-                <td><span class={`st ${p.status}`}>{p.status}</span></td>
-                <td class="td-num">{p.score ?? '—'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
-    )}
-
-    {s.skipped && s.skipped.length > 0 && (
-      <>
-        <h2 class="sec">Skipped (failed to summarize)</h2>
-        <ul class="skips">{s.skipped.map((x: any) => (<li>{x.title} <span class="reason">— {x.reason}</span></li>))}</ul>
-      </>
-    )}
-
-    <!-- library breakdown -->
     <div class="cols2">
       <div>
         <h2 class="sec">By topic</h2>
@@ -111,7 +66,7 @@ const funnel = [
       </div>
     </div>
 
-    <p class="foot-note">Schedule: Mon / Wed / Fri · 08:00 UTC (GitHub may run it late). Spend is a rough per-paper estimate, not a live provider balance.</p>
+    <p class="foot-note">Schedule: Mon / Wed / Fri · 08:00 UTC (GitHub may run it late). Run stats are stored privately in your database; spend is a rough per-paper estimate, not a live provider balance.</p>
   </div>
 
   <style>
@@ -123,7 +78,6 @@ const funnel = [
     .tile { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 4px; }
     .t-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
     .t-val { font-size: 1.7rem; font-weight: 650; line-height: 1.1; }
-    .t-unit { font-size: 0.8rem; color: var(--muted); font-weight: 400; margin-left: 6px; }
     .t-sub { font-size: 0.78rem; color: var(--muted); font-family: var(--font-mono); }
     .sec { font-family: var(--font-ui); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--primary); margin: 28px 0 10px; }
     .run-meta { color: var(--muted); font-family: var(--font-mono); font-size: 0.85rem; margin: 0 0 12px; }
@@ -151,10 +105,10 @@ const funnel = [
   </style>
 
   <script>
-    import { onceSession } from '../lib/supabase';
-    // Only this account may view the dashboard. Soft gate (client-side) — the data
-    // shown is non-sensitive (counts/scores/model names), never keys or balances.
+    import { supabase, onceSession } from '../lib/supabase';
+    import { tagLabel } from '../lib/papers';
     const ADMIN = 'ai.taif.alharbi@gmail.com';
+    const esc = (s: any) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
 
     onceSession((user) => {
       const email = user?.email?.toLowerCase();
@@ -163,6 +117,7 @@ const funnel = [
       document.getElementById('gate')!.hidden = true;
       document.getElementById('dash')!.hidden = false;
       renderNextRun();
+      fetchStats();
     });
 
     function renderNextRun() {
@@ -170,12 +125,65 @@ const funnel = [
       for (let i = 0; i < 14; i++) {
         const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + i, 8, 0, 0));
         if ([1, 3, 5].includes(d.getUTCDay()) && d.getTime() > now.getTime()) {
-          const el = document.getElementById('next-run')!;
-          el.textContent = d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
+          document.getElementById('next-run')!.textContent = d.toLocaleString(undefined, { weekday: 'short', hour: '2-digit', minute: '2-digit' });
           const hrs = Math.round((d.getTime() - now.getTime()) / 3.6e6);
           document.getElementById('next-run-rel')!.textContent = hrs < 24 ? `in ~${hrs}h` : `in ~${Math.round(hrs / 24)}d`;
           return;
         }
+      }
+    }
+
+    async function fetchStats() {
+      const meta = document.getElementById('run-meta')!;
+      const { data, error } = await supabase!
+        .from('run_stats').select('data,created_at')
+        .order('created_at', { ascending: false }).limit(1);
+      const row = data && data[0];
+      if (error) { meta.textContent = 'Could not load run stats.'; return; }
+      if (!row) { meta.textContent = 'No run recorded yet — the next scheduled run will populate this.'; return; }
+      const s: any = row.data;
+
+      meta.textContent =
+        `${String(s.ran_at || row.created_at).replace('T', ' ').replace('+00:00', ' UTC')}` +
+        (s.duration_s != null ? ` · ${s.duration_s}s` : '');
+
+      // tiles
+      document.getElementById('lastrun-pub')!.innerHTML =
+        `${s.published ?? 0}<span class="t-unit" style="font-size:0.8rem;color:var(--muted);font-weight:400;margin-left:6px;">/ target ${s.target ?? 1}</span>`;
+      document.getElementById('lastrun-flag')!.textContent = `${s.flagged ?? 0} flagged`;
+      document.getElementById('est-run')!.textContent = `$${((s.published ?? 0) * 0.19).toFixed(2)}`;
+
+      // funnel
+      const max = Math.max(1, s.discovered || 1);
+      const rows: [string, any][] = [
+        ['Discovered', s.discovered], ['New (after dedup)', s.new_candidates],
+        ['Pre-screen kept', s.prescreen_kept ?? '—'], ['Summarizable', s.summarizable],
+        ['Published', s.published], ['Flagged', s.flagged],
+      ];
+      document.getElementById('funnel')!.innerHTML = rows.map(([label, val]) => {
+        const w = typeof val === 'number' ? Math.round((val / max) * 100) : 0;
+        return `<div class="frow"><span class="fl">${label}</span><span class="fbar"><span class="fbar-fill" style="width:${w}%"></span></span><span class="fv">${val}</span></div>`;
+      }).join('');
+
+      // models
+      document.getElementById('models')!.innerHTML =
+        `<span><span class="m-label">Summarizer</span> ${esc(s.summarizer || '—')}</span>` +
+        `<span><span class="m-label">Verifier</span> ${esc(s.verifier || '—')}</span>`;
+
+      // papers table
+      if (s.papers && s.papers.length) {
+        document.getElementById('papers-wrap')!.hidden = false;
+        document.getElementById('papers-body')!.innerHTML = s.papers.map((p: any) =>
+          `<tr><td class="td-title">${esc(p.title)}</td><td>${p.topic ? esc(tagLabel(p.topic)) : '—'}</td>` +
+          `<td><span class="st ${p.status === 'published' ? 'published' : 'flagged'}">${esc(p.status)}</span></td>` +
+          `<td class="td-num">${p.score ?? '—'}</td></tr>`).join('');
+      }
+
+      // skipped
+      if (s.skipped && s.skipped.length) {
+        document.getElementById('skips-wrap')!.hidden = false;
+        document.getElementById('skips-list')!.innerHTML = s.skipped.map((x: any) =>
+          `<li>${esc(x.title)} <span class="reason">— ${esc(x.reason)}</span></li>`).join('');
       }
     }
   </script>

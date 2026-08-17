@@ -11,9 +11,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as _dt
-import json
 import time
-from pathlib import Path
 
 import httpx
 
@@ -34,20 +32,34 @@ MIN_ABSTRACT_CHARS = 600
 # the run can fall through to a backup instead of publishing nothing.
 SUMMARIZE_BUFFER = 2
 
-# Per-run summary for the private /control dashboard. Written next to papers.json
-# so the site can read it; skipped on DRY_RUN like the papers sink.
-_STATS_PATH = Path(__file__).resolve().parents[1] / "web" / "src" / "data" / "run-stats.json"
-
 
 def _write_stats(stats: dict) -> None:
+    """Store the per-run summary for the private /control dashboard in Supabase
+    (service_role key → bypasses RLS to insert). Row-level security then lets only
+    the admin account read it, so the numbers never live in the public site.
+    Best-effort: never fail a run over stats. Skipped on DRY_RUN."""
     if config.DRY_RUN:
         return
+    url, key = config.SUPABASE_URL, config.SUPABASE_SERVICE_KEY
+    if not (url and key):
+        print("[stats] no Supabase credentials — skipping stats write", flush=True)
+        return
     try:
-        _STATS_PATH.parent.mkdir(parents=True, exist_ok=True)
-        _STATS_PATH.write_text(json.dumps(stats, indent=2, ensure_ascii=False))
-        print(f"[stats] wrote {_STATS_PATH.name}", flush=True)
+        r = httpx.post(
+            f"{url}/rest/v1/run_stats",
+            headers={
+                "apikey": key,
+                "Authorization": f"Bearer {key}",
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal",
+            },
+            json={"data": stats},
+            timeout=20.0,
+        )
+        r.raise_for_status()
+        print("[stats] stored run stats in Supabase", flush=True)
     except Exception as e:  # noqa: BLE001 — stats are best-effort, never fail a run
-        print(f"[stats] could not write ({type(e).__name__}: {e})", flush=True)
+        print(f"[stats] could not write ({type(e).__name__}: {str(e)[:120]})", flush=True)
 
 
 def _recency(paper) -> float:
