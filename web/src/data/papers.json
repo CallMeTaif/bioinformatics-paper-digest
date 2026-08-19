@@ -1,5 +1,55 @@
 [
   {
+    "slug": "multi-omics-and-artificial-intelligence-for-precision-drug-d-2e0dc5",
+    "doi": "10.1038/s41392-026-02631-6",
+    "title": "Multi-omics and artificial intelligence for precision drug discovery and potential clinical applications",
+    "authors": [
+      "Yuqing Liu",
+      "Kun Zhu",
+      "Weijun Peng",
+      "Zhaoqian Liu",
+      "Xiaoyuan Mao"
+    ],
+    "venue": "Signal Transduction and Targeted Therapy",
+    "publication_date": "2026-06-02",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "gold",
+    "license": "cc-by-nc-nd",
+    "original_url": "https://doi.org/10.1038/s41392-026-02631-6",
+    "pdf_original_url": "https://www.nature.com/articles/s41392-026-02631-6.pdf",
+    "hosted_pdf_path": null,
+    "can_host": false,
+    "abstract": "The integration of multiomics technologies with artificial intelligence (AI) has become a transformative force in modern precision medicine, particularly within drug discovery. Multiomics approaches, including genome-wide association studies, transcriptomic profiling, proteomic interaction mapping, and metabolomic sequencing, provide unparalleled insights into the molecular dynamics of disease pathogenesis. Advanced AI methodologies, which leverage deep learning architectures, exhibit extraordinary capabilities in deciphering these intricate biological datasets, elucidating latent patterns, and constructing high-fidelity predictive models. The combined application of multiomics and AI has significant potential to accelerate target identification, streamline lead optimization processes, and enhance the precision of clinical trial designs. However, challenges persist, such as the need to harmonize disparate omics data streams, ensure reproducibility, and mitigate algorithmic biases. This review offers an in-depth analysis of multiomics applications across the drug development pipeline, covering target deconvolution, drug repositioning, and de novo compound discovery. It also explores the critical role of AI in drug discovery, focusing on virtual screening, pharmacokinetic modeling, and safety assessment frameworks. The fusion of multiomics with AI provides distinct advantages in hypothesis generation and data-driven discovery, opening new pathways for therapeutic innovation. By examining cases in oncology, neurodegenerative diseases, and cardiovascular conditions supported by robust technological infrastructures, this review presents a forward-thinking vision for future drug development. The convergence of these technologies not only enables comprehensive molecular understanding but also allows for more precise therapeutic interventions, marking the beginning of a new era in bench-to-clinic translational medicine.",
+    "subfield_tags": [
+      "drug-discovery"
+    ],
+    "tag_accent": "C",
+    "difficulty_level": "intro",
+    "summary": {
+      "tldr": "Integrating multi-omics data with artificial intelligence is transforming drug discovery by accelerating target identification, drug repurposing, and safety predictions, despite ongoing challenges with data standardization and model interpretability.",
+      "problem": "Traditional drug development is highly expensive and prone to failure because it relies on overly simplified models that do not capture the complex, multi-layered molecular interactions of human diseases.",
+      "methods": "The authors conducted a systematic literature review to evaluate how combining multi-omics technologies, such as single-cell and spatial sequencing, with artificial intelligence, including deep learning and graph neural networks, is applied throughout the drug discovery pipeline.",
+      "findings": "The review highlights that combining AI with multi-omics significantly improves the identification of new drug targets, helps repurpose existing drugs for new diseases, and enables the design of entirely new compounds. AI models also successfully predict drug-drug interactions and potential toxicities early in the development process, with proven applications in cancer and neurological disorders.",
+      "why": "This approach shifts pharmaceutical research from a slow, trial-and-error process to a rapid, data-driven system, which could drastically lower costs, reduce clinical trial failures, and pave the way for personalized medicine.",
+      "limitations": "The field still struggles with inconsistent data formats across different studies, the inability of current omics to capture changes over time, and the black-box nature of AI models that makes it difficult to understand how they reach their conclusions.",
+      "takeaway": "Fusing multi-omics with artificial intelligence offers a powerful new framework for precision drug discovery, but realizing its full clinical potential will require better data harmonization and more transparent AI algorithms.",
+      "topic": "drug-discovery",
+      "difficulty": "intro",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.95,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's content, methods (systematic literature review), findings, and limitations without introducing fabricated facts or numbers.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-08-19T08:37:15.561997+00:00"
+  },
+  {
     "slug": "gene-informed-modeling-of-denitrification-process-in-groundw-536245",
     "doi": "10.1029/2026wr043411",
     "title": "Gene‐Informed Modeling of Denitrification Process in Groundwater Through Dynamic Flux Balance Analysis and Deep Learning",
