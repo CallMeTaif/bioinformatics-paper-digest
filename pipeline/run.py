@@ -258,11 +258,14 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
         if n_pub >= limit:
             break
 
-    # 5) publish (published + flagged both persisted; the site shows only published)
-    added = save_records(records)
+    # 5) publish — persist ONLY published papers. Flagged ones are dropped (never
+    #    written to the site) so no hidden records accumulate; they still show in
+    #    the private /control run stats (n_flag) for that run.
+    published_records = [r for r in records if r["status"] == "published"]
+    added = save_records(published_records)
     stats["published"] = n_pub
     stats["flagged"] = n_flag
-    print(f"=== done: {added} record(s) written — {n_pub} published, {n_flag} flagged for review ===")
+    print(f"=== done: {added} published record(s) written — {n_flag} flagged (dropped, not stored) ===")
     return _finish(added)
 
 
