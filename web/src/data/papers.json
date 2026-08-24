@@ -1,5 +1,54 @@
 [
   {
+    "slug": "esmdynamic-fast-and-accurate-prediction-of-protein-dynamic-c-1ee4f1",
+    "doi": "10.1038/s41467-026-76361-2",
+    "title": "ESMDynamic: Fast and accurate prediction of protein dynamic contact maps from single sequences",
+    "authors": [
+      "Diego E. Kleiman",
+      "Jiangyan Feng",
+      "Zhengyuan Xue",
+      "Diwakar Shukla"
+    ],
+    "venue": "Nature Communications",
+    "publication_date": "2026-08-11",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "gold",
+    "license": "cc-by-nc-nd",
+    "original_url": "https://doi.org/10.1038/s41467-026-76361-2",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": false,
+    "abstract": "Abstract Understanding conformational dynamics is essential for elucidating protein function, yet most deep learning models in structural biology predict only static structures. Here, we present ESMDynamic, a deep learning model that predicts residue–residue contact dynamics directly from protein sequence. Built on the ESMFold architecture and trained on conformational variability from experimental structure ensembles and molecular dynamics (MD) simulations, ESMDynamic predicts dynamic contact probabilities, contact frequencies reflecting equilibrium populations, and coarse-grained kinetics of contact formation and dissociation across multiple temperature conditions. On large-scale MD benchmarks (mdCATH and ATLAS), ESMDynamic matches or outperforms state-of-the-art ensemble prediction methods (AlphaFlow, ESMFlow, BioEmu) while requiring orders-of-magnitude less computation. We demonstrate generalization to diverse systems, including membrane transporters, a de novo designed protein, and a homodimer complex. We show that predicted dynamic contacts enable automated selection of collective variables for Markov state model construction. Applied to the human proteome, ESMDynamic generates predictions for over 18,000 proteins, enabling large-scale analysis of conformational variability. Overall, ESMDynamic provides a scalable, sequence-based representation of protein dynamics to inform simulation, analysis, and design workflows.",
+    "subfield_tags": [
+      "ml-in-bio"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "ESMDynamic is a deep learning model that predicts protein residue-residue contact dynamics directly from single sequences, matching or outperforming state-of-the-art ensemble methods like AlphaFlow while requiring orders-of-magnitude less computation.",
+      "problem": "Most deep learning models in structural biology predict only static protein structures, leaving a gap in understanding the conformational dynamics, equilibrium populations, and kinetics that are essential for elucidating protein function.",
+      "methods": "The researchers developed ESMDynamic, a deep learning model built on the ESMFold architecture, trained on experimental structure ensembles and molecular dynamics (MD) simulations. It predicts dynamic contact probabilities, equilibrium contact frequencies, and coarse-grained kinetics across multiple temperatures, and was benchmarked on large-scale MD datasets (mdCATH and ATLAS) and applied to over 18,000 proteins in the human proteome.",
+      "findings": "ESMDynamic matched or outperformed state-of-the-art ensemble prediction methods (AlphaFlow, ESMFlow, BioEmu) on the mdCATH and ATLAS benchmarks while using orders-of-magnitude less computational power. The model successfully generalized to diverse systems, including membrane transporters, a de novo designed protein, and a homodimer complex. Additionally, the predicted dynamic contacts enabled the automated selection of collective variables for constructing Markov state models, and the tool successfully generated predictions for over 18,000 proteins in the human proteome.",
+      "why": "By providing a fast, scalable, sequence-based method to predict protein dynamics, ESMDynamic enables large-scale analysis of conformational variability across entire proteomes and accelerates simulation and design workflows.",
+      "limitations": "The provided text does not explicitly state specific limitations, caveats, or biases of the ESMDynamic model.",
+      "takeaway": "ESMDynamic accurately and rapidly predicts protein dynamic contact maps and kinetics directly from single sequences, offering a highly scalable alternative to computationally expensive molecular dynamics simulations.",
+      "topic": "ml-in-bio",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 0.98,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects all claims made in the abstract without introducing unsupported facts.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-08-24T08:47:30.616167+00:00"
+  },
+  {
     "slug": "hoodscanr-profiling-single-cell-neighborhoods-in-spatial-tra-33def7",
     "doi": "10.1093/bioinformatics/btag609",
     "title": "hoodscanR: profiling single-cell neighborhoods in spatial transcriptomics data",
