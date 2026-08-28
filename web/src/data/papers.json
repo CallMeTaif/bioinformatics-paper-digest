@@ -1,5 +1,55 @@
 [
   {
+    "slug": "orthofinder-improved-phylogenetic-orthology-inference-with-e-d88e67",
+    "doi": "10.1038/s41592-026-03126-6",
+    "title": "OrthoFinder: improved phylogenetic orthology inference with enhanced accuracy and scalability",
+    "authors": [
+      "David Emms",
+      "Yi Liu",
+      "Laurence J. Belcher",
+      "Jonathan Holmes",
+      "Steven Kelly"
+    ],
+    "venue": "Nature Methods",
+    "publication_date": "2026-06-09",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "hybrid",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1038/s41592-026-03126-6",
+    "pdf_original_url": "https://www.nature.com/articles/s41592-026-03126-6.pdf",
+    "hosted_pdf_path": "https://cnwojlwrnlsjpllkhybj.supabase.co/storage/v1/object/public/pdfs/orthofinder-improved-phylogenetic-orthology-inference-with-e-d88e67.pdf",
+    "can_host": true,
+    "abstract": "Here we present a major advancement of the OrthoFinder method. This extends OrthoFinder's high-accuracy comparative genomic framework to provide substantially enhanced scalability and accuracy. Specifically, we show that enhanced phylogenetic delineation of orthogroups provides a 7% relative increase in orthogroup inference accuracy. We further demonstrate that a new gene assignment method substantially reduces overall runtime RAM usage without compromising accuracy. The latest version of OrthoFinder is available via GitHub at https://github.com/OrthoFinder/OrthoFinder .",
+    "subfield_tags": [
+      "phylogenetics"
+    ],
+    "tag_accent": "G",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "OrthoFinder v3 introduces a scalable, two-step phylogenetic algorithm that increases orthogroup inference accuracy by 5-7% and can process over 4,000 genomes, overcoming the quadratic time complexity bottleneck of previous methods.",
+      "problem": "Identifying evolutionarily related genes across different species traditionally requires all-versus-all sequence comparisons, which scale quadratically and become computationally impossible as global projects sequence thousands to millions of new genomes.",
+      "methods": "The authors updated OrthoFinder (v3) with a phylogenetic delineation step that splits erroneously fused orthogroups using gene tree-species tree reconciliation. They also added a linear-scaling workflow using the SHOOT profile algorithm to assign new genomes to a core set of 64 species. They benchmarked v3 against 13 tools (including FastOMA and SonicParanoid2) using OrthoBench, Quest for Orthologs (QfO) datasets, and up to 4,096 Ensembl bacterial genomes.",
+      "findings": "OrthoFinder v3 improved orthogroup inference accuracy (f-score) by 5-7% over version 2. It was the only tool able to process 1,024 eukaryotic genomes within a 7-day limit (completing in 128 hours) and successfully scaled to 4,096 bacterial genomes in 13.6 days using 504 GB of RAM. Compared to FastOMA, OrthoFinder v3 achieved 80% higher recall (15,721 versus 8,686) on the QfO eukaryotic species tree discordance test while maintaining comparable precision.",
+      "why": "This update allows researchers to accurately trace gene evolution and transfer biological knowledge across thousands of newly sequenced species using standard computing resources, directly supporting massive biodiversity initiatives like the Earth BioGenome Project.",
+      "limitations": "The method is currently capped at analyzing thousands of species, meaning further algorithmic improvements are still needed to reach the ultimate goal of analyzing all millions of species on Earth simultaneously.",
+      "takeaway": "By assigning new genomes to a pre-computed core set and using phylogenetic trees to refine gene groupings, OrthoFinder v3 achieves near-linear scalability and top-tier accuracy for massive comparative genomics projects.",
+      "topic": "phylogenetics",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.95,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "All specific figures (5-7% accuracy, 128h, 4096 genomes in 13d15h, 504GB, 80% higher recall 15721 vs 8686, 13 tools, core of 64) match the paper; the '80% higher recall while maintaining comparable precision' is a defensible paraphrase given RF distances 0.06 vs 0.05.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-08-28T19:58:44.487291+00:00"
+  },
+  {
     "slug": "a-complete-diploid-human-genome-benchmark-for-personalized-g-ed8d58",
     "doi": "10.1016/j.cell.2026.06.016",
     "title": "A complete diploid human genome benchmark for personalized genomics",
