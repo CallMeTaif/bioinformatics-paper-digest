@@ -1,5 +1,58 @@
 [
   {
+    "slug": "the-entropic-view-of-aging-from-thermodynamics-to-biology-738546",
+    "doi": "10.1093/lifemedi/lnag020",
+    "title": "The entropic view of aging: from thermodynamics to biology",
+    "authors": [
+      "Zeming Wu",
+      "Shuai Ma",
+      "Si Wang",
+      "Moshi Song",
+      "Weiqi Zhang",
+      "Jing Qu",
+      "J C Izpisua Belmonte",
+      "Guang‐Hui Liu"
+    ],
+    "venue": "Life Medicine",
+    "publication_date": "2026-05-23",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "diamond",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1093/lifemedi/lnag020",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": true,
+    "abstract": "A growing body of evidence suggests that aging is not simply the accumulation of damage, but a systemic progression of increasing entropy across biological scales. Synthesizing concepts from thermodynamics and information theory, we outline a tentative three-stage entropy model of the lifespan: order-building development, homeostatic adulthood, and disorder-dominant aging. Within this model, we attempt to reframe the established hallmarks of aging as interconnected nodes in an entropy-centered network and detail the multiscale manifestations of disorder from molecules to systems. To quantify this trajectory, we introduce a Multiscale Entropic Aging Index (MEAI) as a proof-of-concept conceptual framework, designed to integrate measurements of disorder across biological levels. This framework seeks to offer a potential unifying, quantitative language for aging research and suggests that entropy reduction could serve as a testable mechanism underlying interventions, laying a principled foundation for the future development of biomarkers and rejuvenative strategies.",
+    "subfield_tags": [
+      "systems-biology"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "This paper proposes a theoretical three-stage model of lifespan aging driven by increasing biological entropy and introduces a conceptual Multiscale Entropic Aging Index (MEAI) to quantify systemic disorder across molecular, cellular, and tissue scales.",
+      "problem": "Current aging research catalogs diverse biological hallmarks of aging but lacks a unifying, quantitative framework to explain how these distinct types of damage interconnect, propagate across biological scales, and drive systemic functional collapse over a lifespan.",
+      "methods": "The authors synthesize principles from thermodynamics and Shannon information theory to construct a conceptual biological framework. They formulate a theoretical mathematical metric, the Multiscale Entropic Aging Index (MEAI), designed to integrate Shannon entropy measurements across multiple biological scales (such as epigenetic, transcriptional, and tissue structural entropy) by comparing an individual's multi-scale disorder to a healthy young adult reference population baseline.",
+      "findings": "The paper defines a three-stage lifespan trajectory: programmed entropy reduction during development, dynamic homeostasis in adulthood, and systemic entropy increase during aging. It highlights specific entropic manifestations, such as increased CpG methylation entropy in adults over 70 compared to those aged 45-70 (with lower entropy preserved in individuals over 90), leaky transcription of endogenous retroviruses (ERVs), and tissue-level mesenchymal drift. To unify these observations, the authors propose the MEAI equation, which calculates a weighted sum of entropy deviations from a young adult baseline across genomic, epigenetic, proteomic, and metabolic scales.",
+      "why": "Reframing aging as a thermodynamic loss of biological information provides a universal, quantifiable benchmark for aging research, suggesting that successful rejuvenative interventions, such as Yamanaka factors or senolytics, must fundamentally reduce measurable multi-scale entropy.",
+      "limitations": "The MEAI is currently a theoretical proof-of-concept lacking empirical validation for the linear additivity of entropy across scales. The authors note practical challenges including the lack of standardized cross-scale computational pipelines, the difficulty of calibrating index weights, and Shannon entropy's reliance on population baselines rather than personalized single-sample metrics.",
+      "takeaway": "Aging can be fundamentally understood and potentially measured as a systemic increase in biological entropy, offering a unified theoretical target for future biomarkers and anti-aging therapies.",
+      "topic": "systems-biology",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.97,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's three-stage model, MEAI framework, entropy examples, and limitations without introducing contradicted facts.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-08-31T15:52:48.660154+00:00"
+  },
+  {
     "slug": "orthofinder-improved-phylogenetic-orthology-inference-with-e-d88e67",
     "doi": "10.1038/s41592-026-03126-6",
     "title": "OrthoFinder: improved phylogenetic orthology inference with enhanced accuracy and scalability",
