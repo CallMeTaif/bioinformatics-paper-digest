@@ -1,5 +1,54 @@
 [
   {
+    "slug": "non-standard-proteins-in-the-lens-of-alphafold-3-a-case-stud-adf092",
+    "doi": "10.1038/s41598-026-68041-4",
+    "title": "Non-standard proteins in the lens of AlphaFold 3: a case study of amyloids",
+    "authors": [
+      "Alicja W. Wojciechowska",
+      "Jakub W. Wojciechowski",
+      "Gert Vriend",
+      "Malgorzata Kotulska"
+    ],
+    "venue": "Scientific Reports",
+    "publication_date": "2026-09-03",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "gold",
+    "license": "cc-by-nc-nd",
+    "original_url": "https://doi.org/10.1038/s41598-026-68041-4",
+    "pdf_original_url": "https://www.nature.com/articles/s41598-026-68041-4_reference.pdf",
+    "hosted_pdf_path": null,
+    "can_host": false,
+    "abstract": "Abstract While three-dimensional structures of globular and transmembrane forms are available for many amyloid proteins, structures of their amyloid forms are scarce in the PDB. Amyloids pose major challenges for both experimental structure determination and computational modelling. We evaluated the amyloid-modelling performance of the current top modelling software, AlphaFold 3 (AF3), using three datasets. Dataset 1 contains 153 proteins and peptides that are known to form fibrils, but their 3D structures have not been experimentally determined. Dataset 2 contains 56 non-aggregating/non-amyloid peptides. Dataset 3 contains seven proteins for which the three-dimensional fibrillar structure is known. Fibrillar structures were predicted for 34% of dataset 1, but unfortunately also for 54% of dataset 2. Fibrillar structures were successfully predicted for five out of seven proteins from dataset 3. Comparing AF3 with different methods, it outperformed Boltz, and predicted the structures of CsgA and α-synuclein more correctly than RibbonFold, whereas the latter predicted Aβ-42 better. The performance of AF3 in prediction of amyloid structures for our datasets seems hindered by low abundance of amyloid structures in the PDB and high prevalence of structure data for their non-fibrillar forms. AF3 tends to assign a higher quality score to globular oligomeric models than to fibrillar ones. A correct amyloid structure prediction is more likely to be obtained for shorter fragments. The amyloid modelling quality of AF3 seems underwhelming, but it can still provide hypotheses about amyloid structures in some cases. Our work also suggests the steps needed to achieve a better performance in the near future. Statement for a broader audience Amyloid proteins can form stable, insoluble fibrils that are often related to a neurodegenerative disease. Knowledge of the three-dimensional structure of these fibrils is important, e.g. for a drug design. We evaluate the performance of AlphaFold 3 on the prediction of amyloid structures and observe that it struggles with these cases. The problems seem to arise mainly from the nature of the AlphaFold 3 training dataset and polymorphic nature of many amyloids. Although the results are underwhelming, AlphaFold 3 can sometimes provide valuable insights into amyloid protein structures, something that only a few years ago still seemed a very hard to reach goal.",
+    "subfield_tags": [
+      "ml-in-bio"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "AlphaFold 3 struggles to accurately predict the structures of amyloid proteins, correctly identifying only 34% of known amyloids while falsely predicting amyloid structures for 54% of non-amyloid peptides, largely due to a bias toward globular proteins in its training data.",
+      "problem": "Amyloid proteins, which form fibril structures linked to diseases like Alzheimer's and Parkinson's, are difficult to study experimentally and are severely underrepresented in the Protein Data Bank (PDB). Because AI models like AlphaFold 3 (AF3) are trained primarily on globular proteins, it is unclear if they can accurately predict the complex, polymorphic structures of amyloids.",
+      "methods": "The researchers evaluated AF3 using three datasets: 153 known amyloid sequences without solved 3D structures, 56 non-amyloid peptides, and 7 proteins with known amyloid structures (including Aβ-42 and α-synuclein). They generated hexameric (n=6) models using the AF3 web server and compared the predicted structures to experimental data in the PDB and STAMP databases using Foldseek (TM-score) and US-align, while also comparing AF3's performance against other tools like Boltz and RibbonFold.",
+      "findings": "AF3 correctly predicted amyloid structures for only 34% (52 of 153) of the known amyloid sequences, but incorrectly predicted amyloid folds for 54% (30 of 56) of the non-amyloid peptides. For the 7 known amyloid structures, AF3 successfully modeled 5 (such as Aβ-42 and α-synuclein) but completely failed on transthyretin and immunoglobulin, predicting them as globular instead. Notably, incorrect globular predictions received higher confidence scores (pLDDT was 18 points higher on average) than correct amyloid predictions, strongly correlating with the presence of globular homologs in the PDB training data.",
+      "why": "This reveals that AF3's high confidence scores can be misleading for polymorphic proteins, demonstrating that AI structure prediction still requires significant improvement and human oversight, such as manually setting oligomeric states, to accurately model disease-relevant amyloid fibrils.",
+      "limitations": "The non-amyloid control dataset was limited to short sequences (under 36 amino acids), and the operational choice to model all amyloids as hexamers (n=6) may not be optimal for every protein. Additionally, the explanation for AF3's failures is correlational, limited by the black-box nature of the AI.",
+      "takeaway": "AlphaFold 3 often defaults to predicting globular structures for amyloid proteins due to training data bias, meaning researchers cannot blindly trust its outputs or high confidence scores (pLDDT) when modeling amyloid fibrils.",
+      "topic": "ml-in-bio",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.97,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "All key numbers (34%, 54%, 5/7, 18-point pLDDT gap, dataset sizes, tool names) match the paper accurately.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-09-07T14:01:19.341342+00:00"
+  },
+  {
     "slug": "single-cell-transcriptomic-atlas-of-alzheimer-s-disease-midd-da92fc",
     "doi": "10.1177/13872877261480719",
     "title": "Single-cell transcriptomic atlas of Alzheimer's disease middle temporal gyrus reveals region, cell type, and sex specificity of gene expression with novel genetic risk for MERTK in female",
