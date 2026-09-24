@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import ReadingStatus from '../components/ReadingStatus.astro';
 import { allPapers, accentVar, formatDate, readingMinutes, tagLabel, sourceLabel, ALL_TOPICS, ALL_SOURCES } from '../lib/papers';
 
 const papers = allPapers();
@@ -27,19 +28,21 @@ const tags = [...ALL_TOPICS].sort((a, b) => tagLabel(a).localeCompare(tagLabel(b
       const tag = p.subfield_tags?.[0] ?? 'bioinformatics';
       const hay = `${p.title} ${p.summary.tldr} ${tag} ${(p.authors ?? []).join(' ')}`.toLowerCase();
       return (
-        <article class="card lib-card"
+        <article class="ed-card lib-card"
+          style={`--acc:${accentVar(p.tag_accent)}`}
           data-hay={hay}
           data-source={p.source}
           data-type={p.is_preprint ? 'preprint' : 'published'}
           data-diff={p.difficulty_level}
           data-tag={tag}>
-          <div class="meta">{p.venue ?? 'Unknown venue'} · {formatDate(p.publication_date)} · {readingMinutes(p)} min read</div>
-          <a class="card-title" href={`/paper/${p.slug}`}>{p.title}</a>
-          <p class="tldr">{p.summary.tldr}</p>
+          <div class="m">{p.venue ?? 'Unknown venue'} · {formatDate(p.publication_date)} · {readingMinutes(p)} min read</div>
+          <a class="t" href={`/paper/${p.slug}`}>{p.title}</a>
+          <p>{p.summary.tldr}</p>
           <div class="chips">
             <span class="chip tag" style={`--chip-accent:${accentVar(p.tag_accent)}`}>{tagLabel(tag)}</span>
             <span class="chip diff">{p.difficulty_level}</span>
           </div>
+          <ReadingStatus slug={p.slug} compact={true} />
         </article>
       );
     })}
