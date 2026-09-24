@@ -1,22 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import PaperCard from '../components/PaperCard.astro';
-import { allPapers, tagLabel } from '../lib/papers';
+import ReadingStatus from '../components/ReadingStatus.astro';
+import { allPapers, tagLabel, accentVar, formatDate, readingMinutes } from '../lib/papers';
 
 const papers = allPapers();
-
-// Group by primary category, then order categories by how recent their newest
-// paper is (papers are already sorted newest-first), so fresh activity leads.
-const groups = new Map<string, typeof papers>();
-for (const p of papers) {
-  const tag = p.subfield_tags?.[0] ?? 'bioinformatics';
-  if (!groups.has(tag)) groups.set(tag, []);
-  groups.get(tag)!.push(p);
-}
-const categories = [...groups.entries()].sort(
-  (a, b) => (b[1][0].publication_date ?? '').localeCompare(a[1][0].publication_date ?? '')
-);
-const PREVIEW = 3;
+const lead = papers[0];
+const side = papers.slice(1, 5);          // "Also this week"
+const grid = papers.slice(5, 11);         // a curated handful; the rest live in the Library
+const leadTag = lead ? tagLabel(lead.subfield_tags?.[0] ?? 'bioinformatics') : '';
 ---
 <Base>
   <section class="hero">
@@ -35,19 +26,44 @@ const PREVIEW = 3;
     <p style="color:var(--muted);padding:20px 0 80px;">The first summaries land soon — new papers publish Monday, Wednesday, and Friday. Check back shortly.</p>
   ) : (
     <>
-      {categories.map(([tag, list]) => (
-        <section class="cat-section">
-          <div class="cat-head">
-            <h2>{tagLabel(tag)}</h2>
-            {list.length > PREVIEW && (
-              <a class="cat-more" href={`/library?topic=${encodeURIComponent(tag)}`}>More papers →</a>
-            )}
+      <div class="ed-lead">
+        <article class="ed-feat">
+          <div class="eyebrow">Latest</div>
+          <a class="ed-feat-title" href={`/paper/${lead.slug}`}>{lead.title}</a>
+          <p class="dek">{lead.summary.tldr}</p>
+          <div class="meta">{lead.venue ?? 'Unknown venue'} · {formatDate(lead.publication_date)} · {readingMinutes(lead)} min read</div>
+          <div class="ed-feat-foot">
+            <span class="chip tag" style={`--chip-accent:${accentVar(lead.tag_accent)}`}>{leadTag}</span>
+            <a class="ed-read" href={`/paper/${lead.slug}`}>Read →</a>
           </div>
-          <div class="grid">
-            {list.slice(0, PREVIEW).map((p) => <PaperCard paper={p} />)}
-          </div>
-        </section>
-      ))}
+        </article>
+
+        {side.length > 0 && (
+          <aside class="ed-side">
+            <div class="ed-sh">Also this week</div>
+            {side.map((p) => (
+              <a class="ed-item" href={`/paper/${p.slug}`}>
+                <span class="t">{p.title}</span>
+                <span class="m">{p.venue ?? 'Unknown venue'} · {formatDate(p.publication_date)} · {readingMinutes(p)} min</span>
+              </a>
+            ))}
+          </aside>
+        )}
+      </div>
+
+      {grid.length > 0 && (
+        <div class="ed-grid">
+          {grid.map((p) => (
+            <article class="ed-card" style={`--acc:${accentVar(p.tag_accent)}`}>
+              <a class="t" href={`/paper/${p.slug}`}>{p.title}</a>
+              <div class="m">{p.venue ?? 'Unknown venue'} · {formatDate(p.publication_date)} · {readingMinutes(p)} min</div>
+              <p>{p.summary.tldr}</p>
+              <ReadingStatus slug={p.slug} compact={true} />
+            </article>
+          ))}
+        </div>
+      )}
+
       <p class="all-link"><a href="/library">Browse the full library →</a></p>
     </>
   )}
