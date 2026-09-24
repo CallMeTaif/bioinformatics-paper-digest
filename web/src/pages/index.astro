@@ -39,9 +39,7 @@ const PREVIEW = 3;
         <section class="cat-section">
           <div class="cat-head">
             <h2>{tagLabel(tag)}</h2>
-            <a class="cat-more" href={`/library?topic=${encodeURIComponent(tag)}`}>
-              {list.length > PREVIEW ? `See all ${list.length} →` : 'Browse in Library →'}
-            </a>
+            <a class="cat-more" href={`/library?topic=${encodeURIComponent(tag)}`}>More papers →</a>
           </div>
           <div class="grid">
             {list.slice(0, PREVIEW).map((p) => <PaperCard paper={p} />)}
