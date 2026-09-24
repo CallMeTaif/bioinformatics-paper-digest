@@ -77,6 +77,14 @@ const tags = [...ALL_TOPICS].sort((a, b) => tagLabel(a).localeCompare(tagLabel(b
       el.addEventListener('input', apply);
       el.addEventListener('change', apply);
     });
+
+    // Pre-select filters from the URL (e.g. /library?topic=genomics from the home
+    // page "See all" links), so the Library opens already filtered.
+    const params = new URLSearchParams(location.search);
+    const setIf = (el, key) => { const v = params.get(key); if (v !== null) el.value = v; };
+    setIf(q, 'q'); setIf(fSource, 'source'); setIf(fType, 'type');
+    setIf(fDiff, 'diff'); setIf(fTag, 'topic');
+
     apply();
   </script>
 </Base>

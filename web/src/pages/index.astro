@@ -1,8 +1,22 @@
 ---
 import Base from '../layouts/Base.astro';
 import PaperCard from '../components/PaperCard.astro';
-import { allPapers } from '../lib/papers';
+import { allPapers, tagLabel } from '../lib/papers';
+
 const papers = allPapers();
+
+// Group by primary category, then order categories by how recent their newest
+// paper is (papers are already sorted newest-first), so fresh activity leads.
+const groups = new Map<string, typeof papers>();
+for (const p of papers) {
+  const tag = p.subfield_tags?.[0] ?? 'bioinformatics';
+  if (!groups.has(tag)) groups.set(tag, []);
+  groups.get(tag)!.push(p);
+}
+const categories = [...groups.entries()].sort(
+  (a, b) => (b[1][0].publication_date ?? '').localeCompare(a[1][0].publication_date ?? '')
+);
+const PREVIEW = 3;
 ---
 <Base>
   <section class="hero">
@@ -20,8 +34,21 @@ const papers = allPapers();
   {papers.length === 0 ? (
     <p style="color:var(--muted);padding:20px 0 80px;">The first summaries land soon — new papers publish Monday, Wednesday, and Friday. Check back shortly.</p>
   ) : (
-    <div class="grid">
-      {papers.map((p) => <PaperCard paper={p} />)}
-    </div>
+    <>
+      {categories.map(([tag, list]) => (
+        <section class="cat-section">
+          <div class="cat-head">
+            <h2>{tagLabel(tag)}</h2>
+            <a class="cat-more" href={`/library?topic=${encodeURIComponent(tag)}`}>
+              {list.length > PREVIEW ? `See all ${list.length} →` : 'Browse in Library →'}
+            </a>
+          </div>
+          <div class="grid">
+            {list.slice(0, PREVIEW).map((p) => <PaperCard paper={p} />)}
+          </div>
+        </section>
+      ))}
+      <p class="all-link"><a href="/library">Browse the full library →</a></p>
+    </>
   )}
 </Base>
