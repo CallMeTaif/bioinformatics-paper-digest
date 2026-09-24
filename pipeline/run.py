@@ -32,6 +32,25 @@ MIN_ABSTRACT_CHARS = 600
 # the run can fall through to a backup instead of publishing nothing.
 SUMMARIZE_BUFFER = 2
 
+# Errors that mean the whole run is doomed (no API credits, bad/expired key,
+# permission denied) — as opposed to a one-off content flag or a skippable paper.
+# On these we abort the run LOUDLY so it fails visibly (GitHub emails you on a
+# failed scheduled run) instead of silently publishing nothing — which is exactly
+# what hid a ~2-week outage when the Anthropic credit balance ran out.
+_FATAL_MARKERS = (
+    "credit balance", "billing", "quota", "insufficient",
+    "authentication", "invalid api key", "invalid x-api-key",
+    "permission denied", "unauthorized",
+)
+
+
+def _is_fatal(e: Exception) -> bool:
+    code = getattr(e, "status_code", None) or getattr(e, "code", None)
+    if isinstance(code, int) and code in (401, 402, 403):
+        return True
+    msg = str(e).lower()
+    return any(m in msg for m in _FATAL_MARKERS)
+
 
 def _write_stats(stats: dict) -> None:
     """Store the per-run summary for the private /control dashboard in Supabase
@@ -228,12 +247,17 @@ def run(*, limit: int, pool_per_term: int, mailto: str) -> int:
         try:
             summary = summarizer.summarize(title=paper.title, venue=paper.venue, text=text)
         except Exception as e:  # noqa: BLE001
+            if _is_fatal(e):
+                raise RuntimeError(f"summarizer unavailable — aborting run: {e}") from e
             print(f"    SKIPPED summarize ({type(e).__name__}: {str(e)[:100]})", flush=True)
             stats["skipped"].append({"title": paper.title, "reason": f"summarize: {type(e).__name__}"})
             continue
         try:
             verdict = verifier.verify(title=paper.title, source_text=text, summary=summary)
-        except Exception as e:  # noqa: BLE001 — a verify failure flags, never auto-publishes
+        except Exception as e:  # noqa: BLE001 — a content-level verify failure flags; an
+            # infrastructure failure (no credits, bad key) aborts loudly instead.
+            if _is_fatal(e):
+                raise RuntimeError(f"verifier unavailable — aborting run: {e}") from e
             print(f"    verify failed ({type(e).__name__}: {str(e)[:80]}) — flagging", flush=True)
             from .llm import Verdict
             verdict = Verdict(verdict="flag", notes=f"verify error: {type(e).__name__}",
