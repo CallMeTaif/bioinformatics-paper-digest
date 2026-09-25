@@ -1,5 +1,53 @@
 [
   {
+    "slug": "enabling-student-projects-in-computational-biology-with-the--853f46",
+    "doi": "10.5281/zenodo.21932798",
+    "title": "Enabling Student Projects in Computational Biology with the Morpheus Simulation Framework",
+    "authors": [
+      "Justin Bürger Michaelis",
+      "Jörn Starruß",
+      "Diego Jahn"
+    ],
+    "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+    "publication_date": "2026-08-14",
+    "source": "openalex",
+    "is_preprint": true,
+    "oa_status": "green",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.5281/zenodo.21932798",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": true,
+    "abstract": "Computational biology is an interdisciplinary field with contributors from a range ofbackgrounds. Reproducibility therefore hinges not only on technical factors but also on the usabilityof the tools involved. In this paper, we present a usability test of the MorpheusML ecosystem inwhich three teams of high school students, none with prior experience in computational modeling,were tasked with developing a model of a biological process in MorpheusML and submitting it tothe public MorpheusML model repository within a single workday. Success was judged against therepository’s own acceptance criteria: a submission must faithfully reproduce the target result and passa review process that checks both the model and its documentation. All three teams produced andsubmitted a working model within the day, two of them fully reproducing their target result. In thefirst case study, the students additionally uncovered a parameter swap in an influential, widely citedpaper, underlining the value of reproduction as a quality-control mechanism. We conclude that theMorpheusML ecosystem is usable in practice, and we discuss its potential as a low-barrier entry pointinto authentic scientific practice.",
+    "subfield_tags": [
+      "systems-biology"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intro",
+    "summary": {
+      "tldr": "A usability test demonstrated that high school students with no prior experience could successfully build and submit biological models using the MorpheusML ecosystem within a single workday.",
+      "problem": "Reproducibility in computational biology is hindered by the steep learning curve and poor usability of modeling tools for researchers from diverse backgrounds.",
+      "methods": "The authors conducted a usability test where three teams of high school students with zero computational modeling experience were given one workday to develop and submit a biological model to the public MorpheusML repository using the MorpheusML ecosystem.",
+      "findings": "All three student teams successfully produced and submitted a working model to the repository within a single workday. Two of the three teams fully reproduced their target biological results. Additionally, one team discovered a parameter swap in a widely cited published paper during their reproduction attempt.",
+      "why": "It demonstrates that the MorpheusML framework is highly accessible, providing a low-barrier entry point for novices to engage in authentic scientific modeling and quality control.",
+      "limitations": "The provided text does not explicitly state specific limitations of the study.",
+      "takeaway": "The MorpheusML ecosystem is user-friendly enough that novices can build, reproduce, and submit valid computational biology models in just one day.",
+      "topic": "systems-biology",
+      "difficulty": "intro",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 0.98,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects all key facts, numbers, and findings in the paper abstract.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-09-25T13:17:55.808975+00:00"
+  },
+  {
     "slug": "improving-rna-secondary-structure-prediction-through-expande-eb68bc",
     "doi": "10.1261/rna.081259.126",
     "title": "Improving RNA Secondary Structure Prediction Through Expanded Training Data",
