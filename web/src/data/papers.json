@@ -1,5 +1,55 @@
 [
   {
+    "slug": "an-ecg-biomarker-for-sudden-cardiac-death-discovered-with-de-f691f2",
+    "doi": "10.1038/s41586-026-10674-6",
+    "title": "An ECG biomarker for sudden cardiac death discovered with deep learning",
+    "authors": [
+      "Ziad Obermeyer",
+      "Alexander Schubert",
+      "James Ross",
+      "Sendhil Mullainathan",
+      "Markus Lingman"
+    ],
+    "venue": "Nature",
+    "publication_date": "2026-06-24",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "hybrid",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1038/s41586-026-10674-6",
+    "pdf_original_url": "https://www.nature.com/articles/s41586-026-10674-6.pdf",
+    "hosted_pdf_path": "https://cnwojlwrnlsjpllkhybj.supabase.co/storage/v1/object/public/pdfs/an-ecg-biomarker-for-sudden-cardiac-death-discovered-with-de-f691f2.pdf",
+    "can_host": true,
+    "abstract": "Abstract Sudden cardiac death is, in theory, preventable with defibrillators. But every year, many patients die without defibrillators because doctors fail to predict their risk 1 . The only predictive biomarker in wide use, cardiac left ventricular ejection fraction (LVEF), misses most sudden cardiac deaths 2 , and flags many low-risk patients for futile defibrillators that never fire 3,4 . Here we apply deep learning to a dataset linking all electrocardiograms (ECGs) in a Swedish region to death certificates. The resulting model isolates a high-risk group (2.2% of the sample) with a 7.0% annual rate of sudden cardiac death, higher than those with reduced LVEF (1.9% of the sample; 4.6% annual rate). Notably, 86.1% of the model’s high-risk patients were not flagged by LVEF. High-risk ECG patients with defibrillators implanted were 54.4% less likely to die than expected, suggesting a mortality benefit. We externally validate the model in a US health system, in which it predicts ventricular arrhythmias that cause sudden death; and a Taiwanese hospital registry, in which it specifically predicts future arrhythmic cardiac arrests. To visualize the waveform morphology ‘discovered’ by the predictive model, we pair it with a generative model of the ECG waveform. Together, they reveal a biomarker that is easily visible and robustly predicts sudden cardiac death, but has not to our knowledge been previously described. Tying the biomarker’s shape to electrophysiological first principles, we form and preliminarily test a new hypothesis on the mechanism of sudden cardiac death.",
+    "subfield_tags": [
+      "clinical-informatics"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "A deep learning model trained on hundreds of thousands of ECGs identified a novel electrocardiogram biomarker that predicts sudden cardiac death, flagging a high-risk patient group largely missed by current clinical standards.",
+      "problem": "The current standard for predicting sudden cardiac death risk, left ventricular ejection fraction (LVEF), misses most patients who die suddenly and falsely flags many who never need the implanted defibrillators they receive.",
+      "methods": "Researchers trained a 64-layer ResNet deep learning model on 262,554 ECGs from 75,157 Swedish patients to predict sudden cardiac death within one year. They validated the model on a 40% hold-out set of 119,541 ECGs, a US dataset of 251,858 ECGs, and a Taiwanese case-control registry of 4,268 patients. They also used a Variational Autoencoder (VAE) to generate synthetic ECGs, morphing low-risk beats into high-risk ones to visualize the specific waveform changes the model detected.",
+      "findings": "The model achieved an AUC of 0.872 in the Swedish hold-out set, identifying a high-risk group (2.2% of the sample) with a 7.0% annual sudden cardiac death rate. Notably, 86.1% of these high-risk patients were not flagged by the standard LVEF metric. High-risk patients who received defibrillators had a 54.4% lower mortality rate than expected. The generative model revealed a previously undescribed biomarker: a slurred downstroke at the end of the QRS complex in lead aVL, which independently predicted sudden cardiac death.",
+      "why": "This approach identifies a large, previously unsuspected population of high-risk patients who could potentially be saved by implantable defibrillators, while also providing a concrete, visible ECG biomarker that may point to underlying mechanisms like myocardial fibrosis.",
+      "limitations": "The mortality benefit of defibrillators was estimated from observational data, which is subject to unmeasured confounding. Additionally, death certificates used for training may misclassify some non-arrhythmic deaths, and the external validation datasets had structural differences, such as lacking cause-of-death data in the US cohort.",
+      "takeaway": "Deep learning can discover novel, visually interpretable ECG biomarkers that outperform the current clinical standard for predicting sudden cardiac death.",
+      "topic": "clinical-informatics",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.97,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "All key figures and claims in the summary match the paper; the 86.1% figure is stated in the abstract, and other numbers are accurate.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-09-28T16:29:43.769571+00:00"
+  },
+  {
     "slug": "enabling-student-projects-in-computational-biology-with-the--853f46",
     "doi": "10.5281/zenodo.21932798",
     "title": "Enabling Student Projects in Computational Biology with the Morpheus Simulation Framework",
