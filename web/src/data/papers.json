@@ -1,5 +1,56 @@
 [
   {
+    "slug": "sciphy-a-bayesian-phylogenetic-framework-using-sequential-ge-4655c6",
+    "doi": "10.1038/s41467-026-73377-6",
+    "title": "SciPhy: A Bayesian phylogenetic framework using sequential genetic lineage tracing data",
+    "authors": [
+      "Sophie Seidel",
+      "Antoine Zwaans",
+      "Samuel G. Regalado",
+      "Junhong Choi",
+      "Jay Shendure",
+      "Tanja Stadler"
+    ],
+    "venue": "Nature Communications",
+    "publication_date": "2026-06-10",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "gold",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1038/s41467-026-73377-6",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": true,
+    "abstract": "ABSTRACT CRISPR-based lineage tracing offers a promising avenue to decipher single cell lineage trees, especially in organisms that are challenging for microscopy. A recent advancement in this domain is lineage tracing based on sequential genome editing, which not only records genetic edits but also the order in which they occur. To capitalize on this enriched data, we introduce SciPhy, a simulation and inference tool integrated within the BEAST 2 framework. SciPhy utilizes a Bayesian phylogenetic approach to estimate time-scaled phylogenies and cell population parameters. After validating SciPhy using simulations, we apply it to two lineage tracing datasets for which we estimate time-scaled trees together with cell proliferation rates. Using simulated and real lineage tracing data obtained from a monoclonal culture of HEK293T cells, we compare SciPhy to other lineage reconstruction methods, and find that SciPhy consistently constructs distinct, and more accurate lineage trees. In particular, for HEK293T cells, SciPhy trees stand out for their later estimated cell division times. In addition, SciPhy reports uncertainty as well as proliferation rates, neither of which are available within a UPGMA analysis. Our second example applies SciPhy to the study of murine gastruloids, and showcases the use of complex models of time-varying population growth to capture realistic aspects of this in-vitro model of early mammalian development. Together, these examples showcase the application of advanced phylogenetic and phylodynamic tools to explore and quantify cell lineage trees, laying the groundwork for enhanced and confident analyses to decode the complexities of biological development in multicellular organisms. SciPhy’s codebase is publicly available at https://github.com/azwaans/SciPhy .",
+    "subfield_tags": [
+      "phylogenetics"
+    ],
+    "tag_accent": "G",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "SciPhy is a new Bayesian phylogenetic tool that reconstructs highly accurate, time-scaled cell lineage trees and population growth dynamics from sequential CRISPR-based lineage tracing data.",
+      "problem": "Recent CRISPR lineage tracing technologies record the order of genetic edits over time, but existing tree-building methods like UPGMA ignore the underlying biological mechanisms of this editing process, such as variable edit rates and insertion probabilities, leading to inaccurate lineage trees and missing temporal data.",
+      "methods": "The authors developed SciPhy, a Bayesian phylogenetic framework implemented in BEAST 2, which uses a mechanistic Markov Chain Monte Carlo (MCMC) model of sequential editing. They validated SciPhy on 100 simulated datasets and benchmarked it against UPGMA and TiDeTree. They then applied it to two real DNA Typewriter datasets: a 25-day monoclonal expansion of 1,000 HEK293T cells and a 780-cell murine gastruloid derived from a single mouse embryonic stem cell (mESC).",
+      "findings": "In simulations, SciPhy accurately recovered editing rates (Pearson's R=0.99) and outperformed UPGMA and TiDeTree in tree topology and branch length accuracy. In the HEK293T dataset, SciPhy identified highly variable insertion probabilities (e.g., 'CAT' at 16% vs. 'GCG' at less than 1%) and estimated a cell doubling time of 28 to 33 hours. In the murine gastruloid dataset, SciPhy successfully detected a significant drop in cell growth rate (from approximately 1.0 to 0.5 per day) following CHIR stimulation, matching previous imaging-based observations using only genetic barcode data.",
+      "why": "SciPhy allows researchers to extract previously inaccessible developmental insights, such as absolute cell division times and dynamic population growth rates, directly from sequential single-cell lineage tracing data.",
+      "limitations": "The Bayesian inference method is computationally expensive, taking about 15 days to analyze 1,000 cells, and currently assumes equal editing rates across all sites within a tape while lacking an explicit model for missing data or tape dropout.",
+      "takeaway": "By explicitly modeling the sequential nature of CRISPR-based genetic edits, SciPhy provides a more accurate, time-calibrated reconstruction of single-cell lineage trees and developmental growth dynamics than standard distance-based clustering methods.",
+      "topic": "phylogenetics",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.97,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "All specific facts, numbers, and findings in the summary are supported by the paper text.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-10-02T14:30:38.688123+00:00"
+  },
+  {
     "slug": "an-ecg-biomarker-for-sudden-cardiac-death-discovered-with-de-f691f2",
     "doi": "10.1038/s41586-026-10674-6",
     "title": "An ECG biomarker for sudden cardiac death discovered with deep learning",
