@@ -1,5 +1,55 @@
 [
   {
+    "slug": "stochastic-phylogenetic-models-of-shape-0e9c7f",
+    "doi": "10.1093/sysbio/syag048",
+    "title": "Stochastic Phylogenetic Models of Shape",
+    "authors": [
+      "Sofia Stroustrup",
+      "Morten Akhøj",
+      "Frank H. van der Meulen",
+      "Stefan Sommer",
+      "Rasmus Nielsen"
+    ],
+    "venue": "Systematic Biology",
+    "publication_date": "2026-07-09",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "hybrid",
+    "license": "cc-by-nc",
+    "original_url": "https://doi.org/10.1093/sysbio/syag048",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": false,
+    "abstract": "Phylogenetic modeling of morphological shape in two or three dimensions is one of the most challenging statistical problems in evolutionary biology. As shape data are inherently correlated and non-linear, most naïve methods for phylogenetic analysis of morphological shape fail to capture the biological realities of evolving shapes. In this study we propose a novel framework for evolutionary analysis of morphological shape which facilitates stochastic character mapping on landmark shapes. Our framework is based on recent advances in mathematical shape analysis and models the evolution of shape as a diffusion process that accounts for the evolutionary correlation between nearby landmarks. The diffusion process we consider is parametrized in terms of meaningful parameters describing the evolutionary rate and the degree of spatial autocorrelation among landmarks. The framework we propose assumes that the phylogenetic tree is fixed and uses a Metropolis-Hastings Markov Chain Monte Carlo sampling scheme for inferring ancestral shapes and parameters of the model. We evaluate the new inference algorithm using simulations and show that the method leads to improved estimates of the shape at the root and well-calibrated credible sets of shapes at internal nodes. In addition, we also compare the diffusion parameter describing the degree of spatial autocorrelation to an existing metric of integration and find that they quantify integration in a shape in a similar way. To illustrate the method, we also apply it to a previously published data set of butterfly wing images.",
+    "subfield_tags": [
+      "phylogenetics"
+    ],
+    "tag_accent": "G",
+    "difficulty_level": "advanced",
+    "summary": {
+      "tldr": "A new framework modeling morphological shape evolution as a diffusion process using Metropolis-Hastings MCMC improves ancestral shape estimation at the root and internal nodes of a phylogeny.",
+      "problem": "Modeling the evolution of 2D and 3D morphological shapes is statistically difficult because landmark data are inherently non-linear and spatially correlated, causing naive phylogenetic methods to fail.",
+      "methods": "The authors developed a framework that models shape evolution as a diffusion process parameterized by evolutionary rate and spatial autocorrelation among landmarks. Operating on a fixed phylogenetic tree, the method uses a Metropolis-Hastings Markov Chain Monte Carlo (MCMC) sampling scheme to infer ancestral shapes. It was evaluated using simulations and applied to a real-world dataset of butterfly wing images.",
+      "findings": "Simulation studies demonstrated that the new MCMC-based diffusion model produces improved estimates of ancestral shapes at the root of the tree and yields well-calibrated credible sets for shapes at internal nodes. Additionally, the model's diffusion parameter for spatial autocorrelation was shown to quantify morphological integration in a manner similar to existing integration metrics.",
+      "why": "This approach allows evolutionary biologists to accurately reconstruct ancestral morphologies and map stochastic characters while respecting the biological reality that nearby physical landmarks evolve in a correlated manner.",
+      "limitations": "The proposed framework assumes that the underlying phylogenetic tree is fixed and does not account for uncertainty in the tree topology itself.",
+      "takeaway": "Modeling morphological evolution as a diffusion process with MCMC sampling successfully captures the spatial correlation of landmarks, enabling more accurate reconstructions of ancestral shapes like butterfly wings.",
+      "topic": "phylogenetics",
+      "difficulty": "advanced",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 0.98,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's problem, methods, findings, and limitations without introducing hallucinated facts.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-10-05T16:50:32.743506+00:00"
+  },
+  {
     "slug": "sciphy-a-bayesian-phylogenetic-framework-using-sequential-ge-4655c6",
     "doi": "10.1038/s41467-026-73377-6",
     "title": "SciPhy: A Bayesian phylogenetic framework using sequential genetic lineage tracing data",
