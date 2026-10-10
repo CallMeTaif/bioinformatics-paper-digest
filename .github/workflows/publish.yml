@@ -70,5 +70,17 @@ jobs:
           git config user.email "actions@github.com"
           git add web/src/data/papers.json
           git commit -m "Publish new papers ($(date -u +%Y-%m-%d))"
-          git push
-          echo "Pushed — Vercel will redeploy the site automatically."
+          # Retry the push: GitHub occasionally returns a transient "Internal
+          # Server Error" (it once lost a day's paper), and a concurrent run may
+          # have pushed first. Rebase on the latest and retry a few times.
+          for i in 1 2 3 4 5; do
+            if git push; then
+              echo "Pushed — Vercel will redeploy the site automatically."
+              exit 0
+            fi
+            echo "push failed (attempt $i/5) — rebasing on latest and retrying in 10s…"
+            git pull --rebase --autostash origin main || true
+            sleep 10
+          done
+          echo "::error::git push failed after 5 attempts"
+          exit 1
