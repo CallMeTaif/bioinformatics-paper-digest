@@ -1,5 +1,58 @@
 [
   {
+    "slug": "genvarloader-an-accelerated-dataloader-for-applying-deep-lea-4f3817",
+    "doi": "10.1186/s12864-026-13225-5",
+    "title": "GenVarLoader: an accelerated dataloader for applying deep learning to personalized genomics",
+    "authors": [
+      "David Laub",
+      "Aaron Ho",
+      "Loukik Raina",
+      "Jeff Jaureguy",
+      "Adam Klie",
+      "Rany M. Salem",
+      "Graham McVicker",
+      "Hannah K. Carter"
+    ],
+    "venue": "BMC Genomics",
+    "publication_date": "2026-07-24",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "gold",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1186/s12864-026-13225-5",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": true,
+    "abstract": "Abstract Background Deep learning models can predict the functional impact of genetic variants. However, training and applying these sequence models to personalized genome sequences are severely constrained by the computational burden of storing and reading massive datasets. Results We developed GenVarLoader, an accelerated dataloader that creates personalized genomic sequences and functional tracks on-the-fly to overcome these bottlenecks. GenVarLoader stores this personalized genomic data in formats specifically optimized for machine learning. Our tool reads variants up to 26,000 times faster than a pre-subset BCF, loads personalized data up to 130 times faster than tuned FASTA and pyBigWig pipelines, and reduces storage approximately 2,000-fold compared to existing alternatives. Conclusions By eliminating severe data loading bottlenecks, GenVarLoader ensures efficient model training and inference. It provides a scalable solution for integrating biobank-scale personalized genomic data with deep learning applications.",
+    "subfield_tags": [
+      "ml-in-bio"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "GenVarLoader is a new dataloader that creates personalized genomic sequences on-the-fly, reading variants up to 26,000 times faster and reducing storage by 2,000-fold compared to existing methods.",
+      "problem": "Training and applying deep learning sequence models to personalized genome sequences is severely bottlenecked by the massive computational and storage costs of reading and storing these large datasets.",
+      "methods": "The authors developed GenVarLoader, a software tool that stores personalized genomic data in machine learning-optimized formats and generates personalized genomic sequences and functional tracks on-the-fly during model training or inference.",
+      "findings": "GenVarLoader reads genetic variants up to 26,000 times faster than using a pre-subset BCF file. It loads personalized genomic data up to 130 times faster than optimized FASTA and pyBigWig pipelines. Additionally, it reduces the required data storage footprint by approximately 2,000-fold compared to existing alternative approaches.",
+      "why": "By removing severe data loading and storage bottlenecks, this tool enables the scalable integration of biobank-scale personalized genomic data into deep learning applications.",
+      "limitations": "The provided text does not specify any limitations, biases, or constraints of the tool.",
+      "takeaway": "GenVarLoader drastically accelerates deep learning on personalized genomes by generating sequences on-the-fly, achieving up to 130x faster data loading and a 2,000-fold reduction in storage.",
+      "topic": "ml-in-bio",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 1.0,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "All claims in the summary are directly supported by the paper's abstract.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-10-12T17:25:42.603490+00:00"
+  },
+  {
     "slug": "contrastive-learning-on-multimodal-analysis-of-electronic-he-febd6b",
     "doi": "10.1080/01621459.2026.2698136",
     "title": "Contrastive Learning on Multimodal Analysis of Electronic Health Records",
