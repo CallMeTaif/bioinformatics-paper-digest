@@ -1,5 +1,51 @@
 [
   {
+    "slug": "the-accuracy-of-electrostatic-interactions-captured-by-ai-pr-5fa88c",
+    "doi": "10.1073/pnas.2609610123",
+    "title": "The accuracy of electrostatic interactions captured by AI protein structure prediction models",
+    "authors": [
+      "George I. Makhatadze"
+    ],
+    "venue": "Proceedings of the National Academy of Sciences",
+    "publication_date": "2026-07-17",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "hybrid",
+    "license": "cc-by-nc-nd",
+    "original_url": "https://doi.org/10.1073/pnas.2609610123",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": false,
+    "abstract": "A variant of the U1A protein containing four substitutions to ionizable residues was generated serendipitously due to a miscommunication. Biophysical measurements reveal this variant has twice the helical structure of wild-type U1A and is trimeric, unlike the monomeric wild type. In sharp contrast, structures predicted by deep-learning (AlphaFold2, RoseTTAFold2) and transformer-based tools (OmegaFold, ESMFold) are nearly identical to the wild-type (backbone RMSD < 1 Å). Surprisingly, these models predict ionizable residues buried within the nonpolar core, contradicting established physico-chemical principles. To explore this effect further, we generated sequences containing up to all twelve residues that make up the nonpolar core of U1A. Across thousands of sequences, and depending on the AI model used, the majority of predicted structures contained fully buried ionizable residues while still maintaining the overall U1A fold. We then examined two additional proteins of comparable size, acylphosphatase and the de novo designed TOP7 fold, and observed the same phenomenon: AI models frequently predicted structures with buried ionizable residues that nevertheless retained the parent fold. However, short (50 ns) molecular dynamics simulations with physics-based force fields (CHARMM/AMBER) rapidly relaxed these structures, exposing the ionizable residues. We conclude that while AI-based tools perform exceptionally on natural sequences, they do not reliably encode the physico-chemical principles governing ionizable residue placement. We propose including brief molecular dynamics simulations as a vital validation step for AI-generated structures.",
+    "subfield_tags": [
+      "ml-in-bio"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "AI protein structure prediction models like AlphaFold2 incorrectly predict that ionizable residues can be buried in nonpolar cores for mutated sequences, a physical impossibility that can be corrected using short molecular dynamics simulations.",
+      "problem": "The study investigates whether state-of-the-art AI protein structure prediction models accurately encode fundamental physico-chemical principles, specifically the placement of ionizable residues, when predicting structures for non-natural or mutated sequences.",
+      "methods": "The authors compared biophysical measurements of a U1A protein variant containing four ionizable substitutions against predictions from AlphaFold2, RoseTTAFold2, OmegaFold, and ESMFold. They then computationally generated thousands of sequences with up to 12 ionizable residues in the nonpolar cores of U1A, acylphosphatase, and TOP7, and tested whether 50-nanosecond molecular dynamics simulations using CHARMM and AMBER force fields could correct the AI-generated structures.",
+      "findings": "Biophysical measurements revealed the U1A variant is trimeric with twice the helical structure of the wild-type, yet all tested AI models incorrectly predicted a monomeric structure nearly identical to the wild-type with a backbone RMSD under 1 Angstrom. Across thousands of sequences for U1A, acylphosphatase, and TOP7, the AI models consistently buried ionizable residues inside the nonpolar core while retaining the parent fold. Running 50-nanosecond molecular dynamics simulations rapidly relaxed these physically impossible structures and properly exposed the ionizable residues.",
+      "why": "This reveals that while AI models excel at predicting natural protein structures, they fail to learn underlying physical rules like electrostatics, making physics-based validation steps essential for de novo protein design and variant effect prediction.",
+      "limitations": "The provided text does not detail extensive limitations, but the experiments were specifically constrained to testing the burial of ionizable residues in the nonpolar cores of three similarly sized proteins.",
+      "takeaway": "AI protein structure predictions for non-natural sequences should be validated with brief physics-based molecular dynamics simulations to ensure they do not violate basic physico-chemical principles like burying ionizable residues.",
+      "topic": "ml-in-bio",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 0.97,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's methods, findings, and conclusions without introducing contradicted or invented facts.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-10-16T13:03:32.538230+00:00"
+  },
+  {
     "slug": "foundation-model-enables-interpretable-open-and-error-tolera-23a949",
     "doi": "10.1093/bioinformatics/btag297",
     "title": "Foundation model enables interpretable open and error-tolerant searching for mass spectrometry-based proteomics",
