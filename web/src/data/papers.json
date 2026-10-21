@@ -1,5 +1,56 @@
 [
   {
+    "slug": "the-challenges-of-single-cell-transcriptomics-on-difficult-h-c0e548",
+    "doi": "10.1093/nargab/lqag079",
+    "title": "The challenges of single cell transcriptomics on difficult human tissue: the placenta",
+    "authors": [
+      "Theodoros Xenakis",
+      "George T. Hall",
+      "Jose J Moreno-Villena",
+      "Sara L. Hillman",
+      "Yara E. Sánchez-Corrales",
+      "Sergi Castellano"
+    ],
+    "venue": "NAR Genomics and Bioinformatics",
+    "publication_date": "2026-06-27",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "gold",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1093/nargab/lqag079",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": true,
+    "abstract": "ABSTRACT Demand for the application of single cell transcriptomics on difficult tissues, processed and stored in disparate conditions, has led to the development of various single cell modalities. We focus on the placenta, a challenging tissue to transcriptomically interrogate due to senescence, intermittent hypoxia, high levels of RNase activity and tissue trauma at delivery. We performed single cell and nuclei transcriptomics on two samples with probe-based and native molecule transcript capture, droplet based and in situ plate based cell isolation. We explored sample and storage variations, including freshly dissociated tissues, fixed cells, snap frozen and FFPE processing. We find that variations in sample processing and storage have much larger effect on cell type proportions than differences in chemistry, impacting the biology that can be learned or the identification of disease markers. Further, the transcriptomic output of in situ combinatorial indexing consistently overlaps, with single nucleus transcriptomics, sharing little with other modalities. This may limit combinatorial indexing for sampling cytoplasmstic mRNAs. Our comprehensive analysis of the varying effect of single cell transcriptomic modalities, including their sample management strategies, provides novel and essential considerations for the experimental design and analysis of single cell transcriptomics applicable to challenging tissues, offering actionable guidance for future experiments. GRAPHICAL ABSTRACT",
+    "subfield_tags": [
+      "single-cell"
+    ],
+    "tag_accent": "A",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "A comparison of five single-cell transcriptomics methods on human placenta reveals that sample processing drastically alters detected cell-type proportions, while in situ combinatorial indexing shows a strong, unexpected bias toward nuclear rather than cytoplasmic RNA.",
+      "problem": "Applying single-cell transcriptomics to difficult tissues like the placenta is challenging due to high RNase activity, hypoxia, and tissue trauma, making it unclear how different storage methods (fresh, frozen, FFPE) and sequencing chemistries (droplet versus plate-based, polyA versus probe-based) bias the resulting cell-type proportions and gene expression profiles.",
+      "methods": "The researchers tested five single-cell and single-nucleus modalities on two human placenta samples (delivered at 36 and 37 weeks): fresh droplet poly-A (10X Genomics), fixed in situ poly-A (Parse Biosciences), fixed droplet probe (10X Genomics), nuclei droplet poly-A (10X Genomics), and FFPE droplet probe (10X Genomics). They compared cell capture, sensitivity, and differential gene expression, using a 477-gene 10X Xenium in situ spatial transcriptomics sample as a baseline for true cell-type proportions.",
+      "findings": "Sample processing drove the largest variance in cell-type proportions: freshly dissociated tissues heavily favored immune cells (like NK/T cells) and missed myofibroblasts, whereas stored tissues (FFPE and snap-frozen nuclei) favored non-immune cells and closely matched the spatial transcriptomics baseline. The fixed droplet probe method yielded the highest cell capture efficiency (57%) and sensitivity. Surprisingly, the fixed in situ poly-A method, designed for whole cells, correlated most strongly with the single-nucleus method (Pearson coefficient 0.95 for syncytiotrophoblast and NK/T cells) and captured high levels of nuclear MIR and LINC genes, indicating a significant loss of cytoplasmic mRNA.",
+      "why": "These findings provide concrete guidance for experimental design, demonstrating that researchers must choose sample processing methods carefully to avoid artificially skewing cell populations or missing cytoplasmic disease markers in challenging clinical tissues.",
+      "limitations": "The study relies on a small sample size of only two biological replicates for the single-cell comparisons and one for spatial transcriptomics, and the comparative gene expression analyses were restricted to the most abundant cell types (syncytiotrophoblasts and NK/T cells).",
+      "takeaway": "Sample storage and processing methods skew single-cell population data far more than the sequencing chemistry itself, and some whole-cell plate-based methods primarily capture nuclear RNA.",
+      "topic": "single-cell",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.97,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "All specific facts, numbers, and findings in the summary are supported by the paper; the 57% capture, 0.95 Pearson, 477-gene Xenium panel, and gestational weeks all match.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-10-21T13:28:43.644417+00:00"
+  },
+  {
     "slug": "camus-scalable-phylogenetic-network-estimation-cb65b4",
     "doi": "10.1093/bioinformatics/btag245",
     "title": "CAMUS: scalable phylogenetic network estimation",
