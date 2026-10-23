@@ -1,5 +1,55 @@
 [
   {
+    "slug": "the-evaluation-crisis-in-artificial-intelligence-driven-comp-eba816",
+    "doi": "10.1002/qub2.70058",
+    "title": "The evaluation crisis in artificial intelligence‐driven computational biology: Pitfalls and solutions",
+    "authors": [
+      "Tsung Fei Khang",
+      "Joshua W K Ho",
+      "Lin Hou",
+      "Jiangning Song",
+      "Limsoon Wong"
+    ],
+    "venue": "Quantitative Biology",
+    "publication_date": "2026-09-23",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "diamond",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1002/qub2.70058",
+    "pdf_original_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1002/qub2.70058",
+    "hosted_pdf_path": null,
+    "can_host": true,
+    "abstract": "Artificial intelligence (AI) is rapidly transforming computational biology. However, closer scrutiny reveals that many reported results do not hold under rigorous evaluation. This paper identifies prevalent, recurring issues in the field, including narrow datasets, hidden confounders that make supposedly independent test data effectively indistinguishable from the training data (the doppelgänger effect), misleading performance metrics, and over-reliance on overly easy test cases. We argue that meaningful assessment must go beyond metric-centric model evaluation to encompass biological realism, data diversity, confounding control, and interpretability. Crucially, AI studies in computational biology should deliver not only predictive performance but also genuine biological insight and transferable methodological understanding. To address these systemic limitations, we propose a unifying framework, VALID, comprising the following five guiding principles for rigorous AI in biology: Veracious biological grounding and novelty, artifact control and methodological rigor, legitimate generalization, inspectable preprocessing, and deployment-aware performance. Together, these principles serve as a diagnostic lens for structuring our discussion throughout this paper. We further illustrate common pitfalls through representative examples and provide actionable guidance for authors, reviewers, and editors aimed at improving the rigor and scientific value of AI-driven computational biology.",
+    "subfield_tags": [
+      "ml-in-bio"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intro",
+    "summary": {
+      "tldr": "This paper identifies systemic evaluation flaws in AI-driven computational biology, such as the doppelgänger effect, and proposes the five-principle VALID framework to ensure rigorous, biologically meaningful model assessment.",
+      "problem": "AI models in computational biology frequently report inflated performance due to flawed evaluation practices, such as narrow datasets, misleading metrics, and hidden confounders that make test data indistinguishable from training data (the doppelgänger effect).",
+      "methods": "The authors critically review current evaluation practices in AI-driven computational biology to identify recurring pitfalls. They synthesize these observations into a new diagnostic and guiding framework called VALID, which consists of five principles designed for authors, reviewers, and editors.",
+      "findings": "The study identifies four prevalent evaluation issues in the field: narrow datasets, hidden confounders causing the doppelgänger effect, misleading performance metrics, and reliance on overly easy test cases. To resolve these, the authors introduce the VALID framework, which stands for Veracious biological grounding and novelty, Artifact control and methodological rigor, Legitimate generalization, Inspectable preprocessing, and Deployment-aware performance. This framework shifts evaluation from purely metric-centric approaches to those requiring biological realism, data diversity, and interpretability.",
+      "why": "Adopting the VALID framework will help the field move beyond superficial predictive performance, ensuring that AI models yield genuine biological insights, transferable methodological understanding, and reliable real-world deployment.",
+      "limitations": "The provided text does not explicitly state limitations of the authors' proposed VALID framework or their review methodology.",
+      "takeaway": "AI models in biology must be evaluated using the VALID framework to control for confounders like the doppelgänger effect and ensure they provide genuine biological insight rather than just inflated metrics.",
+      "topic": "ml-in-bio",
+      "difficulty": "intro",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 0.98,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's abstract, including VALID's five principles, the four pitfalls, and the doppelgänger effect.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-10-23T13:09:57.959602+00:00"
+  },
+  {
     "slug": "the-challenges-of-single-cell-transcriptomics-on-difficult-h-c0e548",
     "doi": "10.1093/nargab/lqag079",
     "title": "The challenges of single cell transcriptomics on difficult human tissue: the placenta",
