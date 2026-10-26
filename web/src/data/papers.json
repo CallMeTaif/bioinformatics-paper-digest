@@ -1,5 +1,55 @@
 [
   {
+    "slug": "vista-a-classifier-for-metagenomic-subspecies-and-community--f96490",
+    "doi": "10.1128/mra.00612-26",
+    "title": "VISTA: a classifier for metagenomic subspecies and community state typing of the vaginal microbiome",
+    "authors": [
+      "Johanna B. Holm",
+      "Amaury Maros",
+      "Amanda L. Williams",
+      "Michael France",
+      "Jacques Ravel"
+    ],
+    "venue": "Microbiology Resource Announcements",
+    "publication_date": "2026-09-11",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "diamond",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1128/mra.00612-26",
+    "pdf_original_url": null,
+    "hosted_pdf_path": null,
+    "can_host": true,
+    "abstract": "ABSTRACT Metagenomic community state types (mgCSTs) capture within-species genetic and functional diversity and community structure of the vaginal microbiome, enabling precise links between microbiome composition, function, and health-related risk. VISTA, the V aginal I nference of S ubspecies and T yping A lgorithm, is a two-step classifier that assigns mgCSTs to vaginal metagenomes, providing standardized, scalable classifications.",
+    "subfield_tags": [
+      "metagenomics"
+    ],
+    "tag_accent": "G",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "VISTA is a new two-step machine learning classifier that categorizes vaginal metagenomes into 262 metagenomic subspecies and 25 community state types with 87.8% accuracy.",
+      "problem": "Traditional metataxonomic sequencing groups the vaginal microbiome into five broad community state types (CSTs), which fails to capture the massive genetic and functional diversity (over 1.7 million genes) needed to accurately link microbiome variations to urogenital and reproductive health risks.",
+      "methods": "The authors built VISTA using gene abundance profiles from 2,528 vaginal metagenomes mapped to the VIRGO2 gene catalog. They clustered binary vaginal orthologous group (VOG) profiles using Jaccard distances to define metagenomic subspecies (mgSs), and then clustered samples using Jensen-Shannon distances to define metagenomic community state types (mgCSTs). The final R-based tool uses random forest models for mgSs assignment and a nearest-neighbor centroid classifier for mgCST classification.",
+      "findings": "The reference framework successfully defined 262 metagenomic subspecies (mgSs) across 73 eligible bacterial species, which were further grouped into 25 high-resolution metagenomic community state types (mgCSTs). In tenfold cross-validation, VISTA achieved a mean out-of-bag error rate of 8.9% for subspecies assignment and a mean accuracy of 87.8% for community state type classification.",
+      "why": "By providing a standardized, scalable way to classify the genetic and functional diversity of the vaginal microbiome, VISTA allows researchers to make more precise, cross-study comparisons regarding how specific microbial strains impact host health.",
+      "limitations": "The authors note that not all microbiome niches naturally exhibit discrete community types, which may limit the conceptual applicability of discrete state typing in some microbial ecosystems.",
+      "takeaway": "VISTA upgrades vaginal microbiome classification from five broad metataxonomic groups to 25 high-resolution metagenomic community state types, providing a standardized tool for epidemiological studies.",
+      "topic": "metagenomics",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.98,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "All specific facts, numbers, methods, and findings in the summary are accurately supported by the paper.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-10-26T14:53:45.323542+00:00"
+  },
+  {
     "slug": "the-evaluation-crisis-in-artificial-intelligence-driven-comp-eba816",
     "doi": "10.1002/qub2.70058",
     "title": "The evaluation crisis in artificial intelligence‐driven computational biology: Pitfalls and solutions",
