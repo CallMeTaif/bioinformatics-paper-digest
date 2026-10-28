@@ -1,5 +1,57 @@
 [
   {
+    "slug": "treeflow-probabilistic-modeling-and-automatic-differentiatio-943a2c",
+    "doi": "10.1093/sysbio/syag072",
+    "title": "TreeFlow: Probabilistic Modeling and Automatic Differentiation for Phylogenetics",
+    "authors": [
+      "Christiaan Swanepoel",
+      "Mathieu Fourment",
+      "Xiang Ji",
+      "Hassan Nasif",
+      "Marc A. Suchard",
+      "Frederick A. Matsen IV",
+      "Alexei J. Drummond"
+    ],
+    "venue": "Systematic Biology",
+    "publication_date": "2026-09-10",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "hybrid",
+    "license": "cc-by-nc",
+    "original_url": "https://doi.org/10.1093/sysbio/syag072",
+    "pdf_original_url": "https://academic.oup.com/sysbio/advance-article-pdf/doi/10.1093/sysbio/syag072/71034151/syag072.pdf",
+    "hosted_pdf_path": null,
+    "can_host": false,
+    "abstract": "Probabilistic modelling frameworks are powerful tools for statistical modelling and inference. They are not immediately generalizable to phylogenetic problems due to the particular computational properties of the phylogenetic tree object. TreeFlow is a software library for probabilistic modelling and automatic differentiation with phylogenetic trees. It embeds phylogenetic trees in the TensorFlow Probability framework, and implements inference algorithms for phylogenetic models given a fixed tree topology. We demonstrate how TreeFlow can be used to quickly implement and assess new models. We also show that it provides reasonable performance for gradient-based inference algorithms compared to specialized computational libraries for phylogenetics.",
+    "subfield_tags": [
+      "phylogenetics"
+    ],
+    "tag_accent": "G",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "TreeFlow is a new software library that embeds phylogenetic trees into the TensorFlow Probability framework to enable probabilistic modeling and automatic differentiation for fixed tree topologies.",
+      "problem": "General probabilistic modeling frameworks cannot easily handle phylogenetic problems because of the unique computational properties of phylogenetic tree objects.",
+      "methods": "The authors developed TreeFlow, a software library that integrates phylogenetic trees into the TensorFlow Probability framework and implements gradient-based inference algorithms for phylogenetic models with fixed tree topologies.",
+      "findings": "TreeFlow successfully enables the rapid implementation and assessment of new phylogenetic models. Furthermore, it achieves reasonable performance for gradient-based inference algorithms when compared to existing specialized computational libraries for phylogenetics.",
+      "why": "It allows researchers to leverage modern probabilistic programming and automatic differentiation tools for phylogenetic analysis, speeding up the development and testing of new evolutionary models.",
+      "limitations": "The inference algorithms in TreeFlow are currently limited to models with a fixed tree topology.",
+      "takeaway": "TreeFlow bridges the gap between modern machine learning frameworks and phylogenetics by embedding trees into TensorFlow Probability for gradient-based inference on fixed topologies.",
+      "topic": "phylogenetics",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 0.97,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's abstract claims without introducing unsupported facts.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-10-28T14:53:48.516059+00:00"
+  },
+  {
     "slug": "vista-a-classifier-for-metagenomic-subspecies-and-community--f96490",
     "doi": "10.1128/mra.00612-26",
     "title": "VISTA: a classifier for metagenomic subspecies and community state typing of the vaginal microbiome",
