@@ -1,5 +1,52 @@
 [
   {
+    "slug": "plant-microbe-networks-under-climate-change-molecular-mechan-fb33c7",
+    "doi": "10.1007/s13199-026-01185-z",
+    "title": "Plant-microbe networks under climate change: molecular mechanisms, systems biology, and strategies for ecosystem resilience",
+    "authors": [
+      "Mukhtar Iderawumi Abdulraheem",
+      "Olaniyi Amos Fawole"
+    ],
+    "venue": "Symbiosis",
+    "publication_date": "2026-09-29",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "hybrid",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1007/s13199-026-01185-z",
+    "pdf_original_url": "https://link.springer.com/content/pdf/10.1007/s13199-026-01185-z.pdf",
+    "hosted_pdf_path": "https://cnwojlwrnlsjpllkhybj.supabase.co/storage/v1/object/public/pdfs/plant-microbe-networks-under-climate-change-molecular-mechan-fb33c7.pdf",
+    "can_host": true,
+    "abstract": "Abstract The interplay between plants and their associated microbiomes is a critical determinant of ecosystem resilience under climate change. This review synthesizes current knowledge of plant-microbiome systems, focusing on the molecular mechanisms that govern synergistic interactions and on systems biology approaches to unraveling their complexity. We examine how these networks facilitate plant adaptation to drought, salinity, and extreme temperatures by modulating physiological responses, nutrient acquisition, and defense mechanisms. Multi-omics technologies (metagenomics, metatranscriptomics, metaproteomics, and metabolomics) enable holistic characterization of these interactions, supporting predictive modeling and targeted microbiome engineering. We explore synthetic microbial communities (SynComs) and bioinoculants as innovative solutions to enhance crop resilience and promote sustainable agriculture. Quantitative evidence demonstrates that plant growth-promoting rhizobacteria (PGPR) inoculation under drought stress increases yield by 56% and root biomass by 61% relative to drought-stressed controls, with multi-strain consortia increasing shoot biomass by 70% compared with 28% for single strains, while field trials show approximately 50% reduction in efficacy relative to controlled conditions (22% vs 45% yield increase), highlighting the critical translation gap. Key challenges include inconsistent field performance, formulation stability, commercial viability (> 40% product failure rate), and regulatory fragmentation. Future directions integrating digital twins, AI-driven predictive analytics, and synthetic biology offer important opportunities. This review provides a framework for harnessing plant-microbiome systems to foster climate-resilient agriculture and ensure food security.",
+    "subfield_tags": [
+      "systems-biology"
+    ],
+    "tag_accent": "T",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "Plant growth-promoting rhizobacteria and multi-strain synthetic microbial communities can increase crop yields under drought by 56 percent, though field efficacy drops by half compared to controlled lab conditions.",
+      "problem": "There is a critical gap in translating molecular-level plant-microbe interactions into reliable, ecosystem-scale crop resilience under real-world climate stress, leading to high failure rates for commercial bioinoculants.",
+      "methods": "The authors synthesized data from multi-omics studies, systems biology network analyses, and field trials evaluating plant growth-promoting rhizobacteria and Synthetic Microbial Communities across crops like maize, rice, and tomato.",
+      "findings": "Meta-analyses show PGPR inoculation under drought increases crop yield by 56 percent and root biomass by 61 percent, with multi-strain consortia boosting shoot biomass by 70 percent versus 28 percent for single strains. However, field trials reveal a 50 percent reduction in efficacy compared to lab settings (22 percent vs 45 percent yield increase). Additionally, machine learning models trained on over 800 SynCom-temperature combinations successfully predicted tomato plant biomass.",
+      "why": "Integrating multi-omics data with AI-driven predictive modeling enables the design of targeted synthetic microbial communities that can sustainably improve crop drought and salinity tolerance, reducing reliance on chemical fertilizers.",
+      "limitations": "The translation from lab to field is hindered by environmental complexity, formulation instability (often under 10 percent viable cell recovery after 6 months), host DNA contamination in sequencing, and a commercial product failure rate exceeding 40 percent.",
+      "takeaway": "While engineered microbial consortia offer massive potential for climate-resilient agriculture, overcoming the 50 percent drop in field efficacy requires AI-guided design and improved formulation stability.",
+      "topic": "systems-biology",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": true,
+    "verifier_score": 0.97,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "All specific numbers and claims in the summary (56%, 61%, 70% vs 28%, 22% vs 45%, 800 SynCom combinations, <10% viable cell recovery, >40% failure rate, host DNA contamination) are directly supported by the paper text.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-10-30T14:52:26.632533+00:00"
+  },
+  {
     "slug": "treeflow-probabilistic-modeling-and-automatic-differentiatio-943a2c",
     "doi": "10.1093/sysbio/syag072",
     "title": "TreeFlow: Probabilistic Modeling and Automatic Differentiation for Phylogenetics",
