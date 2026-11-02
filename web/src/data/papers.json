@@ -1,5 +1,55 @@
 [
   {
+    "slug": "integrative-taxonomy-using-traits-and-genomic-data-for-speci-dae9cd",
+    "doi": "10.1093/sysbio/syag084",
+    "title": "Integrative taxonomy using traits and genomic data for Species Delimitation with Deep learning",
+    "authors": [
+      "Manolo F. Perez",
+      "Ricarda Riina",
+      "Brant C. Faircloth",
+      "Marcelo de Bello Cioffi",
+      "Isabel Sanmartín"
+    ],
+    "venue": "Systematic Biology",
+    "publication_date": "2026-10-29",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "hybrid",
+    "license": "cc-by-nc",
+    "original_url": "https://doi.org/10.1093/sysbio/syag084",
+    "pdf_original_url": "https://academic.oup.com/sysbio/advance-article-pdf/doi/10.1093/sysbio/syag084/72585041/syag084.pdf",
+    "hosted_pdf_path": null,
+    "can_host": false,
+    "abstract": "Delimiting species boundaries in complex speciation scenarios, including those involving gene flow and demographic fluctuations, remains a challenge, particularly given the diversity of existing species concepts. Promising recent approaches adopt an integrative taxonomy that combines multiple sources of evidence (e.g., genetic, morphology, geographic distributions), reflecting different properties associated with the dynamics of the speciation continuum. The use of statistical inference methods for model comparison, such as approximate Bayesian computation, approximate likelihood approaches, and machine learning, has improved the assessment of species boundaries in such contexts. However, most existing approaches involve analyzing genetic and phenotypic/geographical information separately, followed by visual/qualitative comparison. Methods that integrate genetic information with other sources of evidence remain limited to simple evolutionary models and are typically unable to analyze more than a few hundred loci across a maximum of a few tens of samples. Here, we present a deep learning approach (DeepID) that combines two convolutional neural networks to integrate genomic data (thousands of loci or single nucleotide polymorphisms, SNPs) and trait information into a unified framework. Using both simulated and empirical data sets, we evaluate the power and accuracy of this approach for discriminating among competing divergence speciation scenarios (with minimal ongoing gene flow) across a varying number of SNPs and traits, as well as different levels of missing data. Analyses based on genomic or trait data alone yielded slightly lower accuracy, whereas integrating genomic and trait data resulted in improved performance. When we violated the speciation model by including extensive migration, approaches incorporating trait data were less affected than those relying solely on genomic information. Moreover, our approach successfully recovered the expected delimitation scenarios in empirical data sets from a plant (Euphorbia balsamifera) and a fish (Lepomis megalotis) species complex. We argue that our method is a flexible and promising approach, allowing for the comparison of complex scenarios and the integration of multiple data types. Combining genomic and trait data likely captures complementary signals associated with different stages of the speciation process, reflecting the fact that speciation is a continuum in which genetic and phenotypic divergence may proceed at different rates.",
+    "subfield_tags": [
+      "phylogenetics"
+    ],
+    "tag_accent": "G",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "The deep learning tool DeepID uses two convolutional neural networks to integrate genomic and trait data, improving species delimitation accuracy in complex evolutionary scenarios.",
+      "problem": "Existing species delimitation methods struggle to formally integrate genomic and phenotypic data, typically analyzing them separately or restricting combined analyses to simple evolutionary models with only a few hundred loci and tens of samples.",
+      "methods": "The authors developed DeepID, a framework using two convolutional neural networks to jointly analyze thousands of SNPs and trait data. They evaluated the tool using simulated datasets with varying numbers of SNPs, traits, missing data, and migration rates, as well as empirical datasets from a plant (Euphorbia balsamifera) and a fish (Lepomis megalotis) species complex.",
+      "findings": "Integrating genomic and trait data in DeepID yielded higher species delimitation accuracy than using either data type alone. When the speciation model was violated by introducing extensive migration, models including trait data were more robust and less affected than those relying solely on genomic data. Furthermore, DeepID successfully recovered the expected species boundaries in the empirical Euphorbia balsamifera and Lepomis megalotis datasets.",
+      "why": "By capturing complementary signals from both genetic and phenotypic divergence, this unified deep learning approach allows researchers to accurately resolve complex speciation events where traits and genetics evolve at different rates.",
+      "limitations": "The abstract does not detail extensive limitations of the software itself, but notes that extensive migration violates the primary speciation models tested, which negatively impacts accuracy, particularly for genomic-only analyses.",
+      "takeaway": "Combining thousands of SNPs with trait data via the DeepID dual-CNN framework provides a more accurate and robust method for defining species boundaries than using genomic data alone.",
+      "topic": "phylogenetics",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 0.98,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's claims about DeepID, its methods, findings, and empirical datasets with no fabricated facts.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-11-02T17:52:06.232573+00:00"
+  },
+  {
     "slug": "plant-microbe-networks-under-climate-change-molecular-mechan-fb33c7",
     "doi": "10.1007/s13199-026-01185-z",
     "title": "Plant-microbe networks under climate change: molecular mechanisms, systems biology, and strategies for ecosystem resilience",
