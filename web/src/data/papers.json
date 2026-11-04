@@ -1,5 +1,58 @@
 [
   {
+    "slug": "pretrained-spectrum-representations-for-diverse-tandem-mass--0873b8",
+    "doi": "10.1016/j.mcpro.2026.101673",
+    "title": "Pretrained spectrum representations for diverse tandem mass spectrometry proteomics tasks",
+    "authors": [
+      "Justin Sanders",
+      "Melih Yilmaz",
+      "Jacob H. Russell",
+      "Wout Bittremieux",
+      "William E. Fondrie",
+      "Nicholas McIlvain Riley",
+      "Sewoong Oh",
+      "William Stafford Noble"
+    ],
+    "venue": "Molecular & Cellular Proteomics",
+    "publication_date": "2026-10-01",
+    "source": "openalex",
+    "is_preprint": false,
+    "oa_status": "gold",
+    "license": "cc-by",
+    "original_url": "https://doi.org/10.1016/j.mcpro.2026.101673",
+    "pdf_original_url": "https://www.mcponline.org/article/S1535-9476(26)00169-6/pdf",
+    "hosted_pdf_path": null,
+    "can_host": true,
+    "abstract": "Mass spectrometry is the dominant technology in the field of proteomics, enabling high-throughput analysis of the protein content of complex biological samples. Due to the complexity of the instrumentation and resulting data, sophisticated computational methods are required for the processing and interpretation of acquired mass spectra. Machine learning has shown great promise to improve the analysis of mass spectrometry data, with numerous purpose-built methods for improving specific steps in the data acquisition and analysis pipeline reaching widespread adoption. Each of these tasks rely on a shared fundamental understanding of the information present in a mass spectrum. Here, we propose a transfer learning framework, CasanovoTL, which utilizes pretrained spectrum representations, derived from a de novo sequencing model trained on a massive proteomics dataset, rather than training a spectrum encoder from scratch for each task. We show that using these pre-trained spectrum representations significantly improves our performance on the four downstream tasks of spectrum quality prediction, chimericity prediction, phosphorylation prediction, and glycosylation status prediction. Finally, we perform end-to-end finetuning, as well as multi-task training, and find that finetuned spectrum representations further improve performance on each individual task. Overall, our work demonstrates that a pretrained spectrum encoder for tandem mass spectrometry proteomics trained on de novo sequencing learns generalizable representations of spectra, improves performance on downstream tasks where training data is limited, and can ultimately enhance data acquisition and analysis in proteomics experiments.",
+    "subfield_tags": [
+      "proteomics"
+    ],
+    "tag_accent": "C",
+    "difficulty_level": "intermediate",
+    "summary": {
+      "tldr": "A transfer learning framework called CasanovoTL uses pretrained spectrum representations from a de novo sequencing model to improve performance on four diverse mass spectrometry tasks.",
+      "problem": "Machine learning models for mass spectrometry are typically built from scratch for specific tasks, which is inefficient and limits performance on tasks where training data is scarce.",
+      "methods": "The authors developed CasanovoTL, a transfer learning framework that leverages a spectrum encoder pretrained on a massive proteomics dataset for de novo sequencing, applying it to downstream tasks via frozen representations, end-to-end finetuning, and multi-task training.",
+      "findings": "Using pretrained spectrum representations improved predictive performance across four distinct downstream tasks: spectrum quality prediction, chimericity prediction, phosphorylation prediction, and glycosylation status prediction. Additionally, end-to-end finetuning of these representations yielded further performance gains for each individual task.",
+      "why": "This approach demonstrates that a single pretrained spectrum encoder learns generalizable features that can enhance various proteomics data analysis pipelines, particularly when task-specific training data is limited.",
+      "limitations": "The provided text does not specify any limitations, caveats, or biases regarding the framework or datasets.",
+      "takeaway": "Pretraining a mass spectrometry spectrum encoder on de novo sequencing creates generalizable representations that can be finetuned to boost performance on diverse proteomics tasks.",
+      "topic": "proteomics",
+      "difficulty": "intermediate",
+      "model": "gemini-3.1-pro-preview",
+      "provider": "google"
+    },
+    "summary_provider": "google",
+    "used_full_text": false,
+    "verifier_score": 0.98,
+    "verifier_verdict": "pass",
+    "verifier_provider": "anthropic",
+    "verifier_notes": "The summary accurately reflects the paper's framework, methods, tasks, and findings without introducing contradicted facts.",
+    "verifier_unsupported_claims": [],
+    "status": "published",
+    "date_posted": "2026-11-04T15:59:01.947853+00:00"
+  },
+  {
     "slug": "integrative-taxonomy-using-traits-and-genomic-data-for-speci-dae9cd",
     "doi": "10.1093/sysbio/syag084",
     "title": "Integrative taxonomy using traits and genomic data for Species Delimitation with Deep learning",
